@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/trafic?useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2B8
+    username: root
+    password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 30MB
+server:
+  port: 8080
+
+#配置文件上传的目录
+uploadFile:
+  urlMapping: /files/**  #通过地址访问的URL
+  resourceLocation: d:/uploadFiles/  #本地存储目录
+
+defaultPassword: 123456
+
+
+mybatis:
+  type-aliases-package: com.jxqixin.trafic.model
+  mapper-locations: classpath:mapper/*.xml
+
