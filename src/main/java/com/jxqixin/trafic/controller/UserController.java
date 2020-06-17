@@ -1,7 +1,7 @@
 package com.jxqixin.trafic.controller;
-import com.twostep.resume.dto.UserDto;
-import com.twostep.resume.model.User;
-import com.twostep.resume.service.IUserService;
+import com.jxqixin.trafic.dto.UserDto;
+import com.jxqixin.trafic.model.User;
+import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -9,10 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.util.Date;
-
 /**
  * Created by Administrator on 2019/10/6.
  */
@@ -60,7 +58,6 @@ public class UserController extends CommonController{
         Page<User> page = userService.findByPageWithoutAdmin(userDto);
         return pageModelMap(page);
     }
-
     /**
      * 批量删除
      * @param ids
@@ -98,7 +95,6 @@ public class UserController extends CommonController{
         }
         return successModelMap("删除成功!");
     }
-
     /**
      * 验证用户名是否可用
      * @param username
@@ -137,14 +133,13 @@ public class UserController extends CommonController{
     @GetMapping("modifyUser")
     public ModelMap modifyUser(User user){
         User u = userService.queryUserByUsername(user.getUsername());
-        u.setRealName(user.getRealName());
+        u.setRealname(user.getRealname());
         u.setTel(user.getTel());
         u.setNote(user.getNote());
         u.setRole(user.getRole());
         userService.addObj(u);
         return successModelMap("修改用户成功!");
     }
-
     /**
      * 根据用户名查找
      * @param username

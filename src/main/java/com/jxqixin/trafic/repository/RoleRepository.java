@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.repository;
-import com.twostep.resume.model.Role;
+import com.jxqixin.trafic.model.Role;
+
 import java.io.Serializable;
 public interface RoleRepository<ID extends Serializable> extends CommonRepository<Role,ID> {
     /**
@@ -7,5 +8,5 @@ public interface RoleRepository<ID extends Serializable> extends CommonRepositor
      * @param rolename
      * @return
      */
-    Role findByRoleName(String rolename);
+    Role findByName(String rolename);
 }

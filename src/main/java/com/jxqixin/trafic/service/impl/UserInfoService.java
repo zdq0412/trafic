@@ -1,7 +1,8 @@
 package com.jxqixin.trafic.service.impl;
-import com.twostep.resume.model.Power;
-import com.twostep.resume.model.User;
-import com.twostep.resume.service.IUserService;
+
+import com.jxqixin.trafic.model.User;
+import com.jxqixin.trafic.service.IAreaManagerService;
+import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +21,9 @@ public class UserInfoService implements UserDetailsService {
 	@Autowired
 	@Qualifier("userService")
 	private IUserService userService;
+	@Autowired
+	@Qualifier("areaManagerService")
+	private IAreaManagerService areaManagerService;
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userService.queryUserByUsername(username);

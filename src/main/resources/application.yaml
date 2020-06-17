@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto:  none #update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
@@ -24,7 +24,6 @@ uploadFile:
   resourceLocation: d:/uploadFiles/  #本地存储目录
 
 defaultPassword: 123456
-
 
 mybatis:
   type-aliases-package: com.jxqixin.trafic.model

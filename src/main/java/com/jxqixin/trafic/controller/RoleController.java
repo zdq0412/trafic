@@ -1,27 +1,19 @@
 package com.jxqixin.trafic.controller;
-
-import com.twostep.resume.dto.RoleDto;
-import com.twostep.resume.model.Power;
-import com.twostep.resume.model.Role;
-import com.twostep.resume.model.TreeNode;
-import com.twostep.resume.service.IPowerService;
-import com.twostep.resume.service.IRoleService;
-import com.twostep.resume.service.IUserService;
+import com.jxqixin.trafic.dto.RoleDto;
+import com.jxqixin.trafic.model.Role;
+import com.jxqixin.trafic.service.IRoleService;
+import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.security.Principal;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 /**
  * Created by Administrator on 2019/10/6.
  */
@@ -115,9 +107,9 @@ public class RoleController extends CommonController{
      */
     @GetMapping("addRole")
     public ModelMap addRole(Role role, Principal principal){
-        Role u = roleService.queryRoleByRolename(role.getRoleName());
+        Role u = roleService.queryRoleByRolename(role.getName());
         if(u!=null){
-            return failureModelMap("角色添加失败: "+ role.getRoleName()+"已被使用!");
+            return failureModelMap("角色添加失败: "+ role.getName()+"已被使用!");
         }
         role.setCreateDate(new Date());
         roleService.addObj(role);
@@ -130,7 +122,7 @@ public class RoleController extends CommonController{
      */
     @GetMapping("modifyRole")
     public ModelMap modifyRole(Role role){
-        Role u = roleService.queryRoleByRolename(role.getRoleName());
+        Role u = roleService.queryRoleByRolename(role.getName());
         u.setNote(role.getNote());
         roleService.addObj(u);
         return successModelMap("修改角色成功!");

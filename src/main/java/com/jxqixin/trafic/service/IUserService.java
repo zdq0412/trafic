@@ -1,11 +1,8 @@
 package com.jxqixin.trafic.service;
-import com.twostep.resume.dto.UserDto;
-import com.twostep.resume.model.Power;
-import com.twostep.resume.model.User;
+import com.jxqixin.trafic.dto.UserDto;
+import com.jxqixin.trafic.model.User;
 import org.springframework.data.domain.Page;
-
 import java.util.List;
-
 public interface IUserService extends ICommonService<User> {
 	/**
 	 * 用户登录

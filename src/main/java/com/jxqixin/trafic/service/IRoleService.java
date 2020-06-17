@@ -1,7 +1,7 @@
 package com.jxqixin.trafic.service;
 
-import com.twostep.resume.dto.RoleDto;
-import com.twostep.resume.model.Role;
+import com.jxqixin.trafic.dto.RoleDto;
+import com.jxqixin.trafic.model.Role;
 import org.springframework.data.domain.Page;
 
 public interface IRoleService extends ICommonService<Role> {

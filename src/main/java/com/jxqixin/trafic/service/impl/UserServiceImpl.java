@@ -1,13 +1,15 @@
 package com.jxqixin.trafic.service.impl;
 
-import com.twostep.resume.dto.UserDto;
-import com.twostep.resume.model.Power;
-import com.twostep.resume.model.User;
-import com.twostep.resume.repository.CommonRepository;
-import com.twostep.resume.repository.UserRepository;
-import com.twostep.resume.service.IUserService;
+import com.jxqixin.trafic.dto.UserDto;
+import com.jxqixin.trafic.model.User;
+import com.jxqixin.trafic.repository.CommonRepository;
+import com.jxqixin.trafic.repository.UserRepository;
+import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
@@ -17,7 +19,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,6 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	public List<Object[]> queryPowersByUsername(String username) {
 		return userRepository.queryPowersByUsername(username);
 	}
-
 	/**
 	 * 分页查询用户信息
 	 * @param userDto
@@ -68,13 +68,11 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 				if(!StringUtils.isEmpty(tel)){
 					list.add(criteriaBuilder.like(root.get("tel"),"%" + tel + "%"));
 				}
-
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}
 		},pageable);
 	}
-
 	/**
 	 * 批量删除用户
 	 * @param ids
@@ -87,14 +85,12 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 
 		for (int i = 0;i<ids.length;i++){
 			User user = (User) userRepository.findById(ids[i]).get();
-			if(!user.getAllowDelete()){
+			if(!user.isAllowedDelete()){
 				throw new RuntimeException("含有不允许删除的用户:" + user.getUsername());
 			}
-
 			userRepository.deleteById(ids[i]);
 		}
 	}
-
 	/**
 	 * 根据id删除
 	 * @param id
@@ -102,13 +98,11 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	@Override
 	public void deleteById(String id) {
 		User user = (User) userRepository.findById(id).get();
-		if(!user.getAllowDelete()){
+		if(!user.isAllowedDelete()){
 			throw new RuntimeException("该用户不允许删除:" + user.getUsername());
 		}
-
 		userRepository.deleteById(id);
 	}
-
 	@Override
 	public Page<User> findByPageWithoutAdmin(UserDto userDto) {
 		Pageable pageable = PageRequest.of(userDto.getPage(),userDto.getLimit());

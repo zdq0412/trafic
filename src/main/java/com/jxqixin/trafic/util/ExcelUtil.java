@@ -1,11 +1,9 @@
 package com.jxqixin.trafic.util;
-
-import com.twostep.resume.model.Power;
+import com.jxqixin.trafic.model.Functions;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,11 +11,9 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * 导入导出工具类
  * @author zdq
- * 2019年2月26日
  */
 public abstract class ExcelUtil {
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -90,8 +86,8 @@ public abstract class ExcelUtil {
 		}
 		return list;
 	}
-	public  List<Power> getPowerData(File file){
-		List<Power> list = null;
+	public  List<Functions> getFunctionsData(File file){
+		List<Functions> list = null;
 		String fileName = file.getName();
 		if (!validateExcel(fileName)) {// 验证文件名是否合格
 			return null;
@@ -101,7 +97,7 @@ public abstract class ExcelUtil {
 			isExcel2003 = false;
 		}
 		try {
-			list = (List<Power>) createExcel(new FileInputStream(file), isExcel2003);
+			list = (List<Functions>) createExcel(new FileInputStream(file), isExcel2003);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

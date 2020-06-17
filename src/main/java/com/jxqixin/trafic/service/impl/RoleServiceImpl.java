@@ -1,28 +1,23 @@
 package com.jxqixin.trafic.service.impl;
-
-import com.twostep.resume.dto.RoleDto;
-import com.twostep.resume.model.Power;
-import com.twostep.resume.model.Role;
-import com.twostep.resume.model.RolePower;
-import com.twostep.resume.model.User;
-import com.twostep.resume.repository.CommonRepository;
-import com.twostep.resume.repository.RoleRepository;
-import com.twostep.resume.repository.UserRepository;
-import com.twostep.resume.service.IRolePowerService;
-import com.twostep.resume.service.IRoleService;
+import com.jxqixin.trafic.dto.RoleDto;
+import com.jxqixin.trafic.model.Role;
+import com.jxqixin.trafic.model.User;
+import com.jxqixin.trafic.repository.CommonRepository;
+import com.jxqixin.trafic.repository.RoleRepository;
+import com.jxqixin.trafic.repository.UserRepository;
+import com.jxqixin.trafic.service.IRoleFunctionsService;
+import com.jxqixin.trafic.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.StringUtils;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +29,7 @@ public class RoleServiceImpl extends CommonServiceImpl<Role> implements IRoleSer
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private IRolePowerService rolePowerService;
+	private IRoleFunctionsService roleFunctionsService;
 	@Autowired
 	private IRoleService roleService;
 	@Override
@@ -62,7 +57,6 @@ public class RoleServiceImpl extends CommonServiceImpl<Role> implements IRoleSer
 			}
 		},pageable);
 	}
-
 	/**
 	 * 批量删除角色
 	 * @param ids
@@ -72,12 +66,10 @@ public class RoleServiceImpl extends CommonServiceImpl<Role> implements IRoleSer
 		if(ids==null || ids.length<=0){
 			throw new RuntimeException("没有要删除的简历!");
 		}
-
 		for (int i = 0;i<ids.length;i++){
 			deleteById(ids[i]);
 		}
 	}
-
 	/**
 	 * 根据id删除
 	 * @param roleName
@@ -85,15 +77,13 @@ public class RoleServiceImpl extends CommonServiceImpl<Role> implements IRoleSer
 	@Override
 	public void deleteById(String roleName) {
 		Role role = (Role) roleRepository.findById(roleName).get();
-		if(!role.getAllowDelete()){
-			throw new RuntimeException("该角色不允许删除:" + role.getRoleName());
+		if(!role.isAllowedDelete()){
+			throw new RuntimeException("该角色不允许删除:" + role.getName());
 		}
-
 		List<User> list = userRepository.queryByRoleId(roleName);
 		if(!CollectionUtils.isEmpty(list)){
-			throw new RuntimeException("该角色下存在用户，不允许删除:" + role.getRoleName());
+			throw new RuntimeException("该角色下存在用户，不允许删除:" + role.getName());
 		}
-
 		roleRepository.deleteById(roleName);
 	}
 	/***
@@ -103,7 +93,7 @@ public class RoleServiceImpl extends CommonServiceImpl<Role> implements IRoleSer
 	 */
 	@Override
 	public Role queryRoleByRolename(String rolename) {
-		return roleRepository.findByRoleName(rolename);
+		return roleRepository.findByName(rolename);
 	}
 	/**
 	 * 为角色赋权限
@@ -113,9 +103,9 @@ public class RoleServiceImpl extends CommonServiceImpl<Role> implements IRoleSer
 	@Override
 	public void asignPowers(String roleName, String[] powerUrls) {
 		Role role = roleService.queryRoleByRolename(roleName);
-		rolePowerService.deleteByRoleId(role.getId());
+		roleFunctionsService.deleteByRoleId(role.getId());
 		for(int i = 0;i<powerUrls.length;i++){
-			rolePowerService.insert(role.getId(),powerUrls[i]);
+			roleFunctionsService.insert(role.getId(),powerUrls[i]);
 		}
 	}
 }
