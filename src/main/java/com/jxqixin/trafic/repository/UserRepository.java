@@ -23,12 +23,11 @@ public interface UserRepository<ID extends Serializable> extends CommonRepositor
             "inner join ROLE r on r.id = u.ROLE_ID " +
             "inner join ROLE_POWER rp on r.id = rp.ROLE_ID " +
             "inner join POWER p on p.url=rp.POWER_ID where u.username=?1",nativeQuery = true)*/
-    @Query(value = "select distinct p.* from Power p  " +
-            "inner join ROLE_POWER rp on p.id = rp.POWER_ID " +
+    @Query(value = "select distinct p.* from Functions p  " +
+            "inner join ROLE_FUNCTIONS rp on p.id = rp.function_ID " +
             " inner join Role r  on r.id=rp.role_id " +
-            " inner join USER_ROLE ur on ur.role_id=r.id " +
-            "inner join T_user u on ur.user_id=u.id  where u.username=?1",nativeQuery = true)
-    public List<Object[]> queryPowersByUsername(String username);
+            "inner join T_user u on r.id=u.role_id  where u.username=?1",nativeQuery = true)
+    public List<Object[]> queryFunctionsByUsername(String username);
     @Query(value="select u from User u where username=?1")
     public User findByUsername(String username);
     /**根据角色id查找用户*/

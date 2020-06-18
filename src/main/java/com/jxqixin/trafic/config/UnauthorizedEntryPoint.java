@@ -18,6 +18,7 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         JsonResult result = new JsonResult(false,"用户未登陆");
         httpServletResponse.setContentType("text/json;charset=utf-8");
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpServletResponse.getWriter().write(JSON.toJSONString(result));
     }
 }

@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 @Component
 public class CustomizeAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-    @Autowired
-    IUserService userService;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException,
             ServletException {
@@ -30,6 +28,7 @@ public class CustomizeAuthenticationSuccessHandler implements AuthenticationSucc
         JsonResult result = new JsonResult(true);
         //处理编码方式，防止中文乱码的情况
         httpServletResponse.setContentType("text/json;charset=utf-8");
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
         //塞到HttpServletResponse中返回给前台
         httpServletResponse.getWriter().write(JSON.toJSONString(result));
     }

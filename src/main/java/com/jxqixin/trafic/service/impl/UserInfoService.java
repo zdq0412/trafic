@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.service.impl;
 
+import com.jxqixin.trafic.model.AreaManager;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IAreaManagerService;
 import com.jxqixin.trafic.service.IUserService;
@@ -24,14 +25,22 @@ public class UserInfoService implements UserDetailsService {
 	@Autowired
 	@Qualifier("areaManagerService")
 	private IAreaManagerService areaManagerService;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userService.queryUserByUsername(username);
+		if(user == null){
+			AreaManager areaManager = areaManagerService.queryAreaManagerByUsername(username);
+			if(areaManager==null) {
+				throw new UsernameNotFoundException("该用户名不存在!");
+			}
+			return new org.springframework.security.core.userdetails.User(username,areaManager.getPassword(),new ArrayList<>());
+		}
 		List<GrantedAuthority> list = new ArrayList<>();
-		List<Object[]> powers = userService.queryPowersByUsername(username);
-		if(powers!=null && powers.size()>0) {
-			for(Object[] obj : powers) {
-				list.add(new SimpleGrantedAuthority(obj[0]+""));
+		List<Object[]> powers = userService.queryFunctionsByUsername(username);
+		if (powers != null && powers.size() > 0) {
+			for (Object[] obj : powers) {
+				list.add(new SimpleGrantedAuthority(obj[0] + ""));
 			}
 		}
 		UserDetails ud = new org.springframework.security.core.userdetails.User(username, user.getPassword(), list);

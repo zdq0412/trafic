@@ -9,6 +9,7 @@ import java.util.Date;
  * 企业类别
  */
 @Entity
+@Table(name = "org_category")
 @GenericGenerator(name="id_gen",strategy = "uuid")
 public class OrgCategory implements Serializable {
     @Id

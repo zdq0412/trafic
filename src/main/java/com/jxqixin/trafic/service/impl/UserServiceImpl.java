@@ -41,8 +41,8 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	}
 
 	@Override
-	public List<Object[]> queryPowersByUsername(String username) {
-		return userRepository.queryPowersByUsername(username);
+	public List<Object[]> queryFunctionsByUsername(String username) {
+		return userRepository.queryFunctionsByUsername(username);
 	}
 	/**
 	 * 分页查询用户信息

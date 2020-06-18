@@ -22,7 +22,7 @@ public interface IUserService extends ICommonService<User> {
 	 * @param username
 	 * @return
 	 */
-	public List<Object[]> queryPowersByUsername(String username);
+	public List<Object[]> queryFunctionsByUsername(String username);
 
 	/**
 	 * 分页查询用户信息

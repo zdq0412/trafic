@@ -16,7 +16,7 @@ spring:
       max-file-size: 5MB
       max-request-size: 30MB
 server:
-  port: 8080
+  port: 80
 
 #配置文件上传的目录
 uploadFile:

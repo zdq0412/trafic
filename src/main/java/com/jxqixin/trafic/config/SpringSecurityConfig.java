@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.config;
 import com.jxqixin.trafic.handler.CustomizeAuthenticationFailHandler;
 import com.jxqixin.trafic.handler.CustomizeAuthenticationSuccessHandler;
+import com.jxqixin.trafic.handler.CustomizeLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -24,25 +25,23 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	private CustomizeAuthenticationFailHandler customizeAuthenticationFailHandler;
 	@Autowired
 	private CustomizeAuthenticationSuccessHandler customizeAuthenticationSuccessHandler;
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		// 设置默认的加密方式（强hash方式加密）
-		return new BCryptPasswordEncoder();
-	}
-
 	@Autowired
 	public AuthenticationEntryPoint authenticationEntryPoint;
+	@Autowired
+	private CustomizeLogoutSuccessHandler customizeLogoutSuccessHandler;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		//解决跨域访问问题
+		ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http.authorizeRequests();
+		registry.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();//让Spring security放行所有preflight
+		registry.antMatchers("/**").permitAll();
+
 		http.formLogin().successHandler(customizeAuthenticationSuccessHandler)
-				.failureHandler(customizeAuthenticationFailHandler);
-		http.authorizeRequests().anyRequest().authenticated()
+				.failureHandler(customizeAuthenticationFailHandler).and()
+				.logout().logoutSuccessHandler(customizeLogoutSuccessHandler).and()
+				.authorizeRequests().anyRequest().authenticated()
 		.and().csrf().disable().cors();
 		http.headers().frameOptions().sameOrigin();
-		//解决跨域访问问题
-		ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http.authorizeRequests(); 
-		//registry.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();//让Spring security放行所有preflight
-//		registry.antMatchers("/**").permitAll();
 		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 	}
 	@Override

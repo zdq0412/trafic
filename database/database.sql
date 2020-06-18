@@ -1,3 +1,4 @@
+
 #企业类别表
 drop table if exists org_category;
 create table org_category(
@@ -6,6 +7,7 @@ create table org_category(
   note varchar(200) comment '类别描述',
   createDate timestamp default current_timestamp comment '创建日期'
 ) comment '企业类别表';
+
 
 #企业信息表
 drop table if exists org;
@@ -64,7 +66,7 @@ create table t_user(
   id varchar(36) primary key comment '主键',
   role_id varchar(36) comment '用户所属角色',
   username varchar(50) not null comment '用户名称',
-  password varchar(50) not null comment '密码',
+  password varchar(100) unique default '123456' comment '密码',
   realname varchar(50) comment '真实姓名',
   tel varchar(20) comment '联系方式',
   status char(1) default '0' comment '状态，0：正常，1：禁用，2：删除',
@@ -77,12 +79,13 @@ create table t_user(
   constraint fk_user_role foreign key(role_id) references role(id)
 ) comment '用户表';
 
+
 #区域管理员
 drop table if exists area_manager;
 create table area_manager(
   id varchar(36) primary key comment '主键',
   username varchar(50) not null comment '用户名称',
-  password varchar(50) not null comment '密码',
+  password varchar(100) unique default '123456' comment '密码',
   province varchar(200) comment '所属省',
   city varchar(200) comment '所属市',
   region  varchar(200) comment '所属地区',
@@ -99,7 +102,7 @@ create table category(
   pid varchar(36) comment '父类ID',
   createDate timestamp default current_timestamp comment '创建日期',
   note varchar(2000) comment '区域描述',
-  constraint fk_area foreign key(pid) references area(id)
+  constraint fk_category foreign key(pid) references category(id)
 ) comment '区域信息表';
 
 #角色权限表
@@ -118,8 +121,28 @@ create table org_category_functions(
   id varchar(36) primary key comment '主键',
   org_category_id varchar(36) not null comment '企业类别ID',
   function_id varchar(36) not null comment '权限ID',
-  constraint fk_function foreign key(function_id) references functions(id),
+  constraint fk_function_id foreign key(function_id) references functions(id),
   constraint fk_org_category_id foreign key(org_category_id) references org_category(id)
 ) comment '类别权限表';
+
+#目录表，每个菜单可以存放在不同的目录下
+drop table if exists directory;
+create table directory(
+  id varchar(36) primary key comment '主键',
+  name varchar(20) unique not null comment '目录名称',
+  priority int default 0 comment '优先级，值越大页面显示越靠前',
+  createDate timestamp default current_timestamp comment '创建日期',
+  note varchar(200) comment '说明'
+) comment '目录表';
+
+#目录菜单表
+drop table if exists directory_functions;
+create table directory_functions(
+  id varchar(36) primary key comment '主键',
+  directory_id varchar(36) not null comment '目录ID',
+  function_id varchar(36) not null comment '权限ID',
+  constraint fk_directory_functions_function_id foreign key(function_id) references functions(id),
+  constraint fk_directory_id foreign key(directory_id) references directory(id)
+) comment '目录菜单表';
 
 

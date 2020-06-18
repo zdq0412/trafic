@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Date;
 /**
- * Created by Administrator on 2019/10/6.
+ * 用户管理
  */
 @RestController
 @RequestMapping("user")
