@@ -37,6 +37,13 @@ public class JsonResult<T> implements Serializable {
         this.resultMsg = resultMsg;
         this.data = data;
     }
+    public JsonResult(Boolean success,T data) {
+        this.success = success;
+        if(success!=null){
+            this.resultCode = success? Result.SUCCESS.getResultCode():Result.FAIL.getResultCode();
+        }
+        this.data = data;
+    }
 
     public Boolean getSuccess() {
         return success;

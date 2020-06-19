@@ -12,10 +12,15 @@ import java.util.Date;
 @GenericGenerator(name="id_gen",strategy = "uuid")
 public class Functions {
 	@Id
-	@GeneratedValue(generator = "id_gen")
+	//@GeneratedValue(generator = "id_gen")
 	private String id;
 	/**权限名称*/
 	private String name;
+	/**图标*/
+	private String icon;
+	/**唯一标识，要和前端路由的地址相同*/
+	@Column(name = "c_index")
+	private String index;
 	/**访问路径*/
 	private String url;
 	/**是否为叶子节点*/
@@ -126,5 +131,21 @@ public class Functions {
 
 	public void setParent(Functions parent) {
 		this.parent = parent;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	public String getIndex() {
+		return index;
+	}
+
+	public void setIndex(String index) {
+		this.index = index;
 	}
 }

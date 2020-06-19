@@ -36,7 +36,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		registry.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();//让Spring security放行所有preflight
 		registry.antMatchers("/**").permitAll();
 
-		http.formLogin().successHandler(customizeAuthenticationSuccessHandler)
+		http.formLogin().loginProcessingUrl("/user/login").
+				successHandler(customizeAuthenticationSuccessHandler)
 				.failureHandler(customizeAuthenticationFailHandler).and()
 				.logout().logoutSuccessHandler(customizeLogoutSuccessHandler).and()
 				.authorizeRequests().anyRequest().authenticated()

@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.util;
+import com.jxqixin.trafic.model.Directory;
 import com.jxqixin.trafic.model.Functions;
+import com.jxqixin.trafic.model.Schema;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -98,6 +100,51 @@ public abstract class ExcelUtil {
 		}
 		try {
 			list = (List<Functions>) createExcel(new FileInputStream(file), isExcel2003);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/**
+	 * 导入模式数据
+	 * @param file
+	 * @return
+	 */
+	public  List<Schema> getSchemaData(File file){
+		List<Schema> list = null;
+		String fileName = file.getName();
+		if (!validateExcel(fileName)) {// 验证文件名是否合格
+			return null;
+		}
+		boolean isExcel2003 = true;// 根据文件名判断文件是2003版本还是2007版本
+		if (isExcel2007(fileName)) {
+			isExcel2003 = false;
+		}
+		try {
+			list = (List<Schema>) createExcel(new FileInputStream(file), isExcel2003);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	/**
+	 * 导入目录数据，就是一级菜单
+	 * @param file
+	 * @return
+	 */
+	public  List<Directory> getDirectoryData(File file){
+		List<Directory> list = null;
+		String fileName = file.getName();
+		if (!validateExcel(fileName)) {// 验证文件名是否合格
+			return null;
+		}
+		boolean isExcel2003 = true;// 根据文件名判断文件是2003版本还是2007版本
+		if (isExcel2007(fileName)) {
+			isExcel2003 = false;
+		}
+		try {
+			list = (List<Directory>) createExcel(new FileInputStream(file), isExcel2003);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

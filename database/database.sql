@@ -8,7 +8,6 @@ create table org_category(
   createDate timestamp default current_timestamp comment '创建日期'
 ) comment '企业类别表';
 
-
 #企业信息表
 drop table if exists org;
 create table org(
@@ -32,7 +31,7 @@ drop table if exists functions;
 create table functions(
   id varchar(36) primary key comment '主键',
   name varchar(50) not null comment '权限名称',
-  url varchar(100) not null comment '访问路径',
+  url varchar(100)  comment '访问路径',
   leaf bit default 1 comment '是否为叶子节点,0:否  1： 是',
   type varchar(10) default '功能' comment '类型：功能或菜单',
   priority int default 0 comment '优先级，值越大页面显示越靠前',
@@ -41,6 +40,8 @@ create table functions(
   creator varchar(50) comment '创建人',
   createDate timestamp default current_timestamp comment '创建日期',
   note varchar(200) comment '备注',
+  icon varchar(20) comment '图标',
+  c_index varchar(50) unique comment '唯一标识，要和前端路由的地址相同',
 	constraint fk_pid foreign key(pid) REFERENCES functions(id)
 ) comment '权限表';
 
@@ -125,14 +126,31 @@ create table org_category_functions(
   constraint fk_org_category_id foreign key(org_category_id) references org_category(id)
 ) comment '类别权限表';
 
+#模式表，模式表下关联一级菜单(directory表)
+drop table if exists t_schema;
+create table t_schema(
+  id varchar(36) primary key comment '主键',
+  name varchar(36) not null comment '模式名称',
+  priority int comment '优先级',
+  createDate timestamp default current_timestamp comment '创建日期',
+  note varchar(200) comment '说明',
+  selected bit(1) default 1 comment '是否选中，页面上显示选中的模式的菜单'
+) comment '模式表';
+
 #目录表，每个菜单可以存放在不同的目录下
 drop table if exists directory;
 create table directory(
   id varchar(36) primary key comment '主键',
-  name varchar(20) unique not null comment '目录名称',
+  name varchar(50) not null comment '权限名称',
   priority int default 0 comment '优先级，值越大页面显示越靠前',
+  schema_id varchar(36)   comment '所属模式ID',
+  status varchar(10) default 0 comment '状态，0：正常，1：禁用，2：删除',
+  creator varchar(50) comment '创建人',
   createDate timestamp default current_timestamp comment '创建日期',
-  note varchar(200) comment '说明'
+  note varchar(200) comment '备注',
+  icon varchar(20) comment '图标',
+  c_index varchar(50) unique comment '唯一标识，要和前端路由的地址相同',
+	constraint fk_schema_id foreign key(schema_id) REFERENCES t_schema(id)
 ) comment '目录表';
 
 #目录菜单表
@@ -144,5 +162,6 @@ create table directory_functions(
   constraint fk_directory_functions_function_id foreign key(function_id) references functions(id),
   constraint fk_directory_id foreign key(directory_id) references directory(id)
 ) comment '目录菜单表';
+
 
 
