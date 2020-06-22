@@ -1,8 +1,11 @@
 package com.jxqixin.trafic.controller;
+
+import com.jxqixin.trafic.constant.RedisConstant;
 import com.jxqixin.trafic.dto.UserDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -10,7 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import java.security.Principal;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 /**
  * 用户管理
@@ -22,6 +26,8 @@ public class UserController extends CommonController{
     private IUserService userService;
     @Value("${defaultPassword}")
     private String defaultPassword;
+    @Autowired
+    private RedisUtil redisUtil;
     /**
      * 修改密码
      * @param oldPassword
@@ -30,32 +36,33 @@ public class UserController extends CommonController{
      * @return
      */
     @PostMapping("modifyPassword")
-    public ModelMap modifyPassword(String oldPassword, String newPassword, String username){
+    public JsonResult modifyPassword(String oldPassword, String newPassword, String username){
         User user = userService.queryUserByUsername(username);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if(!passwordEncoder.matches(oldPassword,user.getPassword())){
-            return failureModelMap("原密码错误!");
+            return new JsonResult(false,"原密码错误!");
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userService.updateObj(user);
-        return successModelMap("密码修改成功!");
+        return new JsonResult(true,"密码修改成功!");
     }
 
-    /**
+  /*  *//**
      * 用户登录
      * @param username
      * @param password
      * @return
-     */
+     *//*
     @PostMapping("login")
     public JsonResult login(String username,String password){
         User user = userService.login(username,password);
         if(user == null){
             return new JsonResult(false,"");
         }
-
-        return new JsonResult(true,"登录成功!");
-    }
+        String token = redisUtil.generateToken();
+        redisUtil.setExpire(token,username, RedisConstant.EXPIRE_MINUTES);
+        return new JsonResult(true,"登录成功!",token);
+    }*/
     /**
      * 根据条件查找用户信息
      * @param userDto

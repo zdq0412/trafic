@@ -5,6 +5,15 @@ spring:
     username: root
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    database: 0
+    port: 6379
+    host: 192.168.213.100
+    password: admin
+    jedis:
+      pool:
+        max-active: 8
+        min-idle: 1
   jpa:
     hibernate:
       ddl-auto:  none #update
