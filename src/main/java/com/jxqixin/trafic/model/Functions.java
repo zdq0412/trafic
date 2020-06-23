@@ -25,7 +25,7 @@ public class Functions {
 	private String url;
 	/**是否为叶子节点*/
 	private boolean leaf;
-	/**权限类型：功能或菜单*/
+	/**权限类型：功能或菜单  1:菜单  0：功能*/
 	private String type;
 	/**优先级，值越大页面显示越靠前*/
 	private int priority;
@@ -142,7 +142,7 @@ public class Functions {
 	}
 
 	public String getIndex() {
-		return index;
+		return index==null?"":index;
 	}
 
 	public void setIndex(String index) {

@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.config;
 import com.alibaba.fastjson.JSON;
+import com.jxqixin.trafic.constant.EnumAsJaveBeanConfig;
+import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.model.JsonResult;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -16,9 +18,9 @@ import java.io.IOException;
 public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        JsonResult result = new JsonResult(false,"用户未登陆");
+        JsonResult result = new JsonResult(Result.USER_NOT_LOGIN);
         httpServletResponse.setContentType("text/json;charset=utf-8");
         httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
-        httpServletResponse.getWriter().write(JSON.toJSONString(result));
+        httpServletResponse.getWriter().write(JSON.toJSONString(result, EnumAsJaveBeanConfig.getSerializeConfig()));
     }
 }

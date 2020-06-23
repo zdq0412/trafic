@@ -1,12 +1,16 @@
 package com.jxqixin.trafic.constant;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * 返回值成功或失败返回码和返回信息
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Result{
     SUCCESS(200,"操作成功!"),
     FAIL(300,"操作失败!"),
-    USER_NOT_LOGIN(1000,"用户未登陆!"),
-    LOGIN_TIMEOUT(2000,"登录超时!");
+    USER_NOT_LOGIN(400,"用户未登陆!"),
+    LOGIN_TIMEOUT(600,"登录超时!");
     /**返回码*/
     private int resultCode;
     /**返回信息*/

@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.controller;
 
 import com.jxqixin.trafic.constant.RedisConstant;
+import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.UserDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.User;
@@ -40,11 +41,13 @@ public class UserController extends CommonController{
         User user = userService.queryUserByUsername(username);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if(!passwordEncoder.matches(oldPassword,user.getPassword())){
-            return new JsonResult(false,"原密码错误!");
+            Result result = Result.FAIL;
+            result.setMessage("原密码错误!");
+            return new JsonResult(Result.FAIL);
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userService.updateObj(user);
-        return new JsonResult(true,"密码修改成功!");
+        return new JsonResult(Result.SUCCESS);
     }
 
   /*  *//**

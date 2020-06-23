@@ -1,14 +1,16 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/trafic?useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3333/trafic?useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2B8
+    #url: jdbc:mysql://localhost:3306/trafic?useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2B8
     username: root
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     database: 0
     port: 6379
-    host: 192.168.213.100
+    #host: 192.168.213.100  #单位
+    host: 192.168.138.128   #家
     password: admin
     jedis:
       pool:
@@ -25,7 +27,7 @@ spring:
       max-file-size: 5MB
       max-request-size: 30MB
 server:
-  port: 80
+  port: 8088
 
 #配置文件上传的目录
 uploadFile:

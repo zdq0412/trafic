@@ -1,6 +1,8 @@
 package com.jxqixin.trafic.interceptors;
 
 import com.alibaba.fastjson.JSON;
+import com.jxqixin.trafic.constant.RedisConstant;
+import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,10 @@ public class AuthencationInterceptor implements HandlerInterceptor {
              String username = (String)redisUtil.get(token);
              //登录超时，默认为30分钟
              if(StringUtils.isEmpty(username)){
-                 response.getWriter().write(JSON.toJSONString(new JsonResult(false,"登录超时")));
+                 response.getWriter().write(JSON.toJSONString(new JsonResult(Result.LOGIN_TIMEOUT)));
                  return false;
+             }else{
+                 redisUtil.setExpire(token,username, RedisConstant.EXPIRE_MINUTES);
              }
         }
         return true;

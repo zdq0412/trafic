@@ -1,7 +1,12 @@
 package com.jxqixin.trafic.handler;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.JSONToken;
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.jxqixin.trafic.constant.EnumAsJaveBeanConfig;
 import com.jxqixin.trafic.constant.RedisConstant;
+import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.model.JsonResult;
+import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IUserService;
 import com.jxqixin.trafic.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,27 +21,30 @@ import java.io.IOException;
 public class CustomizeAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private IUserService userService;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException,
             ServletException {
-        //更新用户表上次登录时间、更新人、更新时间等字段
-      //  User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-       // User sysUser = userService.queryUserByUsername(userDetails.getUsername());
-       /* sysUser.setLastLoginTime(new Date());
-        sysUser.setUpdateTime(new Date());
-        sysUser.setUpdateUser(sysUser.getId());
-        sysUserService.update(sysUser);*/
-        //此处还可以进行一些处理，比如登录成功之后可能需要返回给前台当前用户有哪些菜单权限，
-        //进而前台动态的控制菜单的显示等，具体根据自己的业务需求进行扩展
         String username = authentication.getName();
         String token = redisUtil.generateToken();
-        redisUtil.setExpire(token,username, RedisConstant.EXPIRE_MINUTES);
+        User user = userService.queryUserByUsername(username);
+        String loginType = "";
+        if(user==null){
+            loginType = "AreaManager";
+            redisUtil.set(username,loginType);
+        }else{
+            loginType = "User";
+            redisUtil.set(username,loginType);
+        }
+        redisUtil.setExpire(token + "-" + loginType,username, RedisConstant.EXPIRE_MINUTES);
         //返回json数据
-        JsonResult result = new JsonResult(true,"",token);
+        JsonResult result = new JsonResult(Result.SUCCESS,token + "-" + loginType);
         //处理编码方式，防止中文乱码的情况
         httpServletResponse.setContentType("text/json;charset=utf-8");
         httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
         //塞到HttpServletResponse中返回给前台
-        httpServletResponse.getWriter().write(JSON.toJSONString(result));
+        String retString = JSON.toJSONString(result, EnumAsJaveBeanConfig.getSerializeConfig());
+        httpServletResponse.getWriter().write(retString);
     }
 }

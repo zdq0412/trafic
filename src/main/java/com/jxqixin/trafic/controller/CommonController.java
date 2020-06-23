@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.controller;
 
+import com.jxqixin.trafic.util.RedisUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ public class CommonController {
     private String urlMapping;
     @Value("${uploadFile.resourceLocation}")
     private String resourceLocation;
+    @Autowired
+    private RedisUtil redisUtil;
 
     public String getUrlMapping() {
         return urlMapping;
@@ -93,5 +97,15 @@ public class CommonController {
         File savedFile = new File(uploadDir + "/" + filename);
         file.transferTo(savedFile);
         return savedFile;
+    }
+
+    /**
+     * 获取当前登录用户的用户名
+     * @param request
+     * @return
+     */
+    public String getCurrentUsername(HttpServletRequest request){
+        String token = request.getHeader("token");
+        return  (String)redisUtil.get(token);
     }
 }

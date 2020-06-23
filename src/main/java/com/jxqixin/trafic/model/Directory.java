@@ -105,7 +105,7 @@ public class Directory {
 	}
 
 	public String getIndex() {
-		return index;
+		return index==null?"":index;
 	}
 
 	public void setIndex(String index) {

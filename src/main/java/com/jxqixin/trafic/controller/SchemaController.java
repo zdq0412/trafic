@@ -1,4 +1,5 @@
 package com.jxqixin.trafic.controller;
+import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Schema;
 import com.jxqixin.trafic.service.ISchemaService;
@@ -21,6 +22,7 @@ public class SchemaController extends CommonController{
      */
     @GetMapping("/schemas")
     public JsonResult<List<Schema>> queryAllSchema(){
-        return new JsonResult<>(true,schemaService.findAll());
+        List<Schema> list = schemaService.findAll();
+        return new JsonResult<>(Result.SUCCESS,list);
     }
 }

@@ -23,7 +23,9 @@ create table org(
   region  varchar(200) comment '所属地区',
   createDate timestamp default current_timestamp comment '创建日期',
   status char(1) default '0' comment '状态，0：正常，1：禁用，2：删除',
-  note varchar(2000) comment '企业描述'
+  note varchar(2000) comment '企业描述',
+  org_category_id varchar(36) comment '企业类别ID',
+  constraint fk_org_category_id_org foreign key(org_category_id) references org_category(id)
 ) comment '企业信息表';
 
 #权限表
@@ -144,7 +146,7 @@ create table directory(
   name varchar(50) not null comment '权限名称',
   priority int default 0 comment '优先级，值越大页面显示越靠前',
   schema_id varchar(36)   comment '所属模式ID',
-  status varchar(10) default 0 comment '状态，0：正常，1：禁用，2：删除',
+  status varchar(10) default '0' comment '状态，0：正常，1：禁用，2：删除',
   creator varchar(50) comment '创建人',
   createDate timestamp default current_timestamp comment '创建日期',
   note varchar(200) comment '备注',

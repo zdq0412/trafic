@@ -1,4 +1,5 @@
 package com.jxqixin.trafic.service;
+import com.jxqixin.trafic.dto.Menus;
 import com.jxqixin.trafic.model.Functions;
 
 import java.util.List;
@@ -21,4 +22,10 @@ public interface IFunctionsService extends ICommonService<Functions> {
      * @return
      */
     List<Functions> queryByRoleName(String roleName);
+    /**
+     * 根据用户名查找显示菜单
+     * @param username
+     * @return
+     */
+    List<Menus> findMenus(String username);
 }
