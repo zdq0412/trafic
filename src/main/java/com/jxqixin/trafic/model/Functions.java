@@ -21,7 +21,8 @@ public class Functions {
 	/**唯一标识，要和前端路由的地址相同*/
 	@Column(name = "c_index")
 	private String index;
-	/**访问路径*/
+	/**访问路径,用index属性替代*/
+	@Deprecated
 	private String url;
 	/**是否为叶子节点*/
 	private boolean leaf;

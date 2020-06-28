@@ -23,7 +23,7 @@ public interface FunctionsRepository<ID extends Serializable> extends CommonRepo
             " inner join T_USER u on r.id=u.role_id  where u.username=?2 and f0.id in (" +
             "select f.id from functions f " +
             " inner join directory_functions df on df.function_id=f.id " +
-            " inner join directory d on df.directory_id=d.id where d.id=?1 and f.type='1')")
+            " inner join directory d on df.directory_id=d.id where d.id=?1 and f.type='1') order by f0.priority")
     List<Functions> findByDirIdAndUsername(String id, String username);
 
     /**

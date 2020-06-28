@@ -15,7 +15,7 @@ public class Directory {
 	@Id
 	//@GeneratedValue(generator = "id_gen")
 	private String id;
-	/**权限名称*/
+	/**目录名称*/
 	private String name;
 	/**图标*/
 	private String icon;
