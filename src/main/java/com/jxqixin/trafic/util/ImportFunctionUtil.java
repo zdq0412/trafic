@@ -1,8 +1,10 @@
 package com.jxqixin.trafic.util;
 
 import com.jxqixin.trafic.model.Directory;
+import com.jxqixin.trafic.model.DirectoryFunctions;
 import com.jxqixin.trafic.model.Functions;
 import com.jxqixin.trafic.model.Schema;
+import com.jxqixin.trafic.service.IDirectoryFunctionsService;
 import com.jxqixin.trafic.service.IDirectoryService;
 import com.jxqixin.trafic.service.IFunctionsService;
 import org.apache.poi.ss.usermodel.*;
@@ -17,8 +19,12 @@ import java.util.List;
  */
 public class ImportFunctionUtil extends ExcelUtil {
     private IFunctionsService functionsService;
-    public ImportFunctionUtil(IFunctionsService functionsService){
+    private IDirectoryService directoryService;
+    private IDirectoryFunctionsService directoryFunctionsService;
+    public ImportFunctionUtil(IFunctionsService functionsService,IDirectoryService directoryService,IDirectoryFunctionsService directoryFunctionsService){
         this.functionsService = functionsService;
+        this.directoryService = directoryService;
+        this.directoryFunctionsService = directoryFunctionsService;
     }
     @Override
     public List<?> readExcelValue(Workbook wb) {
@@ -98,6 +104,19 @@ public class ImportFunctionUtil extends ExcelUtil {
                         case 8:{
                             String isLeaf = cell.getStringCellValue();
                             functions.setLeaf("1".equals(isLeaf)?true:false);
+                            break;
+                        }
+                        //所属目录ID
+                        case 9:{
+                            String dirId = cell.getStringCellValue();
+                            Directory directory = directoryService.queryObjById(dirId);
+                            functionsService.addObj(functions);
+                            DirectoryFunctions directoryFunctions = new DirectoryFunctions();
+
+                            directoryFunctions.setFunctions(functions);
+                            directoryFunctions.setDirectory(directory);
+
+                            directoryFunctionsService.addObj(directoryFunctions);
                             break;
                         }
                     }

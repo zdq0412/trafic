@@ -42,7 +42,6 @@ public class CommonController {
     public void setResourceLocation(String resourceLocation) {
         this.resourceLocation = resourceLocation;
     }
-
     /***
      * 分页返回时使用的ModelMap
      * @param page

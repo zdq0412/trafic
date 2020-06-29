@@ -60,6 +60,8 @@ public class ImportDirectoryUtil extends ExcelUtil {
                         }
                         //唯一标识
                         case 3:{
+                            String index = cell.getStringCellValue();
+                            directory.setIndex(index);
                             break;
                         }
                         //所属模式ID
