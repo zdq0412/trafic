@@ -1,8 +1,6 @@
 package com.jxqixin.trafic.controller;
-
-import com.jxqixin.trafic.constant.RedisConstant;
 import com.jxqixin.trafic.constant.Result;
-import com.jxqixin.trafic.dto.UserDto;
+import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IUserService;
@@ -12,16 +10,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.UUID;
 /**
  * 用户管理
  */
 @RestController
-@RequestMapping("user")
 public class UserController extends CommonController{
     @Autowired
     private IUserService userService;
@@ -36,7 +33,7 @@ public class UserController extends CommonController{
      * @param username
      * @return
      */
-    @PostMapping("modifyPassword")
+    @PostMapping("/user/modifyPassword")
     public JsonResult modifyPassword(String oldPassword, String newPassword, String username){
         User user = userService.queryUserByUsername(username);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -49,142 +46,87 @@ public class UserController extends CommonController{
         userService.updateObj(user);
         return new JsonResult(Result.SUCCESS);
     }
-
-  /*  *//**
-     * 用户登录
+    /**
+     * 密码重置
      * @param username
-     * @param password
-     * @return
-     *//*
-    @PostMapping("login")
-    public JsonResult login(String username,String password){
-        User user = userService.login(username,password);
-        if(user == null){
-            return new JsonResult(false,"");
-        }
-        String token = redisUtil.generateToken();
-        redisUtil.setExpire(token,username, RedisConstant.EXPIRE_MINUTES);
-        return new JsonResult(true,"登录成功!",token);
-    }*/
-    /**
-     * 根据条件查找用户信息
-     * @param userDto
      * @return
      */
-    @GetMapping("queryUsers")
-    public ModelMap queryUsers(UserDto userDto) {
-        Page<User> page = userService.findByPage(userDto);
+    @GetMapping("/user/resetPassword")
+    public JsonResult resetPassword(String username){
+        User user = userService.queryUserByUsername(username);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(defaultPassword));
+        userService.updateObj(user);
+        return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     * 分页查询用户
+     * @param nameDto
+     * @return
+     */
+    @GetMapping("/user/usersByPage")
+    public ModelMap queryUsers(NameDto nameDto, HttpServletRequest request){
+        String token = request.getHeader("token");
+        String currentUsername =(String) redisUtil.get(token);
+        Page page = userService.findUsers(nameDto,currentUsername);
         return pageModelMap(page);
     }
     /**
-     * 根据条件查找用户信息
+     * 新增用户
+     * @param user
      * @return
      */
-    @GetMapping("showUsers")
-    public ModelMap showUsers(UserDto userDto) {
-        Page<User> page = userService.findByPageWithoutAdmin(userDto);
-        return pageModelMap(page);
+    @PostMapping("/user/user")
+    public JsonResult addUser(User user){
+        JsonResult jsonResult = findByName(user.getUsername());
+        if(jsonResult.getResult().getResultCode()==200){
+            user.setId(UUID.randomUUID().toString());
+            user.setCreateDate(new Date());
+            userService.addObj(user);
+        }
+        return jsonResult;
     }
     /**
-     * 批量删除
-     * @param ids
+     * 编辑用户
+     * @param user
      * @return
      */
-    @RequestMapping("deleteByIds")
-    public ModelMap deleteByIds(String ids){
-        if(StringUtils.isEmpty(ids)){
-            return failureModelMap("没有要删除的用户!");
+    @PutMapping("/user/user")
+    public JsonResult updateUser(User user){
+        User s = userService.queryUserByUsername(user.getUsername());
+        if(s!=null && !s.getId().equals(user.getId())){
+            return new JsonResult(Result.FAIL);
         }
-        ids = StringUtils.delete(ids,"]");
-        ids = StringUtils.delete(ids,"[");
-        ids = StringUtils.delete(ids,"\"");
-        if(StringUtils.isEmpty(ids)){
-            return failureModelMap("没有要删除的用户!");
-        }
-        try {
-            userService.deleteBatch(ids.split(","));
-        }catch (RuntimeException e){
-            failureModelMap(e.getMessage());
-        }
-        return successModelMap("删除成功!");
+        User savedUser = userService.queryObjById(user.getId());
+        user.setCreateDate(savedUser.getCreateDate());
+        user.setPassword(savedUser.getPassword());
+        user.setCreator(savedUser.getCreator());
+        user.setStatus(savedUser.getStatus());
+        userService.updateObj(user);
+        return new JsonResult(Result.SUCCESS);
     }
     /**
-     * 根据id删除简历
+     * 根据用户名称查找
+     * @param username
+     * @return
+     */
+    @GetMapping("/user/user/{username}")
+    public JsonResult findByName(@PathVariable(name="username") String username){
+        User user = userService.queryUserByUsername(username);
+        if(user==null){
+            return new JsonResult(Result.SUCCESS);
+        }else{
+            return new JsonResult(Result.FAIL);
+        }
+    }
+    /**
+     * 根据ID删除用户
      * @param id
      * @return
      */
-    @GetMapping("deleteById/{id}")
-    public ModelMap deleteById(@PathVariable String id) {
-        try {
-            userService.deleteById(id);
-        }catch (RuntimeException e){
-            return failureModelMap(e.getMessage());
-        }
-        return successModelMap("删除成功!");
-    }
-    /**
-     * 验证用户名是否可用
-     * @param username
-     * @return
-     */
-    @GetMapping("checkUsername/{username}")
-    public ModelMap checkUsername(@PathVariable String username){
-        User user = userService.queryUserByUsername(username);
-        if(user!=null){
-            return failureModelMap("");
-        }else{
-            return successModelMap("");
-        }
-    }
-    /**
-     * 添加用户
-     * @param user
-     * @return
-     */
-    @GetMapping("addUser")
-    public ModelMap addUser(User user){
-        User u = userService.queryUserByUsername(user.getUsername());
-        if(u!=null){
-            return failureModelMap("用户添加失败: "+ user.getUsername()+"已被使用!");
-        }
-        user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
-        user.setCreateDate(new Date());
-        userService.addObj(user);
-        return successModelMap("新增用户成功!");
-    }
-    /**
-     * 修改用户
-     * @param user
-     * @return
-     */
-    @GetMapping("modifyUser")
-    public ModelMap modifyUser(User user){
-        User u = userService.queryUserByUsername(user.getUsername());
-        u.setRealname(user.getRealname());
-        u.setTel(user.getTel());
-        u.setNote(user.getNote());
-        u.setRole(user.getRole());
-        userService.addObj(u);
-        return successModelMap("修改用户成功!");
-    }
-    /**
-     * 根据用户名查找
-     * @param username
-     * @return
-     */
-    @RequestMapping("queryByUsername/{username}")
-    public User queryByUsername(@PathVariable String username){
-        return userService.queryUserByUsername(username);
-    }
-    /**
-     * 密码重置
-     * @return
-     */
-    @GetMapping("resetPassword")
-    public ModelMap resetPassword(String id){
-        User user = userService.queryObjById(id);
-        user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
-        userService.updateObj(user);
-        return successModelMap("");
+    @DeleteMapping("/user/user/{id}")
+    public JsonResult deleteById(@PathVariable(name="id") String id){
+        userService.deleteById(id);
+        return new JsonResult(Result.SUCCESS);
     }
 }

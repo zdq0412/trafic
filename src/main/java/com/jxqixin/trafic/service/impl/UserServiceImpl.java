@@ -1,8 +1,11 @@
 package com.jxqixin.trafic.service.impl;
 
+import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.UserDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.repository.CommonRepository;
+import com.jxqixin.trafic.repository.OrgRepository;
 import com.jxqixin.trafic.repository.UserRepository;
 import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,8 @@ import java.util.List;
 public class UserServiceImpl extends CommonServiceImpl<User> implements IUserService {
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private OrgRepository orgRepository;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return userRepository;
@@ -121,5 +123,28 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	@Override
 	public Integer findCountByRoleId(String id) {
 		return userRepository.findCountByRoleId(id);
+	}
+
+	@Override
+	public Page findUsers(NameDto nameDto,String currentUsername) {
+		User user = userRepository.findByUsername(currentUsername);
+		Org org = user.getOrg();
+		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
+		return userRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> list = new ArrayList<>();
+				if(org!=null){
+					Join<User,Org> orgJoin = root.join("org");
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
+				}
+
+				if(!StringUtils.isEmpty(nameDto.getName())){
+					list.add(criteriaBuilder.like(root.get("username"),"%" + nameDto.getName().trim() + "%"));
+				}
+				Predicate[] predicates = new Predicate[list.size()];
+				return criteriaBuilder.and(list.toArray(predicates));
+			}
+		}, pageable);
 	}
 }

@@ -1,15 +1,26 @@
 package com.jxqixin.trafic.service.impl;
 
+import com.alibaba.druid.sql.PagerUtils;
 import com.jxqixin.trafic.dto.Menus;
+import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Directory;
+import com.jxqixin.trafic.model.DirectoryFunctions;
 import com.jxqixin.trafic.model.Functions;
 import com.jxqixin.trafic.model.OrgCategory;
 import com.jxqixin.trafic.repository.*;
 import com.jxqixin.trafic.service.IFunctionsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.thymeleaf.util.StringUtils;
 
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,31 +34,13 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	@Autowired
 	private OrgCategoryRepository orgCategoryRepository;
 	@Autowired
+	private DirectoryFunctionsRepository directoryFunctionsRepository;
+	@Autowired
 	private UserRepository userRepository;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return functionsRepository;
 	}
-
-	/**
-	 * 查找最顶层权限
-	 * @return
-	 */
-	@Override
-	public List<Functions> queryTopFunctions() {
-		return functionsRepository.queryTopFunctions();
-	}
-
-	/**
-	 * 根据父id查找子权限
-	 * @param id
-	 * @return
-	 */
-	@Override
-	public List<Functions> findByParentId(String id) {
-		return functionsRepository.findByParentId(id);
-	}
-
 	/**
 	 * 根据角色名称查找权限
 	 * @param roleName
@@ -82,6 +75,82 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 			});
 		}
 		return list;
+	}
+
+	@Override
+	public Page findMenusByPage(NameDto nameDto) {
+		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
+		//目录名称或权限名称
+		String name = nameDto.getName();
+		//查询所有目录
+		Page<Directory> dirPage = directoryRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> list = new ArrayList<>();
+				if(!StringUtils.isEmpty(nameDto.getName())){
+					list.add(criteriaBuilder.like(root.get("name"),"%" + nameDto.getName().trim() +"%"));
+				}
+				Predicate[] predicates = new Predicate[list.size()];
+				return criteriaBuilder.and(list.toArray(predicates));
+			}
+		}, pageable);
+
+		if(dirPage.getTotalElements()>0){
+			List<Directory> directories = dirPage.getContent();
+			directories.forEach(directory ->{
+				List<Functions> functionList = functionsRepository.findByDirId(directory.getId());
+				directory.setChildren(functionList);
+			});
+		}
+		return dirPage;
+	}
+
+	@Override
+	public Functions findByName(String name) {
+		return functionsRepository.findByName(name);
+	}
+
+	@Override
+	public void addFunction(Functions functions) {
+		Functions parent = functions.getParent();
+		functions.setParent(null);
+		functions = this.addObj(functions);
+		//父菜单为目录
+		if(StringUtils.isEmpty(parent.getType())){
+			Directory d = new Directory();
+			d.setId(parent.getId());
+
+			DirectoryFunctions directoryFunctions = new DirectoryFunctions();
+			directoryFunctions.setDirectory(d);
+			directoryFunctions.setFunctions(functions);
+
+			directoryFunctionsRepository.save(directoryFunctions);
+		}
+		//父菜单为菜单
+		if("1".equals(parent.getType())){
+			functions.setParent(parent);
+
+			functionsRepository.save(functions);
+		}
+	}
+
+	@Override
+	public void deleteById(String id) {
+		directoryFunctionsRepository.deleteByFunctionId(id);
+		functionsRepository.deleteByParentId(id);
+		functionsRepository.deleteById(id);
+	}
+
+	@Override
+	public Page findFunctionsByPage(NameDto nameDto) {
+		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
+		return functionsRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				Join<Functions,Functions> parentJoin = root.join("parent");
+				return criteriaBuilder.and(criteriaBuilder.equal(parentJoin.get("id"),nameDto.getName()),criteriaBuilder.equal(root.get("type"),"0"));
+			}
+		}, pageable);
 	}
 
 	/**

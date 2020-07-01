@@ -1,16 +1,12 @@
 package com.jxqixin.trafic.repository;
 import com.jxqixin.trafic.model.Functions;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import java.io.Serializable;
 import java.util.List;
 public interface FunctionsRepository<ID extends Serializable> extends CommonRepository<Functions,ID> {
-    @Query("select p from Functions p where p.parent is null")
-    List<Functions> queryTopFunctions();
-    @Query("select p from Functions p where p.parent.id=?1")
-    List<Functions> findByParentId(String id);
     @Query("select rp.functions from RoleFunctions rp where rp.role.name=?1")
     List<Functions> queryByRoleName(String roleName);
-
     /**
      * 根据目录ID和当前用户名查找菜单
      * @param id 目录ID，Directory的ID
@@ -45,4 +41,20 @@ public interface FunctionsRepository<ID extends Serializable> extends CommonRepo
             " inner join org_category oc on oc.id=ocf.org_category_id " +
             " where oc.id=?3)")
     List<Functions> findFunctions(String id, String username ,String orgCategoryId);
+    @Query(value = "select f.* from functions f inner join directory_functions df on f.id=df.function_id" +
+            " inner join directory d on d.id=df.directory_id where d.id=?1",nativeQuery = true)
+    List<Functions> findByDirId(String id);
+    /**
+     * 根据名称查找权限
+     * @param name
+     * @return
+     */
+    Functions findByName(String name);
+    /**
+     * 根据父ID删除子记录
+     * @param parentId
+     */
+    @Modifying
+    @Query(nativeQuery = true,value = "delete from functions where pid=?1")
+    void deleteByParentId(String parentId);
 }

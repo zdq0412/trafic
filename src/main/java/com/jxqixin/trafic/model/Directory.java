@@ -5,7 +5,10 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 /**
  * 目录，相当于一级菜单，目录下是二级以下子菜单信息
  */
@@ -39,6 +42,16 @@ public class Directory {
 	@JoinColumn(name = "schema_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Schema schema;
+	@Transient
+	private List<Functions> children = new ArrayList<>();
+
+	public List<Functions> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<Functions> children) {
+		this.children = children;
+	}
 
 	public String getId() {
 		return id;

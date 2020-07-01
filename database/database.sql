@@ -42,8 +42,8 @@ create table functions(
   creator varchar(50) comment '创建人',
   createDate timestamp default current_timestamp comment '创建日期',
   note varchar(200) comment '备注',
-  icon varchar(20) comment '图标',
-  c_index varchar(50) unique comment '唯一标识，要和前端路由的地址相同',
+  icon varchar(50) comment '图标',
+  c_index varchar(50)  comment '唯一标识，要和前端路由的地址相同',
 	constraint fk_pid foreign key(pid) REFERENCES functions(id)
 ) comment '权限表';
 
@@ -150,8 +150,8 @@ create table directory(
   creator varchar(50) comment '创建人',
   createDate timestamp default current_timestamp comment '创建日期',
   note varchar(200) comment '备注',
-  icon varchar(20) comment '图标',
-  c_index varchar(50) unique comment '唯一标识，要和前端路由的地址相同',
+  icon varchar(50) comment '图标',
+  c_index varchar(50)  comment '唯一标识，要和前端路由的地址相同',
 	constraint fk_schema_id foreign key(schema_id) REFERENCES t_schema(id)
 ) comment '目录表';
 

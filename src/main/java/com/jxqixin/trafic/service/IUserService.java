@@ -1,4 +1,5 @@
 package com.jxqixin.trafic.service;
+import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.UserDto;
 import com.jxqixin.trafic.model.User;
 import org.springframework.data.domain.Page;
@@ -23,20 +24,17 @@ public interface IUserService extends ICommonService<User> {
 	 * @return
 	 */
 	public List<Object[]> queryFunctionsByUsername(String username);
-
 	/**
 	 * 分页查询用户信息
 	 * @param userDto
 	 * @return
 	 */
     Page<User> findByPage(UserDto userDto);
-
 	/**
 	 * 批量删除用户
 	 * @param ids
 	 */
 	void deleteBatch(String[] ids);
-
 	/**
 	 * 根据id删除
 	 * @param id
@@ -50,4 +48,10 @@ public interface IUserService extends ICommonService<User> {
 	 * @return
 	 */
     Integer findCountByRoleId(String id);
+	/**
+	 * 查找当前组织机构下的用户
+	 * @param nameDto
+	 * @return
+	 */
+    Page findUsers(NameDto nameDto,String currentUsername);
 }
