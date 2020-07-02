@@ -13,4 +13,10 @@ public interface OrgCategoryRepository<ID extends Serializable> extends CommonRe
             " inner join org o on oc.id=o.org_category_id  " +
             " inner join t_user u on u.org_id=o.id where u.username=?1")
     OrgCategory findByUsername(String username);
+    /**
+     * 根据类别名称查找
+     * @param name
+     * @return
+     */
+    OrgCategory findByName(String name);
 }

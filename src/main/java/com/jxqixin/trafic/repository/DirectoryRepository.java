@@ -17,4 +17,10 @@ public interface DirectoryRepository<ID extends Serializable> extends CommonRepo
     @Modifying
     @Query(nativeQuery = true,value = "update directory set schema_id=null where schema_id=?1")
     void deleteSchemaBySchemaId(String id);
+    /**
+     * 根据名称查找目录
+     * @param name
+     * @return
+     */
+    Directory findByName(String name);
 }

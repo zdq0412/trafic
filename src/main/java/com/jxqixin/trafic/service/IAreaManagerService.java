@@ -1,4 +1,5 @@
 package com.jxqixin.trafic.service;
+import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.UserDto;
 import com.jxqixin.trafic.model.AreaManager;
 import org.springframework.data.domain.Page;
@@ -35,4 +36,16 @@ public interface IAreaManagerService extends ICommonService<AreaManager> {
 	 * @param id
 	 */
 	void deleteById(String id);
+	/**
+	 * 分页查找区域管理员
+	 * @param nameDto
+	 * @return
+	 */
+    Page findAreaManagers(NameDto nameDto);
+	/**
+	 * 根据用户名查找
+	 * @param username
+	 * @return
+	 */
+	AreaManager findByUsername(String username);
 }
