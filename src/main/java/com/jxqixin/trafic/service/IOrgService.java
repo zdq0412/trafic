@@ -4,6 +4,8 @@ import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Org;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface IOrgService extends ICommonService<Org> {
     /**
      * 分页查找企业信息
@@ -22,4 +24,11 @@ public interface IOrgService extends ICommonService<Org> {
      * @param id
      */
     void deleteById(String id);
+
+    /**
+     * 根据企业代码查找企业信息
+     * @param code
+     * @return
+     */
+    Org findByCode(String code);
 }

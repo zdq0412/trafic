@@ -47,4 +47,8 @@ public class OrgServiceImpl extends CommonServiceImpl<Org> implements IOrgServic
 	public void deleteById(String id) {
 		orgRepository.deleteById(id);
 	}
+	@Override
+	public Org findByCode(String code) {
+		return orgRepository.findByCode(code);
+	}
 }

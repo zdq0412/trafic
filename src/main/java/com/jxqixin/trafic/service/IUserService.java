@@ -25,12 +25,6 @@ public interface IUserService extends ICommonService<User> {
 	 */
 	public List<Object[]> queryFunctionsByUsername(String username);
 	/**
-	 * 分页查询用户信息
-	 * @param userDto
-	 * @return
-	 */
-    Page<User> findByPage(UserDto userDto);
-	/**
 	 * 批量删除用户
 	 * @param ids
 	 */
@@ -40,8 +34,6 @@ public interface IUserService extends ICommonService<User> {
 	 * @param id
 	 */
 	void deleteById(String id);
-
-	Page<User> findByPageWithoutAdmin(UserDto userDto);
 	/**
 	 * 根据角色id查找用户数
 	 * @param id
@@ -54,4 +46,11 @@ public interface IUserService extends ICommonService<User> {
 	 * @return
 	 */
     Page findUsers(NameDto nameDto,String currentUsername);
+	/**
+	 * 根据用户名和企业id查找用户信息
+	 * @param username
+	 * @param orgId
+	 * @return
+	 */
+	User queryUserByUsernameAndOrgId(String username, String orgId);
 }

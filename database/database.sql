@@ -105,6 +105,7 @@ create table category(
   pid varchar(36) comment '父类ID',
   createDate timestamp default current_timestamp comment '创建日期',
   note varchar(2000) comment '区域描述',
+  type varchar(50) comment '类型',
   constraint fk_category foreign key(pid) references category(id)
 ) comment '区域信息表';
 

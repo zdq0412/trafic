@@ -28,11 +28,13 @@ public interface UserRepository<ID extends Serializable> extends CommonRepositor
             " inner join Role r  on r.id=rp.role_id " +
             "inner join T_user u on r.id=u.role_id  where u.username=?1",nativeQuery = true)
     public List<Object[]> queryFunctionsByUsername(String username);
-    @Query(value="select u from User u where username=?1")
+    @Query(value="select u.* from T_User u where username=?1 and u.org_id is null",nativeQuery = true)
     public User findByUsername(String username);
     /**根据角色id查找用户*/
     @Query("select u from User u where u.role.id=?1")
     public List<User> queryByRoleId(String id);
     @Query(nativeQuery = true,value = "select count(id) from T_user where ROLE_ID=?1")
     Integer findCountByRoleId(String id);
+    @Query(value="select u.* from T_User u where username=?1 and u.org_id=?2",nativeQuery = true)
+    User findByUsernameAndOrgId(String username, String orgId);
 }

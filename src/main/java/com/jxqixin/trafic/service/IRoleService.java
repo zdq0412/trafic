@@ -1,39 +1,36 @@
 package com.jxqixin.trafic.service;
 
-import com.jxqixin.trafic.dto.RoleDto;
+import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Role;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface IRoleService extends ICommonService<Role> {
     /**
-     * 根据条件查找角色信息
-     * @param roleDto
+     * 根据角色名称和企业ID查找角色
+     * @param name
+     * @param orgId
      * @return
      */
-    Page<Role> findByPage(RoleDto roleDto);
-    /**
-     * 批量删除角色
-     * @param ids
-     */
-    void deleteBatch(String[] ids);
+    Role findByNameAndOrgId(String name,String orgId);
 
     /**
-     * 根据id删除
+     * 分页查找角色
+     * @param nameDto
+     * @param orgId
+     * @return
+     */
+    Page findRoles(NameDto nameDto,String orgId);
+    /**
+     * 根据ID删除角色
      * @param id
      */
     void deleteById(String id);
-
-    /***
-     * 根据角色名称查找角色
-     * @param rolename
+    /**
+     * 根据企业id查找角色信息
+     * @param orgId
      * @return
      */
-    Role queryRoleByRolename(String rolename);
-
-    /**
-     * 为角色赋权限
-     * @param roleName
-     * @param powerUrls
-     */
-    void asignPowers(String roleName, String[] powerUrls);
+    List<Role> findAllRoles(String orgId);
 }

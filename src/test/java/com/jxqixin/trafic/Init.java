@@ -118,7 +118,7 @@ public class Init{
     @Test
     public void addRoleFunctions(){
         List<Functions> list = functionsService.findAll();
-        Role role = roleService.queryRoleByRolename("admin");
+        Role role = roleService.findByNameAndOrgId("admin",null);
 
         list.forEach(function -> {
             RoleFunctions roleFunctions = new RoleFunctions();

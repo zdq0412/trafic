@@ -1,13 +1,17 @@
 package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.dto.OrgDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.OrgCategory;
 import com.jxqixin.trafic.service.IOrgService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -41,48 +45,87 @@ public class OrgController extends CommonController{
     }
     /**
      * 新增企业
-     * @param org
+     * @param orgDto
      * @return
      */
     @PostMapping("/org/org")
-    public JsonResult addOrg(Org org){
-        JsonResult jsonResult = findByName(org.getName());
+    public JsonResult addOrg(OrgDto orgDto){
+        JsonResult jsonResult = checkCodeAndName(orgDto.getName(),orgDto.getCode());
         if(jsonResult.getResult().getResultCode()==200){
+            Org org = new Org();
+            BeanUtils.copyProperties(orgDto,org);
             org.setId(UUID.randomUUID().toString());
             org.setCreateDate(new Date());
+            if(!StringUtils.isEmpty(orgDto.getOrgCategoryId())){
+                OrgCategory orgCategory = new OrgCategory();
+                orgCategory.setId(orgDto.getOrgCategoryId());
+
+                org.setOrgCategory(orgCategory);
+            }
             orgService.addObj(org);
         }
         return jsonResult;
     }
     /**
      * 编辑企业
-     * @param org
+     * @param orgDto
      * @return
      */
     @PutMapping("/org/org")
-    public JsonResult updateOrg(Org org){
-        Org s = orgService.findByName(org.getName());
+    public JsonResult updateOrg(OrgDto orgDto){
+        Org s = orgService.findByName(orgDto.getName());
 
-        if(s!=null && !s.getId().equals(org.getId())){
-            return new JsonResult(Result.FAIL);
+        Result fail = Result.FAIL;
+        if(s!=null && !s.getId().equals(orgDto.getId())){
+            fail.setMessage("企业名称已被使用!");
+            return new JsonResult(fail);
         }
-        Org savedOrg = orgService.queryObjById(org.getId());
-        org.setCreateDate(savedOrg.getCreateDate());
-        orgService.updateObj(org);
+        s = orgService.findByCode(orgDto.getCode());
+        if(s!=null && !s.getId().equals(orgDto.getId())){
+            fail.setMessage("企业代码已被使用!");
+            return new JsonResult(fail);
+        }
+        Org savedOrg = orgService.queryObjById(orgDto.getId());
+        savedOrg.setCode(orgDto.getCode());
+        savedOrg.setName(orgDto.getName());
+        savedOrg.setContact(orgDto.getContact());
+        savedOrg.setAddr(orgDto.getAddr());
+        savedOrg.setTel(orgDto.getTel());
+        savedOrg.setLegalPerson(orgDto.getLegalPerson());
+        savedOrg.setNote(orgDto.getNote());
+        savedOrg.setProvince(orgDto.getProvince());
+        savedOrg.setCity(orgDto.getCity());
+        savedOrg.setRegion(orgDto.getRegion());
+        if(!StringUtils.isEmpty(orgDto.getOrgCategoryId())){
+            OrgCategory orgCategory = new OrgCategory();
+            orgCategory.setId(orgDto.getOrgCategoryId());
+
+            savedOrg.setOrgCategory(orgCategory);
+        }
+        orgService.updateObj(savedOrg);
         return new JsonResult(Result.SUCCESS);
     }
+
     /**
-     * 根据企业名称查找
+     * 根据企业名称和代码查找企业信息
      * @param name
+     * @param code
      * @return
      */
-    @GetMapping("/org/org/{name}")
-    public JsonResult findByName(@PathVariable(name="name") String name){
+    public JsonResult checkCodeAndName(String name,String code){
         Org org = orgService.findByName(name);
+        Result fail = Result.FAIL;
         if(org==null){
-            return new JsonResult(Result.SUCCESS);
+            org = orgService.findByCode(code);
+            if(org==null) {
+                return new JsonResult(Result.SUCCESS);
+            }else{
+                fail.setMessage("企业代码已被使用!");
+                return new JsonResult(fail);
+            }
         }else{
-            return new JsonResult(Result.FAIL);
+            fail.setMessage("企业名称已被使用!");
+            return new JsonResult(fail);
         }
     }
     /**

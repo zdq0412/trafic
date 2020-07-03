@@ -18,4 +18,6 @@ public interface OrgRepository<ID extends Serializable> extends CommonRepository
      * @return
      */
     Org findByName(String name);
+
+    Org findByCode(String code);
 }

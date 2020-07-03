@@ -1,13 +1,20 @@
 package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
+import com.jxqixin.trafic.dto.AreaManagerDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.AreaManager;
+import com.jxqixin.trafic.model.OrgCategory;
+import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IAreaManagerService;
+import com.jxqixin.trafic.service.IUserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
+
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +25,8 @@ import java.util.UUID;
 public class AreaManagerController extends CommonController{
     @Autowired
     private IAreaManagerService areaManagerService;
+    @Autowired
+    private IUserService userService;
     /**
      * 查询所有区域管理员
      * @return
@@ -39,35 +48,49 @@ public class AreaManagerController extends CommonController{
     }
     /**
      * 新增区域管理员
-     * @param areaManager
+     * @param areaManagerDto
      * @return
      */
     @PostMapping("/areaManager/areaManager")
-    public JsonResult addAreaManager(AreaManager areaManager){
-        JsonResult jsonResult = findByName(areaManager.getUsername());
+    public JsonResult addAreaManager(AreaManagerDto areaManagerDto){
+        JsonResult jsonResult = findByName(areaManagerDto.getUsername());
+        AreaManager areaManager = new AreaManager();
+        BeanUtils.copyProperties(areaManagerDto,areaManager);
         if(jsonResult.getResult().getResultCode()==200){
             areaManager.setId(UUID.randomUUID().toString());
             areaManager.setCreateDate(new Date());
+            if(!StringUtils.isEmpty(areaManagerDto.getOrgCategoryId())){
+                OrgCategory orgCategory = new OrgCategory();
+                orgCategory.setId(areaManagerDto.getOrgCategoryId());
+                areaManager.setOrgCategory(orgCategory);
+            }
             areaManagerService.addObj(areaManager);
         }
         return jsonResult;
     }
     /**
      * 编辑区域管理员
-     * @param areaManager
+     * @param areaManagerDto
      * @return
      */
     @PutMapping("/areaManager/areaManager")
-    public JsonResult updateAreaManager(AreaManager areaManager){
-        AreaManager s = areaManagerService.findByUsername(areaManager.getUsername());
+    public JsonResult updateAreaManager(AreaManagerDto areaManagerDto){
+        AreaManager s = areaManagerService.findByUsername(areaManagerDto.getUsername());
 
-        if(s!=null && !s.getId().equals(areaManager.getId())){
+        if(s!=null && !s.getId().equals(areaManagerDto.getId())){
             return new JsonResult(Result.FAIL);
         }
-        AreaManager savedAreaManager = areaManagerService.queryObjById(areaManager.getId());
-        areaManager.setCreateDate(savedAreaManager.getCreateDate());
-        String privence = areaManager.getProvince();
-        areaManagerService.updateObj(areaManager);
+        AreaManager savedAreaManager = areaManagerService.queryObjById(areaManagerDto.getId());
+        if(!StringUtils.isEmpty(areaManagerDto.getOrgCategoryId())){
+            OrgCategory orgCategory = new OrgCategory();
+            orgCategory.setId(areaManagerDto.getOrgCategoryId());
+            savedAreaManager.setOrgCategory(orgCategory);
+        }
+        savedAreaManager.setUsername(areaManagerDto.getUsername());
+        savedAreaManager.setCity(areaManagerDto.getCity());
+        savedAreaManager.setProvince(areaManagerDto.getProvince());
+        savedAreaManager.setRegion(areaManagerDto.getRegion());
+        areaManagerService.updateObj(savedAreaManager);
         return new JsonResult(Result.SUCCESS);
     }
     /**
@@ -79,10 +102,12 @@ public class AreaManagerController extends CommonController{
     public JsonResult findByName(@PathVariable(name="name") String name){
         AreaManager areaManager = areaManagerService.findByUsername(name);
         if(areaManager==null){
-            return new JsonResult(Result.SUCCESS);
-        }else{
-            return new JsonResult(Result.FAIL);
+            User user = userService.queryUserByUsername(name);
+            if(user==null) {
+                return new JsonResult(Result.SUCCESS);
+            }
         }
+        return new JsonResult(Result.FAIL);
     }
     /**
      * 根据ID删除区域管理员

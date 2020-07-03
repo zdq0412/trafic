@@ -1,12 +1,35 @@
 package com.jxqixin.trafic.dto;
-public class RoleDto {
+
+/**
+ * 类别dto
+ */
+public class CategoryDto {
+
     private String id;
 
     private String name;
 
     private String note;
 
-    private String orgCategoryId;
+    private String type;
+
+    private String parentId;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
     public String getId() {
         return id;
@@ -30,13 +53,5 @@ public class RoleDto {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public String getOrgCategoryId() {
-        return orgCategoryId;
-    }
-
-    public void setOrgCategoryId(String orgCategoryId) {
-        this.orgCategoryId = orgCategoryId;
     }
 }

@@ -10,6 +10,7 @@ import java.util.Date;
  */
 @Entity
 @GenericGenerator(name="id_gen",strategy = "uuid")
+@Table(name="area_manager")
 public class AreaManager {
 	@Id
 	@GeneratedValue(generator = "id_gen")

@@ -1,5 +1,8 @@
 package com.jxqixin.trafic.service.impl;
+import com.jxqixin.trafic.common.NameSpecification;
+import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.RoleDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.Role;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.repository.CommonRepository;
@@ -13,10 +16,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.StringUtils;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,82 +31,63 @@ public class RoleServiceImpl extends CommonServiceImpl<Role> implements IRoleSer
 	private UserRepository userRepository;
 	@Autowired
 	private IRoleFunctionsService roleFunctionsService;
-	@Autowired
-	private IRoleService roleService;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return roleRepository;
 	}
-	/**
-	 * 根据条件查找角色信息
-	 * @param roleDto
-	 * @return
-	 */
+
 	@Override
-	public Page<Role> findByPage(RoleDto roleDto) {
-		Pageable pageable = PageRequest.of(roleDto.getPage(),roleDto.getLimit(), Sort.Direction.DESC,"createDate");
-		return roleRepository.findAll(new Specification() {
+	public Role findByNameAndOrgId(String name, String orgId) {
+		if(!StringUtils.isEmpty(orgId)){
+			return roleRepository.findByNameAndOrgId(name,orgId);
+		}else{
+			return roleRepository.findByName(name);
+		}
+	}
+	@Override
+	public Page findRoles(NameDto nameDto,String orgId) {
+		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
+		return roleRepository.findAll(new Specification(){
+
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				String roleName = roleDto.getRoleName();
 				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(roleName)){
-					list.add(criteriaBuilder.like(root.get("roleName"),"%" + roleName +"%"));
+
+				if(!StringUtils.isEmpty(nameDto.getName())){
+					list.add(criteriaBuilder.like(root.get("name"),"%" + nameDto.getName()+"%"));
+				}
+
+				if(!StringUtils.isEmpty(orgId)){
+					Join<Role, Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),orgId));
 				}
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}
 		},pageable);
 	}
-	/**
-	 * 批量删除角色
-	 * @param ids
-	 */
+
 	@Override
-	public void deleteBatch(String[] ids) {
-		if(ids==null || ids.length<=0){
-			throw new RuntimeException("没有要删除的简历!");
-		}
-		for (int i = 0;i<ids.length;i++){
-			deleteById(ids[i]);
-		}
-	}
-	/**
-	 * 根据id删除
-	 * @param roleName
-	 */
-	@Override
-	public void deleteById(String roleName) {
-		Role role = (Role) roleRepository.findById(roleName).get();
+	public void deleteById(String id) {
+		Role role = (Role)roleRepository.findById(id).get();
 		if(!role.isAllowedDelete()){
-			throw new RuntimeException("该角色不允许删除:" + role.getName());
+			throw new RuntimeException("删除失败,该角色不允许删除!");
 		}
-		List<User> list = userRepository.queryByRoleId(roleName);
-		if(!CollectionUtils.isEmpty(list)){
-			throw new RuntimeException("该角色下存在用户，不允许删除:" + role.getName());
+
+		Integer userCount = userRepository.findCountByRoleId(id);
+		if(userCount!=null & userCount>0){
+			throw new RuntimeException("删除失败，该角色下存在用户!");
 		}
-		roleRepository.deleteById(roleName);
+
+		roleFunctionsService.deleteByRoleId(id);
+		roleRepository.deleteById(id);
 	}
-	/***
-	 * 根据角色名称查找角色
-	 * @param rolename
-	 * @return
-	 */
+
 	@Override
-	public Role queryRoleByRolename(String rolename) {
-		return roleRepository.findByName(rolename);
-	}
-	/**
-	 * 为角色赋权限
-	 * @param roleName
-	 * @param powerUrls
-	 */
-	@Override
-	public void asignPowers(String roleName, String[] powerUrls) {
-		Role role = roleService.queryRoleByRolename(roleName);
-		roleFunctionsService.deleteByRoleId(role.getId());
-		for(int i = 0;i<powerUrls.length;i++){
-			roleFunctionsService.insert(role.getId(),powerUrls[i]);
+	public List<Role> findAllRoles(String orgId) {
+		if(StringUtils.isEmpty(orgId)){
+			return roleRepository.findAll();
 		}
+		return roleRepository.findAllByOrgId(orgId);
 	}
 }

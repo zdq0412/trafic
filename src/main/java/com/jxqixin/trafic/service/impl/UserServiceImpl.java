@@ -47,35 +47,6 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 		return userRepository.queryFunctionsByUsername(username);
 	}
 	/**
-	 * 分页查询用户信息
-	 * @param userDto
-	 * @return
-	 */
-	@Override
-	public Page<User> findByPage(UserDto userDto) {
-		Pageable pageable = PageRequest.of(userDto.getPage(),userDto.getLimit(), Sort.Direction.DESC,"createDate");
-		return userRepository.findAll(new Specification() {
-			@Override
-			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				String username = userDto.getUsername();
-				String realName = userDto.getRealName();
-				String tel = userDto.getTel();
-				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(username)){
-					list.add(criteriaBuilder.like(root.get("username"),"%" + username + "%"));
-				}
-				if(!StringUtils.isEmpty(realName)){
-					list.add(criteriaBuilder.like(root.get("realName"),"%" + realName + "%"));
-				}
-				if(!StringUtils.isEmpty(tel)){
-					list.add(criteriaBuilder.like(root.get("tel"),"%" + tel + "%"));
-				}
-				Predicate[] predicates = new Predicate[list.size()];
-				return criteriaBuilder.and(list.toArray(predicates));
-			}
-		},pageable);
-	}
-	/**
 	 * 批量删除用户
 	 * @param ids
 	 */
@@ -104,16 +75,6 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 			throw new RuntimeException("该用户不允许删除:" + user.getUsername());
 		}
 		userRepository.deleteById(id);
-	}
-	@Override
-	public Page<User> findByPageWithoutAdmin(UserDto userDto) {
-		Pageable pageable = PageRequest.of(userDto.getPage(),userDto.getLimit());
-		return userRepository.findAll(new Specification() {
-			@Override
-			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				return criteriaBuilder.notEqual(root.get("username"),"admin");
-			}
-		}, pageable);
 	}
 	/**
 	 * 根据角色id查找用户数
@@ -146,5 +107,14 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 				return criteriaBuilder.and(list.toArray(predicates));
 			}
 		}, pageable);
+	}
+
+	@Override
+	public User queryUserByUsernameAndOrgId(String username, String orgId) {
+		if(!StringUtils.isEmpty(orgId)){
+			return userRepository.findByUsernameAndOrgId(username,orgId);
+		}else{
+			return userRepository.findByUsername(username);
+		}
 	}
 }

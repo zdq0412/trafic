@@ -1,18 +1,6 @@
-package com.jxqixin.trafic.model;
+package com.jxqixin.trafic.dto;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
-import java.util.Date;
-
-@Entity
-@GenericGenerator(name="id_gen",strategy = "uuid")
-public class Org {
-	@Id
-	@GeneratedValue(generator = "id_gen")
+public class OrgDto {
 	private String id;
 	/**组织机构代码*/
 	private String code;
@@ -32,26 +20,10 @@ public class Org {
 	private String city;
 	/**所属地区*/
 	private String region;
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createDate;
-	/**状态，0：正常，1：禁用，2：删除*/
-	private String status="0";
 	/**企业描述*/
 	private String note;
-	@ManyToOne
-	@JoinColumn(name="org_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private OrgCategory orgCategory;
-
-	public OrgCategory getOrgCategory() {
-		return orgCategory;
-	}
-
-	public void setOrgCategory(OrgCategory orgCategory) {
-		this.orgCategory = orgCategory;
-	}
-
+	/**企业所属类别id*/
+	private String orgCategoryId;
 	public String getId() {
 		return id;
 	}
@@ -132,27 +104,19 @@ public class Org {
 		this.region = region;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public String getNote() {
 		return note;
 	}
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getOrgCategoryId() {
+		return orgCategoryId;
+	}
+
+	public void setOrgCategoryId(String orgCategoryId) {
+		this.orgCategoryId = orgCategoryId;
 	}
 }
