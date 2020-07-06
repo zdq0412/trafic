@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.dto.SchemaDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Schema;
 import com.jxqixin.trafic.service.ISchemaService;
@@ -56,20 +57,21 @@ public class SchemaController extends CommonController{
     }
     /**
      * 编辑模式
-     * @param schema
+     * @param schemaDto
      * @return
      */
     @PutMapping("/schema/schema")
-    public JsonResult updateSchema(Schema schema){
-        Schema s = schemaService.findByName(schema.getName());
+    public JsonResult updateSchema(SchemaDto schemaDto){
+        Schema s = schemaService.findByName(schemaDto.getName());
 
-        if(s!=null && !s.getId().equals(schema.getId())){
+        if(s!=null && !s.getId().equals(schemaDto.getId())){
             return new JsonResult(Result.FAIL);
         }
-        Schema savedSchema = schemaService.queryObjById(schema.getId());
-        schema.setSelected(savedSchema.isSelected());
-        schema.setCreateDate(savedSchema.getCreateDate());
-        schemaService.updateObj(schema);
+        Schema savedSchema = schemaService.queryObjById(schemaDto.getId());
+        savedSchema.setName(schemaDto.getName());
+        savedSchema.setNote(schemaDto.getNote());
+        savedSchema.setPriority(schemaDto.getPriority());
+        schemaService.updateObj(savedSchema);
         return new JsonResult(Result.SUCCESS);
     }
     /**
@@ -93,7 +95,13 @@ public class SchemaController extends CommonController{
      */
     @DeleteMapping("/schema/schema/{id}")
     public JsonResult deleteById(@PathVariable(name="id") String id){
-        schemaService.deleteById(id);
+        try {
+            schemaService.deleteById(id);
+        }catch (RuntimeException e){
+            Result result = Result.FAIL;
+            result.setMessage(e.getMessage());
+            return new JsonResult(result);
+        }
         return new JsonResult(Result.SUCCESS);
     }
 }

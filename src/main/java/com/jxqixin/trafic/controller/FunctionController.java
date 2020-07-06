@@ -12,6 +12,7 @@ import com.jxqixin.trafic.service.IDirectoryService;
 import com.jxqixin.trafic.service.IFunctionsService;
 import com.jxqixin.trafic.service.ISchemaService;
 import com.jxqixin.trafic.util.RedisUtil;
+import com.jxqixin.trafic.util.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,6 +53,7 @@ public class FunctionController extends CommonController{
         Page page = functionsService.findMenusByPage(nameDto);
         return pageModelMap(page);
     }
+
     /**
      * 分页查询菜单下的功能
      * @param  nameDto name字段为菜单的ID
@@ -62,6 +64,84 @@ public class FunctionController extends CommonController{
         Page page = functionsService.findFunctionsByPage(nameDto);
         return pageModelMap(page);
     }
+    /**
+     * 角色授权查询
+     * @return
+     */
+    @GetMapping("functions/roleFunctions")
+    public ModelMap findFunctions(String roleId,HttpServletRequest request){
+        //查找当前用户下的权限,用户只能分配其具有的权限
+        List<Functions> functions = functionsService.findFunctions(getCurrentUsername(request));
+        //查找roleId下的权限ID
+        List<String> functionsIdList = functionsService.findIdsByRoleId(roleId);
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute("functions",functions);
+        modelMap.addAttribute("functionIds",functionsIdList);
+        return modelMap;
+    }
+    /**
+     * 目录授权查询
+     * @return
+     */
+    @GetMapping("/functions/directoryFunctions")
+    public ModelMap findDirectoryFunctions(String dirId){
+        List<Functions> functions = functionsService.findAllMenus();
+        List<String> functionsIdList = functionsService.findIdsByDirectoryId(dirId);
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute("functions",functions);
+        modelMap.addAttribute("functionIds",functionsIdList);
+        return modelMap;
+    }
+    /**
+     * 企业类别授权查询
+     * @return
+     */
+    @GetMapping("/functions/orgCategoryFunctions")
+    public ModelMap findOrgCategoryFunctions(String orgCategoryId){
+        List<Functions> functions = functionsService.findAllFunctions();
+        List<String> functionsIdList = functionsService.findIdsByOrgCategoryId(orgCategoryId);
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute("functions",functions);
+        modelMap.addAttribute("functionIds",functionsIdList);
+        return modelMap;
+    }
+    /**
+     * 为角色赋权限
+     * @param functionsId
+     * @param roleId
+     * @return
+     */
+    @PutMapping("/functions/roleFunctions")
+    public JsonResult assignFunctions2Role(String functionsId,String roleId){
+        String[] functionIdArray = StringUtil.handleIds(functionsId);
+        functionsService.assign2Role(functionIdArray,roleId);
+        return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     * 为目录赋权限
+     * @param functionsId
+     * @param orgCategoryId
+     * @return
+     */
+    @PutMapping("/functions/orgCategoryFunctions")
+    public JsonResult assignFunctions2OrgCategory(String functionsId,String orgCategoryId){
+        String[] functionIdArray = StringUtil.handleIds(functionsId);
+        functionsService.assign2OrgCategory(functionIdArray,orgCategoryId);
+        return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     * 为目录赋菜单
+     * @param functionsId
+     * @param dirId
+     * @return
+     */
+    @PutMapping("/functions/directoryFunctions")
+    public JsonResult assignFunctions2Directory(String functionsId,String dirId){
+        String[] functionIdArray = StringUtil.handleIds(functionsId);
+        directoryService.assign2Directory(functionIdArray,dirId);
+        return new JsonResult(Result.SUCCESS);
+    }
+
     /**
      * 根据模式名称查找
      * @param name

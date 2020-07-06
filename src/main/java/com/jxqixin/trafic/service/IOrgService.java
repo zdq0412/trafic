@@ -24,11 +24,15 @@ public interface IOrgService extends ICommonService<Org> {
      * @param id
      */
     void deleteById(String id);
-
     /**
      * 根据企业代码查找企业信息
      * @param code
      * @return
      */
     Org findByCode(String code);
+    /**
+     * 新增企业信息
+     * @param org
+     */
+    void addOrg(Org org);
 }

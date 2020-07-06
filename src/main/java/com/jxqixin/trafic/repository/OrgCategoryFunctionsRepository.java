@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface OrgCategoryFunctionsRepository<ID extends Serializable> extends CommonRepository<OrgCategoryFunctions,ID> {
     /**
@@ -14,4 +15,6 @@ public interface OrgCategoryFunctionsRepository<ID extends Serializable> extends
     @Query(nativeQuery = true,value = "delete from org_category_functions " +
             " where org_category_id=?1")
     void deleteByOrgCategoryId(String id);
+    @Query(nativeQuery = true,value="select ocf.function_id from org_category_functions ocf where ocf.org_category_id=?1")
+    List<String> findFunctionIdsByOrgCategoryId(String orgCategoryId);
 }

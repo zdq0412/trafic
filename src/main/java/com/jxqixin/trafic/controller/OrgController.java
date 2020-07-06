@@ -62,7 +62,7 @@ public class OrgController extends CommonController{
 
                 org.setOrgCategory(orgCategory);
             }
-            orgService.addObj(org);
+            orgService.addOrg(org);
         }
         return jsonResult;
     }

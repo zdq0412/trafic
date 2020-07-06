@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.service;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Directory;
+import com.jxqixin.trafic.model.Functions;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -23,10 +24,15 @@ public interface IDirectoryService extends ICommonService<Directory> {
      * @return
      */
     Directory findByName(String name);
-
     /**
      * 根据ID删除目录及目录下的菜单
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 为目录分配菜单
+     * @param functionIdArray
+     * @param dirId
+     */
+    void assign2Directory(String[] functionIdArray, String dirId);
 }

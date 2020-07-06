@@ -1,4 +1,5 @@
 package com.jxqixin.trafic.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -48,6 +49,17 @@ public class Functions {
 	@JoinColumn(name = "pid",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Functions parent;
+	@Transient
+	@JsonIgnoreProperties("parent")
+	private List<Functions> children = new ArrayList<>();
+
+	public List<Functions> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<Functions> children) {
+		this.children = children;
+	}
 
 	public String getId() {
 		return id;

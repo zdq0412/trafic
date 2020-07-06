@@ -2,10 +2,13 @@ package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.DirectoryDto;
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.model.Functions;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Directory;
 import com.jxqixin.trafic.model.Schema;
 import com.jxqixin.trafic.service.IDirectoryService;
+import com.jxqixin.trafic.service.IFunctionsService;
+import com.jxqixin.trafic.util.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +28,8 @@ import java.util.UUID;
 public class DirectoryController extends CommonController{
     @Autowired
     private IDirectoryService directoryService;
+    @Autowired
+    private IFunctionsService functionsService;
     /**
      * 查询所有目录
      * @return
@@ -43,6 +49,7 @@ public class DirectoryController extends CommonController{
         Page page = directoryService.findDirectorys(nameDto);
         return pageModelMap(page);
     }
+
     /**
      * 新增目录
      * @param directoryDto

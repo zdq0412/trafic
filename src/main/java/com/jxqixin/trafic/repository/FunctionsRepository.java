@@ -57,4 +57,16 @@ public interface FunctionsRepository<ID extends Serializable> extends CommonRepo
     @Modifying
     @Query(nativeQuery = true,value = "delete from functions where pid=?1")
     void deleteByParentId(String parentId);
+    @Query(nativeQuery = true,value="select f.* from Functions f inner join role_functions rf on f.id=rf.function_id " +
+            "inner join Role r on rf.role_id=r.id " +
+            " inner join t_user u on u.role_id=r.id where u.username=?2 and f.pid=?1")
+    List<Functions> findByParentIdAndUsername(String parentId, String currentUsername);
+    @Query(nativeQuery = true,value="select f.* from Functions f inner join role_functions rf on f.id=rf.function_id " +
+            "inner join Role r on rf.role_id=r.id " +
+            " inner join t_user u on u.role_id=r.id where u.username=?1")
+    List<Functions> findByUsername(String currentUsername);
+    @Query(nativeQuery = true,value="select * from functions where type='1'")
+    List<Functions> findAllMenus();
+    @Query("select f from Functions f where f.parent.id=?1")
+    List<Functions> findByParentId(String id);
 }

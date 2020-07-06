@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface DirectoryFunctionsRepository<ID extends Serializable> extends CommonRepository<DirectoryFunctions,ID> {
     /**
@@ -22,4 +23,6 @@ public interface DirectoryFunctionsRepository<ID extends Serializable> extends C
     @Modifying
     @Query(nativeQuery = true,value="delete from directory_functions where directory_id=?1")
     void deleteByDirectoryId(String id);
+    @Query(nativeQuery = true,value="select df.function_id from directory_functions df where df.directory_id=?1")
+    List<String> findIdsByDirectoryId(String dirId);
 }

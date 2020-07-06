@@ -3,10 +3,7 @@ package com.jxqixin.trafic.service.impl;
 import com.alibaba.druid.sql.PagerUtils;
 import com.jxqixin.trafic.dto.Menus;
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.Directory;
-import com.jxqixin.trafic.model.DirectoryFunctions;
-import com.jxqixin.trafic.model.Functions;
-import com.jxqixin.trafic.model.OrgCategory;
+import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.*;
 import com.jxqixin.trafic.service.IFunctionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +20,10 @@ import org.thymeleaf.util.StringUtils;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
 @Service
 @Transactional
 public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implements IFunctionsService{
@@ -36,11 +36,15 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	@Autowired
 	private DirectoryFunctionsRepository directoryFunctionsRepository;
 	@Autowired
-	private UserRepository userRepository;
+	private RoleFunctionsRepository roleFunctionsRepository;
+	@Autowired
+	private OrgCategoryFunctionsRepository orgCategoryFunctionsRepository;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return functionsRepository;
 	}
+	@Autowired
+	private RoleRepository roleRepository;
 	/**
 	 * 根据角色名称查找权限
 	 * @param roleName
@@ -75,6 +79,163 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 			});
 		}
 		return list;
+	}
+	@Override
+	public List<Functions> findFunctions(String currentUsername) {
+		List<Functions> list = functionsRepository.findByUsername(currentUsername);
+		list.forEach(functions -> findChildren(functions,currentUsername));
+		return list;
+	}
+	@Override
+	public List<String> findIdsByRoleId(String roleId) {
+		return roleFunctionsRepository.findFunctionsIdsByRoleId(roleId);
+	}
+
+	@Override
+	public void assign2Role(String[] functionIdArray, String roleId) {
+		//根据角色ID删除角色和权限的关联
+		roleFunctionsRepository.deleteByRoleId(roleId);
+
+		if(functionIdArray!=null && functionIdArray.length>0) {
+			//添加新关联
+			List<RoleFunctions> list = new ArrayList<>();
+			Role role = new Role();
+			role.setId(roleId);
+			for (int i = 0; i < functionIdArray.length; i++) {
+				Functions functions = new Functions();
+				functions.setId(functionIdArray[i]);
+
+				RoleFunctions roleFunctions = new RoleFunctions();
+				roleFunctions.setRole(role);
+				roleFunctions.setFunctions(functions);
+
+				list.add(roleFunctions);
+			}
+
+			roleFunctionsRepository.saveAll(list);
+		}
+	}
+
+	@Override
+	public List<String> findIdsByDirectoryId(String dirId) {
+		return directoryFunctionsRepository.findIdsByDirectoryId(dirId);
+	}
+
+	@Override
+	public List<Functions> findAllMenus() {
+		return functionsRepository.findAllMenus();
+	}
+
+	@Override
+	public List<Functions> findAllFunctions() {
+		List<Functions> menus = findAllMenus();
+		menus.forEach(functions -> findChildren(functions));
+		return menus;
+	}
+
+	@Override
+	public List<String> findIdsByOrgCategoryId(String orgCategoryId) {
+		return orgCategoryFunctionsRepository.findFunctionIdsByOrgCategoryId(orgCategoryId);
+	}
+
+	@Override
+	public void assign2OrgCategory(String[] functionIdArray, String orgCategoryId) {
+		orgCategoryFunctionsRepository.deleteByOrgCategoryId(orgCategoryId);
+		if(functionIdArray!=null && functionIdArray.length>0) {
+			List<OrgCategoryFunctions> list = new ArrayList<>();
+			OrgCategory orgCategory = new OrgCategory();
+			orgCategory.setId(orgCategoryId);
+			for (int i = 0; i < functionIdArray.length; i++) {
+				Functions functions = new Functions();
+				functions.setId(functionIdArray[i]);
+				OrgCategoryFunctions orgCategoryFunctions = new OrgCategoryFunctions();
+				orgCategoryFunctions.setOrgCategory(orgCategory);
+				orgCategoryFunctions.setFunctions(functions);
+				list.add(orgCategoryFunctions);
+			}
+			orgCategoryFunctionsRepository.saveAll(list);
+		}
+		//修改企业类别权限
+		addOrFindOrgCategoryRole(functionIdArray,orgCategoryId);
+	}
+
+	/**
+	 * 新增或查找类别管理员
+	 * @param functionIdArray 权限ID数组
+	 * @param orgCategoryId 企业类别ID
+	 */
+	private void addOrFindOrgCategoryRole(String[] functionIdArray, String orgCategoryId){
+		OrgCategory orgCategory = (OrgCategory) orgCategoryRepository.findById(orgCategoryId).get();
+		List<Role> roles = roleRepository.findByOrgCategoryId(orgCategoryId);
+		Role role = null;
+		if(CollectionUtils.isEmpty(roles)){
+			role = new Role();
+			role.setId(UUID.randomUUID().toString());
+			role.setName(orgCategory.getName() + "管理员角色");
+			role.setOrgCategory(orgCategory);
+			role.setCreateDate(new Date());
+			role= (Role) roleRepository.save(role);
+			modifyOrgCategoryRole(functionIdArray,role);
+		}else{
+			roles.forEach(r -> {
+				modifyOrgCategoryRole(functionIdArray,r);
+			});
+		}
+	}
+	/**
+	 * 修改类别管理员权限
+	 * @param functionIdArray
+	 * @param role
+	 */
+	private void modifyOrgCategoryRole(String[] functionIdArray, Role role) {
+		roleFunctionsRepository.deleteByRoleId(role.getId());
+
+		List<RoleFunctions> list = new ArrayList<>();
+		if(functionIdArray!=null && functionIdArray.length>0){
+			for(int i = 0;i<functionIdArray.length;i++){
+				Functions functions = new Functions();
+				functions.setId(functionIdArray[i]);
+
+				RoleFunctions roleFunctions = new RoleFunctions();
+				roleFunctions.setFunctions(functions);
+				roleFunctions.setRole(role);
+
+				list.add(roleFunctions);
+			}
+
+			roleFunctionsRepository.saveAll(list);
+		}
+	}
+	/**
+	 * 根据父功能和当前登录用户名称查找子功能
+	 * @param parent 父功能
+	 * @param currentUsername 当前登录用户名
+	 */
+	private void findChildren(Functions parent,String currentUsername){
+		List<Functions> children = functionsRepository.findByParentIdAndUsername(parent.getId(),currentUsername);
+		if(!CollectionUtils.isEmpty(children)){
+			parent.setChildren(children);
+			children.forEach(child ->{
+				findChildren(child,currentUsername);
+			});
+		}else{
+			return ;
+		}
+	}
+	/**
+	 * 根据父功能和当前登录用户名称查找子功能
+	 * @param parent 父功能
+	 */
+	private void findChildren(Functions parent){
+		List<Functions> children = functionsRepository.findByParentId(parent.getId());
+		if(!CollectionUtils.isEmpty(children)){
+			parent.setChildren(children);
+			children.forEach(child ->{
+				findChildren(child);
+			});
+		}else{
+			return ;
+		}
 	}
 
 	@Override
@@ -152,7 +313,6 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 			}
 		}, pageable);
 	}
-
 	/**
 	 * 构建页面显示菜单数据
 	 */

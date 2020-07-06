@@ -17,4 +17,11 @@ public interface RoleRepository<ID extends Serializable> extends CommonRepositor
     Role findByNameAndOrgId(String name, String orgId);
     @Query(value = "select r from Role r where r.org.id=?2")
     List<Role> findAllByOrgId(String orgId);
+    /**
+     * 根据企业类别ID查找角色
+     * @param orgCategoryId
+     * @return
+     */
+    @Query("select r from Role r where r.orgCategory.id=?1")
+    List<Role> findByOrgCategoryId(String orgCategoryId);
 }

@@ -44,6 +44,10 @@ public class SchemaServiceImpl extends CommonServiceImpl<Schema> implements ISch
 
 	@Override
 	public void deleteById(String id) {
+		Schema schema = (Schema) schemaRepository.findById(id).get();
+		if(schema.isSelected()){
+			throw new RuntimeException("正在使用的模式不允许删除!");
+		}
 		directoryRepository.deleteSchemaBySchemaId(id);
 		schemaRepository.deleteById(id);
 	}
