@@ -25,8 +25,45 @@ create table org(
   status char(1) default '0' comment '状态，0：正常，1：禁用，2：删除',
   note varchar(2000) comment '企业描述',
   org_category_id varchar(36) comment '企业类别ID',
+
+  established_time timestamp comment '成立日期',
+  business_scope varchar(2000) comment '经营范围',
+  email varchar(100) comment '邮箱',
+  introduction text comment '企业介绍',
+  report_tel varchar(20) comment '举报电话',
   constraint fk_org_category_id_org foreign key(org_category_id) references org_category(id)
 ) comment '企业信息表';
+
+#企业资质文件
+drop table if exists m001_org_doc;
+create table m001_org_doc(
+  id varchar(36) primary key comment 'ID主键',
+  name varchar(50) not null comment '资质文件名称',
+  doc_num varchar(100) comment '文件编号',
+  beginDate timestamp comment '有效期起始时间',
+  endDate timestamp comment '有效期终止时间',
+  url varchar(200) comment '资质文件路径',
+  org_id varchar(36) not null comment '所属企业ID',
+  constraint fk_m001_org_doc_org_id foreign key(org_id) references org(id)
+) comment '企业资质文件表';
+
+
+#企业人员资料
+drop table if exists m003_employee;
+create table m003_employee(
+  id varchar(36) primary key comment 'ID主键',
+  name varchar(50) not null comment '员工名称',
+  sex varchar(10) comment '性别',
+  age int comment '年龄',
+  tel varchar(20) comment '联系电话',
+  idnum varchar(20) comment '身份证号',
+  org_id varchar(36) not null comment '所属企业ID',
+  note varchar(200) comment '备注',
+  photo varchar(200) comment '头像',
+  user_id varchar(36) comment '人员对应用户ID',
+  constraint fk_m003_employee_org_id foreign key(org_id) references org(id),
+  constraint fk_m003_employee_user_id foreign key(user_id) references t_user(id)
+) comment '企业人员资料表';
 
 #权限表
 drop table if exists functions;

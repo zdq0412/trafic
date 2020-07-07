@@ -22,6 +22,9 @@ public class Org {
 	private String contact;
 	/**联系方式*/
 	private String tel;
+	/**举报电话:默认和联系方式相同，企业用户可以修改*/
+	@Column(name = "report_tel")
+	private String reportTel;
 	/**企业地址*/
 	private String addr;
 	/**法人*/
@@ -43,9 +46,62 @@ public class Org {
 	@JoinColumn(name="org_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private OrgCategory orgCategory;
-
+	/**举报邮箱:企业邮箱*/
+	private String email;
+	/**企业介绍*/
+	private String introduction;
+	/**成立日期*/
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "established_time")
+	private Date establishedTime;
+	/**
+	 * 经营范围
+	 */
+	@Column(name = "business_scope")
+	private String businessScope;
 	public OrgCategory getOrgCategory() {
 		return orgCategory;
+	}
+
+	public String getReportTel() {
+		return reportTel;
+	}
+
+	public void setReportTel(String reportTel) {
+		this.reportTel = reportTel;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getIntroduction() {
+		return introduction;
+	}
+
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+
+	public Date getEstablishedTime() {
+		return establishedTime;
+	}
+
+	public void setEstablishedTime(Date establishedTime) {
+		this.establishedTime = establishedTime;
+	}
+
+	public String getBusinessScope() {
+		return businessScope;
+	}
+
+	public void setBusinessScope(String businessScope) {
+		this.businessScope = businessScope;
 	}
 
 	public void setOrgCategory(OrgCategory orgCategory) {
