@@ -57,9 +57,10 @@ create table m003_employee(
   age int comment '年龄',
   tel varchar(20) comment '联系电话',
   idnum varchar(20) comment '身份证号',
-  org_id varchar(36) not null comment '所属企业ID',
+  org_id varchar(36) comment '所属企业ID',
   note varchar(200) comment '备注',
   photo varchar(200) comment '头像',
+  realPath varchar(200) comment '真实路径',
   user_id varchar(36) comment '人员对应用户ID',
   constraint fk_m003_employee_org_id foreign key(org_id) references org(id),
   constraint fk_m003_employee_user_id foreign key(user_id) references t_user(id)

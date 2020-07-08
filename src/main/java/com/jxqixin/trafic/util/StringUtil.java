@@ -1,7 +1,5 @@
 package com.jxqixin.trafic.util;
 
-import org.thymeleaf.util.StringUtils;
-
 public class StringUtil {
     /**
      * 处理页面传递到后台的ID数组

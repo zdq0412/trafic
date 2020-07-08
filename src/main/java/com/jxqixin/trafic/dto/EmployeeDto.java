@@ -1,43 +1,26 @@
-package com.jxqixin.trafic.model;
+package com.jxqixin.trafic.dto;
+import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-@Entity
-@Table(name = "m003_employee")
-@GenericGenerator(name="id_gen",strategy = "uuid")
-public class Employee implements Serializable {
-    @Id
-    @GeneratedValue(generator = "id_gen")
+public class EmployeeDto implements Serializable {
     private String id;
     /**名称*/
     private String name;
-    /**性别*/
-    private String sex;
-    /**年龄*/
-    private int age;
     /**身份证号*/
     private String idnum;
     /**头像图片地址*/
     private String photo;
-    /**实际存储路径*/
+    /***真实路径*/
     private String realPath;
     /**手机号*/
     private String tel;
     /**备注*/
     private String note;
-    /**所属企业*/
-    @ManyToOne
-    @JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Org org;
-    /**关联用户*/
-    @ManyToOne
-    @JoinColumn(name = "user_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private User user;
-
-    public User getUser() {
-        return user;
-    }
+    /**角色ID*/
+    private String roleId;
 
     public String getRealPath() {
         return realPath;
@@ -45,10 +28,6 @@ public class Employee implements Serializable {
 
     public void setRealPath(String realPath) {
         this.realPath = realPath;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getId() {
@@ -65,22 +44,6 @@ public class Employee implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getIdnum() {
@@ -115,11 +78,11 @@ public class Employee implements Serializable {
         this.note = note;
     }
 
-    public Org getOrg() {
-        return org;
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setOrg(Org org) {
-        this.org = org;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 }

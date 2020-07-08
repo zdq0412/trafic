@@ -1,17 +1,23 @@
 package com.jxqixin.trafic.controller;
+
 import com.jxqixin.trafic.constant.Result;
+import com.jxqixin.trafic.dto.EmployeeDto;
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Employee;
+import com.jxqixin.trafic.model.JsonResult;
+import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IEmployeeService;
+import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 企业员工控制器
@@ -20,6 +26,8 @@ import java.util.UUID;
 public class EmployeeController extends CommonController{
     @Autowired
     private IEmployeeService employeeService;
+    @Autowired
+    private IUserService userService;
     /**
      * 查询所有企业员工
      * @return
@@ -41,24 +49,40 @@ public class EmployeeController extends CommonController{
     }
     /**
      * 新增企业员工
-     * @param employee
+     * @param employeeDto
      * @return
      */
-    @PostMapping("/employee/employee")
-    public JsonResult addEmployee(Employee employee){
-        employeeService.addObj(employee);
-        return new JsonResult(Result.SUCCESS);
+    @PostMapping("/employee/addEmployee")
+    public JsonResult addEmployee(EmployeeDto employeeDto, @RequestParam("file") MultipartFile file, HttpServletRequest request){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        String urlMapping = "";
+        Result result = Result.SUCCESS;
+        try {
+            String dir = (user.getOrg()==null?"":(user.getOrg().getName()+"/")) + "photo";
+            File savedFile = upload(dir,file);
+            if(savedFile!=null) {
+                urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
+            }
+            employeeDto.setPhoto(urlMapping);
+            employeeDto.setRealPath(savedFile.getAbsolutePath());
+            employeeService.addEmployee(employeeDto,user.getOrg());
+        } catch (IOException e) {
+            e.printStackTrace();
+            result = Result.FAIL;
+            result.setMessage(e.getMessage());
+        }
+        return new JsonResult(result,urlMapping);
     }
     /**
      * 编辑企业员工
-     * @param employee
+     * @param employeeDto
      * @return
      */
-    @PutMapping("/employee/employee")
-    public JsonResult updateEmployee(Employee employee){
-        Employee savedEmployee = employeeService.queryObjById(employee.getId());
-        savedEmployee.setName(employee.getName());
-        savedEmployee.setNote(employee.getNote());
+    @PostMapping("/employee/updateEmployee")
+    public JsonResult updateEmployee(EmployeeDto employeeDto, @RequestParam("file") MultipartFile file, HttpServletRequest request){
+        Employee savedEmployee = employeeService.queryObjById(employeeDto.getId());
+        savedEmployee.setName(employeeDto.getName());
+        savedEmployee.setNote(employeeDto.getNote());
         employeeService.updateObj(savedEmployee);
         return new JsonResult(Result.SUCCESS);
     }
