@@ -48,24 +48,6 @@ create table m001_org_doc(
 ) comment '企业资质文件表';
 
 
-#企业人员资料
-drop table if exists m003_employee;
-create table m003_employee(
-  id varchar(36) primary key comment 'ID主键',
-  name varchar(50) not null comment '员工名称',
-  sex varchar(10) comment '性别',
-  age int comment '年龄',
-  tel varchar(20) comment '联系电话',
-  idnum varchar(20) comment '身份证号',
-  org_id varchar(36) comment '所属企业ID',
-  note varchar(200) comment '备注',
-  photo varchar(200) comment '头像',
-  realPath varchar(200) comment '真实路径',
-  user_id varchar(36) comment '人员对应用户ID',
-  constraint fk_m003_employee_org_id foreign key(org_id) references org(id),
-  constraint fk_m003_employee_user_id foreign key(user_id) references t_user(id)
-) comment '企业人员资料表';
-
 #权限表
 drop table if exists functions;
 create table functions(
@@ -134,6 +116,25 @@ create table area_manager(
   org_category_id varchar(36) comment '企业类别id',
   constraint fk_org_category_area_manager foreign key(org_category_id) references org_category(id)
 ) comment '区域管理员';
+
+
+#企业人员资料
+drop table if exists m003_employee;
+create table m003_employee(
+  id varchar(36) primary key comment 'ID主键',
+  name varchar(50) not null comment '员工名称',
+  sex varchar(10) comment '性别',
+  age int comment '年龄',
+  tel varchar(20) comment '联系电话',
+  idnum varchar(20) comment '身份证号',
+  org_id varchar(36) comment '所属企业ID',
+  note varchar(200) comment '备注',
+  photo varchar(200) comment '头像',
+  realPath varchar(200) comment '真实路径',
+  user_id varchar(36) comment '人员对应用户ID',
+  constraint fk_m003_employee_org_id foreign key(org_id) references org(id),
+  constraint fk_m003_employee_user_id foreign key(user_id) references t_user(id)
+) comment '企业人员资料表';
 
 #区域信息表
 drop table if exists category;

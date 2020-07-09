@@ -66,12 +66,30 @@ public class EmployeeController extends CommonController{
             employeeDto.setPhoto(urlMapping);
             employeeDto.setRealPath(savedFile.getAbsolutePath());
             employeeService.addEmployee(employeeDto,user.getOrg());
-        } catch (IOException e) {
+        } catch (RuntimeException | IOException e) {
             e.printStackTrace();
             result = Result.FAIL;
             result.setMessage(e.getMessage());
         }
         return new JsonResult(result,urlMapping);
+    }
+    /**
+     * 新增企业员工，不上传头像
+     * @param employeeDto
+     * @return
+     */
+    @PostMapping("/employee/addEmployeeNoPhoto")
+    public JsonResult addEmployeeNoPhoto(EmployeeDto employeeDto, HttpServletRequest request){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        Result result = Result.SUCCESS;
+        try {
+            employeeService.addEmployee(employeeDto,user.getOrg());
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            result = Result.FAIL;
+            result.setMessage(e.getMessage());
+        }
+        return new JsonResult(result);
     }
     /**
      * 编辑企业员工
@@ -80,11 +98,42 @@ public class EmployeeController extends CommonController{
      */
     @PostMapping("/employee/updateEmployee")
     public JsonResult updateEmployee(EmployeeDto employeeDto, @RequestParam("file") MultipartFile file, HttpServletRequest request){
-        Employee savedEmployee = employeeService.queryObjById(employeeDto.getId());
-        savedEmployee.setName(employeeDto.getName());
-        savedEmployee.setNote(employeeDto.getNote());
-        employeeService.updateObj(savedEmployee);
-        return new JsonResult(Result.SUCCESS);
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        String urlMapping = "";
+        Result result = Result.SUCCESS;
+        try {
+            String dir = (user.getOrg()==null?"":(user.getOrg().getName()+"/")) + "photo";
+            File savedFile = upload(dir,file);
+            if(savedFile!=null) {
+                urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
+            }
+            employeeDto.setPhoto(urlMapping);
+            employeeDto.setRealPath(savedFile.getAbsolutePath());
+            employeeService.updateEmployee(employeeDto);
+        } catch (RuntimeException | IOException e) {
+            e.printStackTrace();
+            result = Result.FAIL;
+            result.setMessage(e.getMessage());
+        }
+        return new JsonResult(result);
+    }
+    /**
+     * 编辑企业员工,不修改头像
+     * @param employeeDto
+     * @return
+     */
+    @PostMapping("/employee/updateEmployeeNoPhoto")
+    public JsonResult updateEmployeeNoPhoto(EmployeeDto employeeDto, HttpServletRequest request){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        Result result = Result.SUCCESS;
+        try {
+            employeeService.updateEmployee(employeeDto);
+        } catch (RuntimeException  e) {
+            e.printStackTrace();
+            result = Result.FAIL;
+            result.setMessage(e.getMessage());
+        }
+        return new JsonResult(result);
     }
     /**
      * 根据ID删除企业员工
@@ -93,7 +142,7 @@ public class EmployeeController extends CommonController{
      */
     @DeleteMapping("/employee/employee/{id}")
     public JsonResult deleteById(@PathVariable(name="id") String id){
-        employeeService.deleteById(id);
+        employeeService.deleteEmployee(id);
         return new JsonResult(Result.SUCCESS);
     }
 }

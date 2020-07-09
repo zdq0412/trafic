@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.util.Date;
 
 @Service
@@ -90,5 +91,61 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		employee.setSex(IdCardUtil.getSex(employeeDto.getIdnum()));
 		employee.setAge(IdCardUtil.getAge(employeeDto.getIdnum()));
 		employeeRepository.save(employee);
+	}
+
+	@Override
+	public void updateEmployee(EmployeeDto employeeDto) {
+		Employee employee = (Employee) employeeRepository.findById(employeeDto.getId()).get();
+		if(!StringUtils.isEmpty(employeeDto.getPhoto()) && !employeeDto.getPhoto().equals(employee.getPhoto())){
+				File photo = new File(employee.getRealPath());
+				photo.delete();
+		}
+		//手机号不空，创建用户，手机号作为用户名
+		if(!StringUtils.isEmpty(employeeDto.getTel())){
+			//根据手机号查找人员
+			Employee employee1 = employeeRepository.findByTel(employeeDto.getTel());
+			if(employee1!=null && !employee1.getId().equals(employee.getId())){
+				throw new RuntimeException("手机号已被使用!");
+			}
+
+			User user = employee.getUser();
+			if(!StringUtils.isEmpty(employeeDto.getRoleId())){
+				Role userRole = user.getRole();
+				if(userRole==null || !userRole.getId().equals(employeeDto.getRoleId())) {
+					Role role = new Role();
+					role.setId(employeeDto.getRoleId());
+
+					user.setRole(role);
+					user = (User) userRepository.save(user);
+				}
+			}
+		}else{
+			throw new RuntimeException("手机号不能为空!");
+		}
+
+		if(StringUtils.isEmpty(employeeDto.getIdnum())){
+			throw new RuntimeException("身份证号不能为空!");
+		}else {
+			Employee employee1 = employeeRepository.findByIdnum(employeeDto.getIdnum());
+			if(employee1!=null && !employee1.getId().equals(employeeDto.getId())){
+				throw new RuntimeException("身份证号已被使用!");
+			}
+		}
+		employee.setName(employeeDto.getName());
+		employee.setTel(employeeDto.getTel());
+		if(employeeDto.getPhoto()!=null) {
+			employee.setPhoto(employeeDto.getPhoto());
+		}
+		employee.setRealPath(employeeDto.getRealPath());
+		employee.setIdnum(employeeDto.getIdnum());
+		employee.setNote(employeeDto.getNote());
+		employee.setSex(IdCardUtil.getSex(employeeDto.getIdnum()));
+		employee.setAge(IdCardUtil.getAge(employeeDto.getIdnum()));
+		employeeRepository.save(employee);
+	}
+
+	@Override
+	public void deleteEmployee(String id) {
+		employeeRepository.updateOrg2Null(id);
 	}
 }

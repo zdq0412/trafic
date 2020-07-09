@@ -1,6 +1,8 @@
 package com.jxqixin.trafic.repository;
 
 import com.jxqixin.trafic.model.Employee;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.io.Serializable;
 
@@ -16,4 +18,11 @@ public interface EmployeeRepository<ID extends Serializable> extends CommonRepos
      * @return
      */
     Employee findByIdnum(String idnum);
+    /**
+     * 将企业信息设置为空
+     * @param id
+     */
+    @Modifying
+    @Query(nativeQuery = true,value = "update m003_employee set org_id=null where id=?1")
+    void updateOrg2Null(String id);
 }
