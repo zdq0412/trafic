@@ -28,7 +28,7 @@ public interface UserRepository<ID extends Serializable> extends CommonRepositor
             " inner join Role r  on r.id=rp.role_id " +
             "inner join T_user u on r.id=u.role_id  where u.username=?1",nativeQuery = true)
     public List<Object[]> queryFunctionsByUsername(String username);
-    @Query(value="select u.* from T_User u where username=?1 and u.org_id is null",nativeQuery = true)
+    //@Query(value="select u.* from T_User u where username=?1 and u.org_id is null",nativeQuery = true)
     public User findByUsername(String username);
     /**根据角色id查找用户*/
     @Query("select u from User u where u.role.id=?1")

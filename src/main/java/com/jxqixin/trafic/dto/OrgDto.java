@@ -1,5 +1,11 @@
 package com.jxqixin.trafic.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
+
 public class OrgDto {
 	private String id;
 	/**组织机构代码*/
@@ -10,6 +16,8 @@ public class OrgDto {
 	private String contact;
 	/**联系方式*/
 	private String tel;
+	/**安全举报电话*/
+	private String reportTel;
 	/**企业地址*/
 	private String addr;
 	/**法人*/
@@ -24,6 +32,24 @@ public class OrgDto {
 	private String note;
 	/**企业所属类别id*/
 	private String orgCategoryId;
+	/**安全举报邮箱*/
+	private String email;
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date establishedTime;
+	/**经营范围*/
+	private String businessScope;
+	/**企业介绍*/
+	private String introduction;
+
+	public String getIntroduction() {
+		return introduction;
+	}
+
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -42,6 +68,38 @@ public class OrgDto {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getReportTel() {
+		return reportTel;
+	}
+
+	public void setReportTel(String reportTel) {
+		this.reportTel = reportTel;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Date getEstablishedTime() {
+		return establishedTime;
+	}
+
+	public void setEstablishedTime(Date establishedTime) {
+		this.establishedTime = establishedTime;
+	}
+
+	public String getBusinessScope() {
+		return businessScope;
+	}
+
+	public void setBusinessScope(String businessScope) {
+		this.businessScope = businessScope;
 	}
 
 	public void setName(String name) {

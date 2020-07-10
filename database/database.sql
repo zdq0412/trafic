@@ -34,6 +34,18 @@ create table org(
   constraint fk_org_category_id_org foreign key(org_category_id) references org_category(id)
 ) comment '企业信息表';
 
+#企业图片
+drop table if exists m001_org_img;
+create table m001_org_img(
+ id varchar(36) primary key comment 'ID主键',
+  name varchar(50) not null comment '图片名称',
+  url varchar(200) comment '资质文件路径',
+  realPath varchar(200) comment '实际路径',
+  uploadDate timestamp comment '上传日期',
+  org_id varchar(36) not null comment '所属企业ID',
+  constraint fk_m001_org_img_org_id foreign key(org_id) references org(id)
+) comment '企业图片';
+
 #企业资质文件
 drop table if exists m001_org_doc;
 create table m001_org_doc(
@@ -42,7 +54,9 @@ create table m001_org_doc(
   doc_num varchar(100) comment '文件编号',
   beginDate timestamp comment '有效期起始时间',
   endDate timestamp comment '有效期终止时间',
+  uploadDate timestamp comment '上传日期',
   url varchar(200) comment '资质文件路径',
+  realPath varchar(200) comment '实际路径',
   org_id varchar(36) not null comment '所属企业ID',
   constraint fk_m001_org_doc_org_id foreign key(org_id) references org(id)
 ) comment '企业资质文件表';

@@ -1,20 +1,20 @@
 package com.jxqixin.trafic.service.impl;
-import com.jxqixin.trafic.common.NameSpecification;
+
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.dto.RoleDto;
 import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.Role;
-import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.RoleRepository;
 import com.jxqixin.trafic.repository.UserRepository;
+import com.jxqixin.trafic.service.IOrgService;
 import com.jxqixin.trafic.service.IRoleFunctionsService;
 import com.jxqixin.trafic.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.criteria.*;
@@ -31,6 +31,8 @@ public class RoleServiceImpl extends CommonServiceImpl<Role> implements IRoleSer
 	private UserRepository userRepository;
 	@Autowired
 	private IRoleFunctionsService roleFunctionsService;
+	@Autowired
+	private IOrgService orgService;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return roleRepository;
@@ -88,6 +90,12 @@ public class RoleServiceImpl extends CommonServiceImpl<Role> implements IRoleSer
 		if(StringUtils.isEmpty(orgId)){
 			return roleRepository.findAll();
 		}
-		return roleRepository.findAllByOrgId(orgId);
+
+		Org org = orgService.queryObjById(orgId);
+		if(org.getOrgCategory()==null){
+			return roleRepository.findAllByOrgId(orgId);
+		}
+
+		return roleRepository.findByOrgIdAndOrgCategoryId(orgId,org.getOrgCategory().getId());
 	}
 }

@@ -2,21 +2,21 @@ package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.OrgDto;
-import com.jxqixin.trafic.model.JsonResult;
-import com.jxqixin.trafic.model.Org;
-import com.jxqixin.trafic.model.OrgCategory;
+import com.jxqixin.trafic.model.*;
+import com.jxqixin.trafic.service.IOrgDocService;
+import com.jxqixin.trafic.service.IOrgImgService;
 import com.jxqixin.trafic.service.IOrgService;
+import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 /**
  * 企业控制器
  */
@@ -24,6 +24,12 @@ import java.util.UUID;
 public class OrgController extends CommonController{
     @Autowired
     private IOrgService orgService;
+    @Autowired
+    private IOrgImgService orgImgService;
+    @Autowired
+    private IOrgDocService orgDocService;
+    @Autowired
+    private IUserService userService;
     /**
      * 查询所有企业
      * @return
@@ -56,6 +62,7 @@ public class OrgController extends CommonController{
             BeanUtils.copyProperties(orgDto,org);
             org.setId(UUID.randomUUID().toString());
             org.setCreateDate(new Date());
+            org.setReportTel(orgDto.getTel());
             if(!StringUtils.isEmpty(orgDto.getOrgCategoryId())){
                 OrgCategory orgCategory = new OrgCategory();
                 orgCategory.setId(orgDto.getOrgCategoryId());
@@ -96,12 +103,29 @@ public class OrgController extends CommonController{
         savedOrg.setProvince(orgDto.getProvince());
         savedOrg.setCity(orgDto.getCity());
         savedOrg.setRegion(orgDto.getRegion());
+        savedOrg.setReportTel(orgDto.getReportTel());
+        savedOrg.setEmail(orgDto.getEmail());
+        savedOrg.setEstablishedTime(orgDto.getEstablishedTime());
+        savedOrg.setBusinessScope(orgDto.getBusinessScope());
+        savedOrg.setIntroduction(orgDto.getIntroduction());
         if(!StringUtils.isEmpty(orgDto.getOrgCategoryId())){
             OrgCategory orgCategory = new OrgCategory();
             orgCategory.setId(orgDto.getOrgCategoryId());
 
             savedOrg.setOrgCategory(orgCategory);
         }
+        orgService.updateObj(savedOrg);
+        return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     * 修改企业介绍
+     * @param orgDto
+     * @return
+     */
+    @PostMapping("/org/orgIntroduction")
+    public JsonResult orgIntroduction(OrgDto orgDto){
+        Org savedOrg = orgService.queryObjById(orgDto.getId());
+        savedOrg.setIntroduction(orgDto.getIntroduction());
         orgService.updateObj(savedOrg);
         return new JsonResult(Result.SUCCESS);
     }
@@ -137,5 +161,24 @@ public class OrgController extends CommonController{
     public JsonResult deleteById(@PathVariable(name="id") String id){
         orgService.deleteById(id);
         return new JsonResult(Result.SUCCESS);
+    }
+
+    /**
+     * 查询企业对象，企业图片，企业资质文件
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping("/org/orgInfo")
+    public ModelMap findOrgInfo(HttpServletRequest httpServletRequest){
+        User user = userService.queryUserByUsername(getCurrentUsername(httpServletRequest));
+        Org org = user.getOrg();
+        List<OrgImg> orgImgList = orgImgService.findAll(org);
+        List<OrgDoc> orgDocList = orgDocService.findAll(org);
+
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute("org",org);
+        modelMap.addAttribute("orgImgList",orgImgList);
+        modelMap.addAttribute("orgDocList",orgDocList);
+        return modelMap;
     }
 }
