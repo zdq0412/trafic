@@ -17,4 +17,10 @@ public interface IOrgImgService extends ICommonService<OrgImg> {
      * @return
      */
     List<OrgImg> findAll(Org org);
+
+    /**
+     * 批量保存企业图片
+     * @param orgImgList
+     */
+    void saveAll(List<OrgImg> orgImgList);
 }

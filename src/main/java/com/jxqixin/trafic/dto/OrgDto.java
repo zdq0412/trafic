@@ -34,9 +34,9 @@ public class OrgDto {
 	private String orgCategoryId;
 	/**安全举报邮箱*/
 	private String email;
-	@Temporal(TemporalType.TIMESTAMP)
+	/*@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date establishedTime;
+	private Date establishedTime;*/
 	/**经营范围*/
 	private String businessScope;
 	/**企业介绍*/
@@ -85,15 +85,6 @@ public class OrgDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public Date getEstablishedTime() {
-		return establishedTime;
-	}
-
-	public void setEstablishedTime(Date establishedTime) {
-		this.establishedTime = establishedTime;
-	}
-
 	public String getBusinessScope() {
 		return businessScope;
 	}

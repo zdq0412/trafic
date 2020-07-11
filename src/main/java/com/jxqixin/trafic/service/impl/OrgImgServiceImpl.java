@@ -34,4 +34,9 @@ public class OrgImgServiceImpl extends CommonServiceImpl<OrgImg> implements IOrg
 		}
 		return orgImgRepository.findByOrgId(org.getId());
 	}
+
+	@Override
+	public void saveAll(List<OrgImg> orgImgList) {
+		orgImgRepository.saveAll(orgImgList);
+	}
 }

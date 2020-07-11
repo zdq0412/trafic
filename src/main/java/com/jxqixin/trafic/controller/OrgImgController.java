@@ -1,18 +1,23 @@
 package com.jxqixin.trafic.controller;
 
 import com.jxqixin.trafic.constant.Result;
-import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.dto.OrgImgDto;
 import com.jxqixin.trafic.model.JsonResult;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.OrgImg;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IOrgImgService;
 import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +26,8 @@ import java.util.UUID;
  */
 @RestController
 public class OrgImgController extends CommonController{
+    private SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+
     @Autowired
     private IOrgImgService orgImgService;
     @Autowired
@@ -52,7 +59,7 @@ public class OrgImgController extends CommonController{
      * @return
      */
     @PutMapping("/orgImg/orgImg")
-    public JsonResult updateOrgImg(OrgImg orgImg){
+    public JsonResult updateOrgImg(OrgImgDto orgImg){
         OrgImg savedOrgImg = orgImgService.queryObjById(orgImg.getId());
         savedOrgImg.setName(orgImg.getName());
         orgImgService.updateObj(savedOrgImg);
@@ -73,5 +80,46 @@ public class OrgImgController extends CommonController{
             return new JsonResult(result);
         }
         return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     * 上传公司图片
+     * @return
+     */
+    @PostMapping("/orgImg/photos")
+    public JsonResult uploadImages(@RequestParam("files") MultipartFile[] files,String name, String orgId, HttpServletRequest request){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        String urlMapping = "";
+        Result result = Result.SUCCESS;
+        List<OrgImg> orgImgList = new ArrayList<>();
+        List<String> urls = new ArrayList<>();
+        Org org = new Org();
+        org.setId(orgId);
+        try {
+            String dir = (user.getOrg()==null?"":(user.getOrg().getName()+"/")) + "photo";
+            if(files.length>0) {
+                for(int i = 0;i<files.length;i++) {
+                    File savedFile = upload(dir, files[i]);
+                    if (savedFile != null) {
+                        urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
+                    }
+                    OrgImg orgImg = new OrgImg();
+                    orgImg.setOrg(org);
+                    orgImg.setName(name);
+                    orgImg.setUploadDate(new Date());
+                    orgImg.setUrl(urlMapping);
+                    orgImg.setRealPath(savedFile.getAbsolutePath());
+
+                    urls.add(urlMapping);
+                    orgImgList.add(orgImg);
+                }
+
+                orgImgService.saveAll(orgImgList);
+            }
+        } catch (RuntimeException | IOException e) {
+            e.printStackTrace();
+            result = Result.FAIL;
+            result.setMessage(e.getMessage());
+        }
+        return new JsonResult(result,urls);
     }
 }

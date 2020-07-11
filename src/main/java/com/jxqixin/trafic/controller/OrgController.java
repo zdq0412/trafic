@@ -1,4 +1,5 @@
 package com.jxqixin.trafic.controller;
+
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.OrgDto;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
@@ -105,7 +107,7 @@ public class OrgController extends CommonController{
         savedOrg.setRegion(orgDto.getRegion());
         savedOrg.setReportTel(orgDto.getReportTel());
         savedOrg.setEmail(orgDto.getEmail());
-        savedOrg.setEstablishedTime(orgDto.getEstablishedTime());
+       // savedOrg.setEstablishedTime(orgDto.getEstablishedTime());
         savedOrg.setBusinessScope(orgDto.getBusinessScope());
         savedOrg.setIntroduction(orgDto.getIntroduction());
         if(!StringUtils.isEmpty(orgDto.getOrgCategoryId())){
