@@ -56,13 +56,19 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		employee.setOrg(org);
 		//手机号不空，创建用户，手机号作为用户名
 		if(!StringUtils.isEmpty(employeeDto.getTel())){
+			//该手机号已被其他用户使用
+			User user = userRepository.findByUsername(employeeDto.getTel());
+			if(user!=null){
+				throw new RuntimeException("手机号已被使用!");
+			}
+
 			//根据手机号查找人员
 			Employee employee1 = employeeRepository.findByTel(employeeDto.getTel());
 			if(employee1!=null){
 				throw new RuntimeException("手机号已被使用!");
 			}
 
-			User user = new User();
+			 user = new User();
 			user.setUsername(employee.getTel());
 			user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
 			user.setOrg(org);

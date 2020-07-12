@@ -86,7 +86,7 @@ public class OrgImgController extends CommonController{
      * @return
      */
     @PostMapping("/orgImg/photos")
-    public JsonResult uploadImages(@RequestParam("files") MultipartFile[] files,String name, String orgId, HttpServletRequest request){
+    public JsonResult uploadImages(@RequestParam("file") MultipartFile[] files,String name, String orgId, HttpServletRequest request){
         User user = userService.queryUserByUsername(getCurrentUsername(request));
         String urlMapping = "";
         Result result = Result.SUCCESS;

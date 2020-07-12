@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,13 @@ public class OrgDocServiceImpl extends CommonServiceImpl<OrgDoc> implements IOrg
 
 	@Override
 	public void deleteById(String id) {
+		OrgDoc orgDoc = (OrgDoc) orgDocRepository.findById(id).get();
+		try {
+			File file = new File(orgDoc.getRealPath());
+			file.delete();
+		}catch (RuntimeException e){
+			e.printStackTrace();
+		}
 		orgDocRepository.deleteById(id);
 	}
 
