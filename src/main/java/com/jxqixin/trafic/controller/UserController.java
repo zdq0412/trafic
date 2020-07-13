@@ -65,6 +65,30 @@ public class UserController extends CommonController{
         return new JsonResult(Result.SUCCESS);
     }
     /**
+     * 禁用或启用用户
+     * @param id
+     * @return
+     */
+    @GetMapping("/user/enableOrDisableUser")
+    public JsonResult enableOrDisableUser(String id,String status){
+        User user = userService.queryObjById(id);
+       switch (status){
+           //启用
+           case "1":{
+               user.setStatus(User.OK);
+               break;
+           }
+           //禁用
+           case "0":{
+               user.setStatus(User.DISABLED);
+               break;
+           }
+       }
+
+       userService.updateObj(user);
+        return new JsonResult(Result.SUCCESS);
+    }
+    /**
      * 分页查询用户
      * @param nameDto
      * @return

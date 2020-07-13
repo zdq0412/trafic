@@ -21,4 +21,9 @@ public interface ISchemaService extends ICommonService<Schema> {
      * 根据ID删除模式，同时删除模式下的所有目录
      */
     void deleteById(String id);
+    /**
+     * 模式切换
+     * @param schemaId
+     */
+    void switchSchema(String schemaId);
 }

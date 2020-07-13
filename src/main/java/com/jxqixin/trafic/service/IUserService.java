@@ -53,4 +53,11 @@ public interface IUserService extends ICommonService<User> {
 	 * @return
 	 */
 	User queryUserByUsernameAndOrgId(String username, String orgId);
+
+	/**
+	 * 查找激活用户
+	 * @param username
+	 * @return
+	 */
+    User queryActiveUserByUsername(String username);
 }

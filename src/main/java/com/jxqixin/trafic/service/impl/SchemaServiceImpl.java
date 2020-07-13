@@ -51,4 +51,10 @@ public class SchemaServiceImpl extends CommonServiceImpl<Schema> implements ISch
 		directoryRepository.deleteSchemaBySchemaId(id);
 		schemaRepository.deleteById(id);
 	}
+
+	@Override
+	public void switchSchema(String schemaId) {
+		schemaRepository.updateSelected2False();
+		schemaRepository.updateSelected2TrueBySchemaId(schemaId);
+	}
 }

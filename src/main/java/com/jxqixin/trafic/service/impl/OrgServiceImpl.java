@@ -77,7 +77,7 @@ public class OrgServiceImpl extends CommonServiceImpl<Org> implements IOrgServic
 				user.setCreateDate(new Date());
 				user.setTel(org.getTel());
 				user.setOrg(org);
-
+				user.setStatus(User.DELETED);
 				userRepository.save(user);
 			}
 		}

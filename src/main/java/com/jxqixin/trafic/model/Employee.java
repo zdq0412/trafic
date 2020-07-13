@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.model;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,6 +36,16 @@ public class Employee implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
+    /**所在部门*/
+    @ManyToOne
+    @JoinColumn(name = "department_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Department department;
+    /**所在职位*/
+    @ManyToOne
+    @JoinColumn(name = "position_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Position position;
 
     public User getUser() {
         return user;
@@ -121,5 +133,21 @@ public class Employee implements Serializable {
 
     public void setOrg(Org org) {
         this.org = org;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

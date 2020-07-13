@@ -104,4 +104,14 @@ public class SchemaController extends CommonController{
         }
         return new JsonResult(Result.SUCCESS);
     }
+    /**
+     * 切换模式
+     * @param schemaId
+     * @return
+     */
+    @GetMapping("/schema/switchSchema")
+    public JsonResult switchSchema(String schemaId){
+        schemaService.switchSchema(schemaId);
+        return new JsonResult(Result.SUCCESS);
+    }
 }

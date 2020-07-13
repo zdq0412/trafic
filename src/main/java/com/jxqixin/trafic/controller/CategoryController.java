@@ -1,15 +1,19 @@
 package com.jxqixin.trafic.controller;
+
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.CategoryDto;
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Category;
+import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.service.ICategoryService;
+import com.jxqixin.trafic.util.ExcelUtil;
+import com.jxqixin.trafic.util.ImportCategoryUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.Date;
@@ -106,6 +110,23 @@ public class CategoryController extends CommonController{
     @DeleteMapping("/category/category/{id}")
     public JsonResult deleteById(@PathVariable(name="id") String id){
         categoryService.deleteById(id);
+        return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     * 导入类别
+     * @return
+     */
+    @PostMapping("/category/importCategory")
+    public JsonResult importCategory(@RequestParam("file") MultipartFile file){
+        ExcelUtil excelUtil = new ImportCategoryUtil();
+        List<Category> list = (List<Category>) excelUtil.getData(file);
+        try{
+            categoryService.importCategory(list);
+        }catch (RuntimeException e){
+            Result result = Result.FAIL;
+            result.setMessage(e.getMessage());
+            return new JsonResult(result);
+        }
         return new JsonResult(Result.SUCCESS);
     }
 }

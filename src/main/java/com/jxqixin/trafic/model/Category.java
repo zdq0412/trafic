@@ -1,22 +1,19 @@
 package com.jxqixin.trafic.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 /**
  * 类别表，包括区域信息，如省、市、地区等
  */
 @Entity
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class Category {
+public class Category implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

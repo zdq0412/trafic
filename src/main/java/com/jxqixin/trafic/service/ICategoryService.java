@@ -3,6 +3,7 @@ package com.jxqixin.trafic.service;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Category;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,4 +30,9 @@ public interface ICategoryService extends ICommonService<Category> {
      * @return
      */
     List<Category> findAll(String type);
+    /**
+     * 导入类别
+     * @param list
+     */
+    void importCategory(List<Category> list);
 }

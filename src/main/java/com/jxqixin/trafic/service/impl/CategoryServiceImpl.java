@@ -1,11 +1,10 @@
 package com.jxqixin.trafic.service.impl;
+
 import com.jxqixin.trafic.common.NameSpecification;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Category;
-import com.jxqixin.trafic.repository.CommonRepository;
-import com.jxqixin.trafic.repository.DirectoryFunctionsRepository;
-import com.jxqixin.trafic.repository.DirectoryRepository;
 import com.jxqixin.trafic.repository.CategoryRepository;
+import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.StringUtils;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -45,6 +47,30 @@ public class CategoryServiceImpl extends CommonServiceImpl<Category> implements 
 		}
 		return list;
 	}
+
+	@Override
+	public void importCategory(List<Category> list) {
+		if(CollectionUtils.isEmpty(list)){
+			throw new RuntimeException("没有数据!");
+		}
+		list.forEach(category -> {
+			Category c = categoryRepository.findByName(category.getName());
+			if(c!=null){
+				throw new RuntimeException("类别名称已经存在:" + category.getName());
+			}
+			Category parent = category.getParent();
+			if(parent!=null){
+				parent = categoryRepository.findByName(parent.getName());
+				if(parent==null){
+					parent = (Category) categoryRepository.save(parent);
+				}
+				category.setParent(parent);
+			}
+			categoryRepository.save(category);
+		});
+	}
+
+
 	@Override
 	public Page findCategorys(NameDto nameDto) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());

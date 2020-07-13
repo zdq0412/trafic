@@ -28,7 +28,7 @@ public class UserInfoService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userService.queryUserByUsername(username);
+		User user = userService.queryActiveUserByUsername(username);
 		if(user == null){
 			AreaManager areaManager = areaManagerService.queryAreaManagerByUsername(username);
 			if(areaManager==null) {

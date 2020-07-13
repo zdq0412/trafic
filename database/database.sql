@@ -61,6 +61,31 @@ create table m001_org_doc(
   constraint fk_m001_org_doc_org_id foreign key(org_id) references org(id)
 ) comment '企业资质文件表';
 
+#部门表
+drop table if exists m002_department;
+create table m002_department(
+  id varchar(36) primary key comment '主键',
+  name varchar(50) not null comment '部门名称',
+  pid varchar(36)   comment '父部门ID',
+  tel varchar(50) comment '部门电话',
+  org_id varchar(36) comment '企业id',
+  business varchar(2000) comment '部门职能',
+  constraint fk_m002_department_pid foreign key(pid) REFERENCES m002_department(id),
+  constraint fk_m002_department_org_id foreign key(org_id) references org(id)
+)comment '部门表';
+
+#职位表
+drop table if exists m002_position;
+create table m002_position(
+  id varchar(36) primary key comment '主键',
+  name varchar(50) not null comment '职位名称',
+  note varchar(500) comment '职位描述',
+ department_id varchar(36) comment '所在部门',
+  org_id varchar(36) comment '企业id',
+  constraint fk_m002_position_m002_department_id foreign key(department_id) REFERENCES m002_department(id),
+  constraint fk_m002_department_m002_position_org_id foreign key(org_id) references org(id)
+)comment '职位表';
+
 
 #权限表
 drop table if exists functions;
@@ -146,6 +171,10 @@ create table m003_employee(
   photo varchar(200) comment '头像',
   realPath varchar(200) comment '真实路径',
   user_id varchar(36) comment '人员对应用户ID',
+  department_id varchar(36) comment '部门id',
+  position_id varchar(36) comment '职位id',
+  constraint fk_m003_employee_department_id foreign key(department_id) references m002_department(id),
+  constraint fk_m003_employee_position_id foreign key(position_id) references m002_position(id),
   constraint fk_m003_employee_org_id foreign key(org_id) references org(id),
   constraint fk_m003_employee_user_id foreign key(user_id) references t_user(id)
 ) comment '企业人员资料表';

@@ -117,4 +117,8 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 			return userRepository.findByUsername(username);
 		}
 	}
+	@Override
+	public User queryActiveUserByUsername(String username) {
+		return userRepository.findActiveUserByUsername(username);
+	}
 }

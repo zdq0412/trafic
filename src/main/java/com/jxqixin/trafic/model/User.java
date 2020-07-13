@@ -14,6 +14,12 @@ import java.util.Date;
 @GenericGenerator(name = "id_gen",strategy = "uuid")
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
+	/**正常状态*/
+	public static final String OK="0";
+	/**禁用状态*/
+	public static final String DISABLED="1";
+	/**删除状态*/
+	public static final String DELETED="1";
 	/**对象标识*/
 	@Id
 	@GeneratedValue(generator = "id_gen")
@@ -32,9 +38,9 @@ public class User implements Serializable{
 	/**联系方式*/
 	private String tel;
 	/**状态，0：正常，1：禁用，2：删除*/
-	private String status;
+	private String status="0";
 	/**是否允许删除*/
-	private boolean allowedDelete;
+	private boolean allowedDelete=true;
 	/**创建人*/
 	private String creator;
 	/**创建日期*/
