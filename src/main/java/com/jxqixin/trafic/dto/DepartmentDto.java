@@ -3,6 +3,32 @@ package com.jxqixin.trafic.dto;
 public class DepartmentDto {
     private String id;
     private String name;
+    private String pid;
+    private String tel;
+    private String business;
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getBusiness() {
+        return business;
+    }
+
+    public void setBusiness(String business) {
+        this.business = business;
+    }
 
     public String getId() {
         return id;
