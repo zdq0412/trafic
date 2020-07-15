@@ -45,7 +45,7 @@ public class UserController extends CommonController{
         if(!passwordEncoder.matches(oldPassword,user.getPassword())){
             Result result = Result.FAIL;
             result.setMessage("原密码错误!");
-            return new JsonResult(Result.FAIL);
+            return new JsonResult(result);
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userService.updateObj(user);
@@ -126,6 +126,7 @@ public class UserController extends CommonController{
             user.setId(UUID.randomUUID().toString());
             user.setCreateDate(new Date());
             user.setAllowedDelete(true);
+            user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
             userService.addObj(user);
         }
         return jsonResult;

@@ -64,6 +64,12 @@ public class OrgServiceImpl extends CommonServiceImpl<Org> implements IOrgServic
 	}
 	@Override
 	public void addOrg(Org org) {
+		//根据手机号查找用户
+		User u = userRepository.findByUsername(org.getTel());
+		if(u!=null){
+			throw new RuntimeException("手机号已被使用!");
+		}
+
 		org = (Org) orgRepository.save(org);
 		//添加企业管理员
 		if(org.getOrgCategory()!=null){

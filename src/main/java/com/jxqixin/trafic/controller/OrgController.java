@@ -68,10 +68,15 @@ public class OrgController extends CommonController{
             if(!StringUtils.isEmpty(orgDto.getOrgCategoryId())){
                 OrgCategory orgCategory = new OrgCategory();
                 orgCategory.setId(orgDto.getOrgCategoryId());
-
                 org.setOrgCategory(orgCategory);
             }
-            orgService.addOrg(org);
+            try {
+                orgService.addOrg(org);
+            }catch (RuntimeException e){
+                Result result = Result.FAIL;
+                result.setMessage(e.getMessage());
+                return new JsonResult(result);
+            }
         }
         return jsonResult;
     }
@@ -142,13 +147,13 @@ public class OrgController extends CommonController{
         Org org = orgService.findByName(name);
         Result fail = Result.FAIL;
         if(org==null){
-            org = orgService.findByCode(code);
-            if(org==null) {
+           /* org = orgService.findByCode(code);
+            if(org==null) {*/
                 return new JsonResult(Result.SUCCESS);
-            }else{
+           /* }else{
                 fail.setMessage("企业代码已被使用!");
                 return new JsonResult(fail);
-            }
+            }*/
         }else{
             fail.setMessage("企业名称已被使用!");
             return new JsonResult(fail);

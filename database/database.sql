@@ -12,7 +12,7 @@ create table org_category(
 drop table if exists org;
 create table org(
   id varchar(36) primary key comment '主键',
-  code varchar(50) not null comment '机构代码',
+  code varchar(50)  comment '机构代码',
   name varchar(50) not null comment '机构名称',
   contact varchar(50) comment '联系人',
   tel varchar(20) comment '联系方式',
