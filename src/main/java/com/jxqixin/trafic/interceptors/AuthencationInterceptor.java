@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 /**
  * Token信息拦截器
  */
@@ -26,15 +24,19 @@ public class AuthencationInterceptor implements HandlerInterceptor {
     @Autowired
     private RedisUtil redisUtil;
     /**不拦截列表*/
-    private static List<String> exceptList = new ArrayList();
+    private static List<InterceptorExcept> exceptList = new ArrayList();
     static{
-        exceptList.add("category.xlsx");
+        exceptList.add(new InterceptorExcept("get","category.xlsx"));
+        exceptList.add(new InterceptorExcept("get","orgCategory/orgCategorys"));
+        exceptList.add(new InterceptorExcept("get","category/categorys"));
+        exceptList.add(new InterceptorExcept("post","org/org"));
     }
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String url = request.getRequestURI();
-        for (String uri:exceptList) {
-            if(url.endsWith(uri)){
+        String method = request.getMethod();
+        for (InterceptorExcept interceptorExcept:exceptList) {
+            if(url.endsWith(interceptorExcept.getUrl()) && method.toLowerCase().equals(interceptorExcept.getMethod())){
                 return true;
             }
         }

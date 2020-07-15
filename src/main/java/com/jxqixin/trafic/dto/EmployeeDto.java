@@ -21,6 +21,26 @@ public class EmployeeDto implements Serializable {
     private String note;
     /**角色ID*/
     private String roleId;
+    /**部门ID*/
+    private String departmentId;
+    /**职位ID*/
+    private String positionId;
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(String positionId) {
+        this.positionId = positionId;
+    }
 
     public String getRealPath() {
         return realPath;

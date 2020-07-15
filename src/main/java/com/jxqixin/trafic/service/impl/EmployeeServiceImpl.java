@@ -2,10 +2,7 @@ package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.common.NameSpecification;
 import com.jxqixin.trafic.dto.EmployeeDto;
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.Employee;
-import com.jxqixin.trafic.model.Org;
-import com.jxqixin.trafic.model.Role;
-import com.jxqixin.trafic.model.User;
+import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.EmployeeRepository;
 import com.jxqixin.trafic.repository.UserRepository;
@@ -94,6 +91,20 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 				throw new RuntimeException("身份证号已被使用!");
 			}
 		}
+
+		if(!StringUtils.isEmpty(employeeDto.getDepartmentId())){
+			Department department = new Department();
+			department.setId(employeeDto.getDepartmentId());
+
+			employee.setDepartment(department);
+		}
+
+		if(!StringUtils.isEmpty(employeeDto.getPositionId())){
+			Position position = new Position();
+			position.setId(employeeDto.getPositionId());
+
+			employee.setPosition(position);
+		}
 		employee.setSex(IdCardUtil.getSex(employeeDto.getIdnum()));
 		employee.setAge(IdCardUtil.getAge(employeeDto.getIdnum()));
 		employeeRepository.save(employee);
@@ -106,6 +117,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 				File photo = new File(employee.getRealPath());
 				photo.delete();
 		}
+
 		//手机号不空，创建用户，手机号作为用户名
 		if(!StringUtils.isEmpty(employeeDto.getTel())){
 			//根据手机号查找人员
@@ -141,6 +153,24 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		employee.setTel(employeeDto.getTel());
 		if(employeeDto.getPhoto()!=null) {
 			employee.setPhoto(employeeDto.getPhoto());
+		}
+		if(!StringUtils.isEmpty(employeeDto.getDepartmentId())){
+			Department department  = employee.getDepartment();
+			if(department!=null && !department.getId().equals(employeeDto.getDepartmentId().trim())){
+				Department newDepartment = new Department();
+				newDepartment.setId(employeeDto.getDepartmentId());
+
+				employee.setDepartment(newDepartment);
+			}
+		}
+		if(!StringUtils.isEmpty(employeeDto.getPositionId())){
+			Position position  = employee.getPosition();
+			if(position!=null && !position.getId().equals(employeeDto.getPositionId().trim())){
+				Position newPosition = new Position();
+				newPosition.setId(employeeDto.getPositionId());
+
+				employee.setPosition(newPosition);
+			}
 		}
 		employee.setRealPath(employeeDto.getRealPath());
 		employee.setIdnum(employeeDto.getIdnum());
