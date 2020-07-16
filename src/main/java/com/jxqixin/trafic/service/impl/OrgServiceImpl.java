@@ -88,4 +88,9 @@ public class OrgServiceImpl extends CommonServiceImpl<Org> implements IOrgServic
 			}
 		}
 	}
+
+	@Override
+	public String findFourColorPic(String id) {
+		return orgRepository.findFourColorPic(id);
+	}
 }

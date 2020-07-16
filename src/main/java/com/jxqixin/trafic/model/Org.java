@@ -55,6 +55,10 @@ public class Org {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "established_time")
 	private Date establishedTime;
+	/**企业四色图访问路径*/
+	private String fourColorPicUrl;
+	/**企业四色图磁盘路径*/
+	private String fourColorPicRealPath;
 	/**
 	 * 经营范围
 	 */
@@ -78,6 +82,22 @@ public class Org {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getFourColorPicUrl() {
+		return fourColorPicUrl;
+	}
+
+	public void setFourColorPicUrl(String fourColorPicUrl) {
+		this.fourColorPicUrl = fourColorPicUrl;
+	}
+
+	public String getFourColorPicRealPath() {
+		return fourColorPicRealPath;
+	}
+
+	public void setFourColorPicRealPath(String fourColorPicRealPath) {
+		this.fourColorPicRealPath = fourColorPicRealPath;
 	}
 
 	public String getIntroduction() {

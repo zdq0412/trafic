@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.controller;
 
 import com.jxqixin.trafic.constant.Result;
+import com.jxqixin.trafic.dto.EmployeeDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.OrgDto;
 import com.jxqixin.trafic.model.*;
@@ -13,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -112,7 +116,7 @@ public class OrgController extends CommonController{
         savedOrg.setRegion(orgDto.getRegion());
         savedOrg.setReportTel(orgDto.getReportTel());
         savedOrg.setEmail(orgDto.getEmail());
-       // savedOrg.setEstablishedTime(orgDto.getEstablishedTime());
+        // savedOrg.setEstablishedTime(orgDto.getEstablishedTime());
         savedOrg.setBusinessScope(orgDto.getBusinessScope());
         savedOrg.setIntroduction(orgDto.getIntroduction());
         if(!StringUtils.isEmpty(orgDto.getOrgCategoryId())){
@@ -149,7 +153,7 @@ public class OrgController extends CommonController{
         if(org==null){
            /* org = orgService.findByCode(code);
             if(org==null) {*/
-                return new JsonResult(Result.SUCCESS);
+            return new JsonResult(Result.SUCCESS);
            /* }else{
                 fail.setMessage("企业代码已被使用!");
                 return new JsonResult(fail);
@@ -187,5 +191,58 @@ public class OrgController extends CommonController{
         modelMap.addAttribute("orgImgList",orgImgList);
         modelMap.addAttribute("orgDocList",orgDocList);
         return modelMap;
+    }
+    /**
+     * 查找企业四色图
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping("/org/fourColorPic")
+    public JsonResult fourColorPic(HttpServletRequest httpServletRequest){
+        User user = userService.queryUserByUsername(getCurrentUsername(httpServletRequest));
+        Org org = user.getOrg();
+        if(org == null){
+            return new JsonResult<>(Result.FAIL);
+        }
+        return new JsonResult(Result.SUCCESS,orgService.findFourColorPic(org.getId()));
+    }
+
+    /**
+     * 上传四色图
+     * @return
+     */
+    @PostMapping("/org/upload4ColorPic")
+    public JsonResult upload4ColorPic(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        String urlMapping = "";
+        Result result = Result.SUCCESS;
+        try {
+            Org org = user.getOrg();
+            if(org!=null) {
+                String dir = (user.getOrg() == null ? (user.getUsername() + "/") : (user.getOrg().getName() + "/")) + "fourColor";
+                File savedFile = upload(dir, file);
+                if (savedFile != null) {
+                    urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
+                }
+                if(!StringUtils.isEmpty(org.getFourColorPicUrl())){
+                    if(!org.getFourColorPicUrl().equals(urlMapping)){
+                        File oldPic = new File(org.getFourColorPicRealPath());
+                        oldPic.delete();
+                    }
+                }
+                org.setFourColorPicUrl(urlMapping);
+                org.setFourColorPicRealPath(savedFile.getAbsolutePath());
+                orgService.updateObj(org);
+            }else{
+                result = Result.FAIL;
+                result.setMessage("当前登录用户非企业内部用户，不能执行该操作!");
+                return new JsonResult(result);
+            }
+        } catch (RuntimeException | IOException e) {
+            e.printStackTrace();
+            result = Result.FAIL;
+            result.setMessage(e.getMessage());
+        }
+        return new JsonResult(result,urlMapping);
     }
 }

@@ -31,6 +31,9 @@ create table org(
   email varchar(100) comment '邮箱',
   introduction text comment '企业介绍',
   report_tel varchar(20) comment '举报电话',
+
+  fourColorPicUrl varchar(100) comment '四色图访问路径',
+  fourColorPicRealPath varchar(100) comment '四色图磁盘路径',
   constraint fk_org_category_id_org foreign key(org_category_id) references org_category(id)
 ) comment '企业信息表';
 

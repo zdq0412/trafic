@@ -20,4 +20,6 @@ public interface OrgRepository<ID extends Serializable> extends CommonRepository
     Org findByName(String name);
 
     Org findByCode(String code);
+    @Query(nativeQuery = true,value = "select fourColorPicUrl from org where id=?1")
+    String findFourColorPic(String id);
 }

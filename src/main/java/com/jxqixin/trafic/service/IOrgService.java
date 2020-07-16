@@ -35,4 +35,11 @@ public interface IOrgService extends ICommonService<Org> {
      * @param org
      */
     void addOrg(Org org);
+
+    /**
+     * 根据企业ID查找企业四色图访问路径
+     * @param id
+     * @return
+     */
+    String findFourColorPic(String id);
 }
