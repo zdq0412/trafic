@@ -41,7 +41,7 @@ create table org(
 drop table if exists m037_hazard_sources_list;
 create table m037_hazard_sources_list(
  id varchar(36) primary key comment 'ID主键',
-  name varchar(50) not null comment '危险源名称名称',
+  name varchar(50) not null comment '危险源名称',
   happen integer comment '发生可能性',
   consequence integer comment '后果严重性',
   criterion integer comment '判定准则',
@@ -52,6 +52,28 @@ create table m037_hazard_sources_list(
   org_id varchar(36) not null comment '所属企业ID',
   constraint fkm037_hazard_sources_list_org_id foreign key(org_id) references org(id)
 ) comment '危险源清单';
+
+#法律法规文件
+drop table if exists m004_law;
+create table m004_law(
+ id varchar(36) primary key comment 'ID主键',
+  name varchar(1000) not null comment '法律法规文件名称',
+  content text comment '法律法规内容',
+  publishDate timestamp comment '发布日期',
+  implementDate timestamp comment '实施日期',
+  publishDepartment varchar(100) comment '发文部门',
+  note varchar(1000) comment '备注',
+  province varchar(200) comment '所属省',
+  city varchar(200) comment '所属市',
+  region  varchar(200) comment '所属地区',
+  orgCategoryName varchar(36) comment '企业类别名称',
+  num varchar(500) comment '发文字号:企业简称+年+自增序号',
+  org_id varchar(36) not null comment '所属企业ID',
+  timeliness varchar(20) comment '时效性，有效或无效',
+  constraint fk_m004_law_org_id foreign key(org_id) references org(id)
+) comment '法律法规文件';
+
+
 
 
 #企业图片
