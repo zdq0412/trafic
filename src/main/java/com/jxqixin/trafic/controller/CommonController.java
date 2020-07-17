@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.controller;
 
+import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.service.IUserService;
 import com.jxqixin.trafic.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +28,8 @@ public class CommonController {
     private String resourceLocation;
     @Autowired
     private RedisUtil redisUtil;
-
+    @Autowired
+    private IUserService userService;
     public String getUrlMapping() {
         return urlMapping;
     }
@@ -106,5 +109,13 @@ public class CommonController {
     public String getCurrentUsername(HttpServletRequest request){
         String token = request.getHeader("token");
         return  (String)redisUtil.get(token);
+    }
+
+    /**
+     * 获取当前登录用户所在的企业对象
+     * @return
+     */
+    public Org getOrg(HttpServletRequest request){
+        return userService.queryUserByUsername(getCurrentUsername(request)).getOrg();
     }
 }

@@ -37,6 +37,23 @@ create table org(
   constraint fk_org_category_id_org foreign key(org_category_id) references org_category(id)
 ) comment '企业信息表';
 
+#危险源清单
+drop table if exists m037_hazard_sources_list;
+create table m037_hazard_sources_list(
+ id varchar(36) primary key comment 'ID主键',
+  name varchar(50) not null comment '危险源名称名称',
+  happen integer comment '发生可能性',
+  consequence integer comment '后果严重性',
+  criterion integer comment '判定准则',
+  riskLevel varchar(100) comment '安全风险等级',
+  fourColor varchar(50) comment '四色标识',
+  measures varchar(2000) comment '应采取的行动/控制措施',
+  timeLimit varchar(200) comment '实施期限',
+  org_id varchar(36) not null comment '所属企业ID',
+  constraint fkm037_hazard_sources_list_org_id foreign key(org_id) references org(id)
+) comment '危险源清单';
+
+
 #企业图片
 drop table if exists m001_org_img;
 create table m001_org_img(

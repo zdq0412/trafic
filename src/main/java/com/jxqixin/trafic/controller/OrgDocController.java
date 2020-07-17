@@ -73,6 +73,20 @@ public class OrgDocController extends CommonController{
            OrgDoc orgDoc = new OrgDoc();
             buildOrgDoc(orgDocDto,orgDoc);
             orgDoc.setUploadDate(new Date());
+            if(!StringUtils.isEmpty(orgDocDto.getBeginDate())){
+                try {
+                    orgDoc.setBeginDate(format.parse(orgDocDto.getBeginDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(!StringUtils.isEmpty(orgDocDto.getEndDate())){
+                try {
+                    orgDoc.setEndDate(format.parse(orgDocDto.getEndDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
             orgDoc.setRealPath(savedFile.getAbsolutePath());
             orgDoc.setUrl(urlMapping);
             orgDoc.setOrg(user.getOrg());
