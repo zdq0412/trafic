@@ -66,12 +66,55 @@ create table m004_law(
   province varchar(200) comment '所属省',
   city varchar(200) comment '所属市',
   region  varchar(200) comment '所属地区',
-  orgCategoryName varchar(36) comment '企业类别名称',
+  orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
   org_id varchar(36) not null comment '所属企业ID',
   timeliness varchar(20) comment '时效性，有效或无效',
-  constraint fk_m004_law_org_id foreign key(org_id) references org(id)
+  constraint fk_m004_law_org_id foreign key(org_id) references org(id),
+  constraint fk_m004_law_orgCategory_id foreign key(orgCategory_id) references org_category(id)
 ) comment '法律法规文件';
+
+#安全规章制度
+drop table if exists m005_rules;
+create table m005_rules(
+ id varchar(36) primary key comment 'ID主键',
+  name varchar(1000) not null comment '安全规章制度文件名称',
+  content text comment '安全规章制度内容',
+  publishDate timestamp comment '发布日期',
+  implementDate timestamp comment '实施日期',
+  publishDepartment varchar(100) comment '发文部门',
+  note varchar(1000) comment '备注',
+  province varchar(200) comment '所属省',
+  city varchar(200) comment '所属市',
+  region  varchar(200) comment '所属地区',
+  orgCategory_id varchar(36) comment '企业类别',
+  num varchar(500) comment '发文字号:企业简称+年+自增序号',
+  org_id varchar(36) not null comment '所属企业ID',
+  timeliness varchar(20) comment '时效性，有效或无效',
+  constraint fk_m005_rules_org_id foreign key(org_id) references org(id),
+  constraint fk_m005_rules_orgCategory_id foreign key(orgCategory_id) references org_category(id)
+) comment '安全规章制度';
+
+#企业发文通知
+drop table if exists m006_notice;
+create table m006_notice(
+ id varchar(36) primary key comment 'ID主键',
+  name varchar(1000) not null comment '企业发文通知名称',
+  content text comment '企业发文通知内容',
+  publishDate timestamp comment '发布日期',
+  implementDate timestamp comment '实施日期',
+  publishDepartment varchar(100) comment '发文部门',
+  note varchar(1000) comment '备注',
+  province varchar(200) comment '所属省',
+  city varchar(200) comment '所属市',
+  region  varchar(200) comment '所属地区',
+  orgCategory_id varchar(36) comment '企业类别',
+  num varchar(500) comment '发文字号:企业简称+年+自增序号',
+  org_id varchar(36) not null comment '所属企业ID',
+  timeliness varchar(20) comment '时效性，有效或无效',
+  constraint fk_m006_notice_org_id foreign key(org_id) references org(id),
+  constraint fk_m006_notice_orgCategory_id foreign key(orgCategory_id) references org_category(id)
+) comment '企业发文通知';
 
 
 

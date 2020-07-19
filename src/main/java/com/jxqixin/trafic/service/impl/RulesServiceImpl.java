@@ -1,13 +1,11 @@
 package com.jxqixin.trafic.service.impl;
-import com.jxqixin.trafic.common.NameSpecification;
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.Law;
+import com.jxqixin.trafic.model.Rules;
 import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.OrgCategory;
 import com.jxqixin.trafic.repository.CommonRepository;
-import com.jxqixin.trafic.repository.LawRepository;
-import com.jxqixin.trafic.service.ILawService;
-import org.aspectj.weaver.ast.Or;
+import com.jxqixin.trafic.repository.RulesRepository;
+import com.jxqixin.trafic.service.IRulesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,19 +24,19 @@ import java.util.List;
 
 @Service
 @Transactional
-public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawService {
+public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRulesService {
 	@Autowired
-	private LawRepository lawRepository;
+	private RulesRepository rulesRepository;
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy");
 	@Override
 	public CommonRepository getCommonRepository() {
-		return lawRepository;
+		return rulesRepository;
 	}
 	@Override
-	public Page findLaws(NameDto nameDto,Org org) {
+	public Page findRules(NameDto nameDto,Org org) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(), nameDto.getLimit(), Sort.Direction.DESC,"publishDate");
 		if(org==null) {
-			return lawRepository.findAll(new Specification() {
+			return rulesRepository.findAll(new Specification() {
 				@Override
 				public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 					List<Predicate> list = new ArrayList<>();
@@ -53,7 +51,7 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 				}
 			}, pageable);
 		}else{
-			return lawRepository.findAll(new Specification() {
+			return rulesRepository.findAll(new Specification() {
 				@Override
 				public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 					List<Predicate> list = new ArrayList<>();
@@ -62,16 +60,16 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 						list.add(criteriaBuilder.like(root.get("name"),"%" + nameDto.getName() +"%"));
 					}
 
-					Join<Law, Org> orgJoin = root.join("org",JoinType.INNER);
+					Join<Rules, Org> orgJoin = root.join("org",JoinType.INNER);
 					list.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("province"),orgJoin.get("province")),
 							criteriaBuilder.equal(root.get("city"),orgJoin.get("city")),
 							criteriaBuilder.equal(root.get("region"),orgJoin.get("region"))))	;
 
 					OrgCategory orgCategory = org.getOrgCategory();
 					if(orgCategory!=null){
-						Join<Law,OrgCategory> lawOrgCategoryJoin = root.join("orgCategory",JoinType.INNER);
+						Join<Rules,OrgCategory> rulesOrgCategoryJoin = root.join("orgCategory",JoinType.INNER);
 						Join<Org,OrgCategory> orgOrgCategoryJoin = orgJoin.join("orgCategory",JoinType.INNER);
-						list.add(criteriaBuilder.equal(orgOrgCategoryJoin.get("id"), lawOrgCategoryJoin.get("id")));
+						list.add(criteriaBuilder.equal(orgOrgCategoryJoin.get("id"), rulesOrgCategoryJoin.get("id")));
 					}
 
 					//过滤本企业发布或超级管理员发布的法律法规文件
@@ -84,27 +82,27 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 	}
 	@Override
 	public void deleteById(String id) {
-		lawRepository.deleteById(id);
+		rulesRepository.deleteById(id);
 	}
 	@Override
-	public void addLaw(Law law, Org org) {
-		String num = law.getNum();
+	public void addRule(Rules rules, Org org) {
+		String num = rules.getNum();
 		String maxNum = "";
 		//查找最大发文字号
 		if(org == null){
-			maxNum = lawRepository.findMaxNumWhereOrgIdIsNull();
+			maxNum = rulesRepository.findMaxNumWhereOrgIdIsNull();
 		}else{
-			maxNum = lawRepository.findMaxNumByOrgId(org.getId());
-			law.setProvince(org.getProvince());
-			law.setCity(org.getCity());
-			law.setRegion(org.getRegion());
-			law.setOrgCategory(org.getOrgCategory());
-			law.setOrg(org);
+			maxNum = rulesRepository.findMaxNumByOrgId(org.getId());
+			rules.setProvince(org.getProvince());
+			rules.setCity(org.getCity());
+			rules.setRegion(org.getRegion());
+			rules.setOrgCategory(org.getOrgCategory());
+			rules.setOrg(org);
 		}
 		String newNum = generateNewNum(num,maxNum);
-		law.setNum(newNum);
+		rules.setNum(newNum);
 
-		lawRepository.save(law);
+		rulesRepository.save(rules);
 	}
 	/**
 	 * 根据企业简称生成新的发文字号

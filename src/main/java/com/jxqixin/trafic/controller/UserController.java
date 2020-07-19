@@ -51,6 +51,17 @@ public class UserController extends CommonController{
         userService.updateObj(user);
         return new JsonResult(Result.SUCCESS);
     }
+
+    /**
+     * 查询用户是否具有企业信息
+     * @param request
+     * @return
+     */
+    @GetMapping("/user/haveOrg")
+    public JsonResult haveOrg(HttpServletRequest request){
+        return new JsonResult(Result.SUCCESS,getOrg(request));
+    }
+
     /**
      * 密码重置
      * @param username

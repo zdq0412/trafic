@@ -4,6 +4,7 @@ import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.LawDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Law;
+import com.jxqixin.trafic.model.OrgCategory;
 import com.jxqixin.trafic.service.ILawService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ public class LawController extends CommonController{
      * @return
      */
     @GetMapping("/law/lawsByPage")
-    public ModelMap queryLaws(NameDto nameDto){
-        Page page = lawService.findLaws(nameDto);
+    public ModelMap queryLaws(NameDto nameDto,HttpServletRequest request){
+        Page page = lawService.findLaws(nameDto,getOrg(request));
         return pageModelMap(page);
     }
     /**
@@ -57,6 +58,11 @@ public class LawController extends CommonController{
                 e.printStackTrace();
             }
         }
+        if(!StringUtils.isEmpty(lawDto.getOrgCategoryId())){
+            OrgCategory orgCategory = new OrgCategory();
+            orgCategory.setId(lawDto.getOrgCategoryId());
+            law.setOrgCategory(orgCategory);
+        }
         lawService.addLaw(law,getOrg(request));
         return new JsonResult(Result.SUCCESS);
     }
@@ -70,6 +76,7 @@ public class LawController extends CommonController{
     public JsonResult lawContent(LawDto lawDto){
         Law law = lawService.queryObjById(lawDto.getId());
         law.setContent(lawDto.getContent());
+        lawService.updateObj(law);
         return new JsonResult(Result.SUCCESS);
     }
 
@@ -84,7 +91,11 @@ public class LawController extends CommonController{
         savedLaw.setName(lawDto.getName());
         savedLaw.setNote(lawDto.getNote());
         savedLaw.setCity(lawDto.getCity());
-        savedLaw.setOrgCategoryName(lawDto.getOrgCategoryName());
+        if(!StringUtils.isEmpty(lawDto.getOrgCategoryId())){
+            OrgCategory orgCategory = new OrgCategory();
+            orgCategory.setId(lawDto.getOrgCategoryId());
+            savedLaw.setOrgCategory(orgCategory);
+        }
         savedLaw.setProvince(lawDto.getProvince());
         savedLaw.setRegion(lawDto.getRegion());
         savedLaw.setPublishDepartment(lawDto.getPublishDepartment());

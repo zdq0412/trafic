@@ -9,7 +9,7 @@ public interface ILawService extends ICommonService<Law> {
      * @param nameDto
      * @return
      */
-    Page findLaws(NameDto nameDto);
+    Page findLaws(NameDto nameDto,Org org);
     /**
      * 根据ID删除模式，同时删除模式下的所有目录
      */

@@ -25,7 +25,7 @@ public class LawDto implements Serializable {
     /**所属地区*/
     private String region;
     /**企业类别名称*/
-    private String orgCategoryName;
+    private String orgCategoryId;
     /**发文字号：企业简称+年月日+自增序号*/
     private String num;
     /**时效性：有效或无效*/
@@ -111,12 +111,12 @@ public class LawDto implements Serializable {
         this.region = region;
     }
 
-    public String getOrgCategoryName() {
-        return orgCategoryName;
+    public String getOrgCategoryId() {
+        return orgCategoryId;
     }
 
-    public void setOrgCategoryName(String orgCategoryName) {
-        this.orgCategoryName = orgCategoryName;
+    public void setOrgCategoryId(String orgCategoryId) {
+        this.orgCategoryId = orgCategoryId;
     }
 
     public String getNum() {

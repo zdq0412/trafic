@@ -1,33 +1,18 @@
-package com.jxqixin.trafic.model;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
+package com.jxqixin.trafic.dto;
 import java.io.Serializable;
-import java.util.Date;
-
 /**
- * 法律法规文件
+ * 企业发文通知
  */
-@Entity
-@Table(name = "m004_law")
-@GenericGenerator(name="id_gen",strategy = "uuid")
-public class Law implements Serializable {
-    @Id
-    @GeneratedValue(generator = "id_gen")
+public class NoticeDto implements Serializable {
     private String id;
     /**名称*/
     private String name;
-    /**法律法规文件内容*/
+    /**文件内容*/
     private String content;
     /**发布日期*/
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date publishDate;
+    private String publishDate;
     /**实施日期*/
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date implementDate;
+    private String implementDate;
     /**发文部门名称*/
     private String publishDepartment;
     /**备注*/
@@ -39,17 +24,27 @@ public class Law implements Serializable {
     /**所属地区*/
     private String region;
     /**企业类别名称*/
-    @ManyToOne
-    @JoinColumn(name = "orgCategory_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private OrgCategory orgCategory;
-    /**发文字号：企业简称+年+自增序号  自增序号为四位*/
+    private String orgCategoryId;
+    /**发文字号：企业简称+年月日+自增序号*/
     private String num;
     /**时效性：有效或无效*/
     private String timeliness;
-    /**所属企业，如果没有企业，则所有企业都可见*/
-    @ManyToOne
-    @JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Org org;
+
+    public String getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(String publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public String getImplementDate() {
+        return implementDate;
+    }
+
+    public void setImplementDate(String implementDate) {
+        this.implementDate = implementDate;
+    }
 
     public String getId() {
         return id;
@@ -73,22 +68,6 @@ public class Law implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Date getPublishDate() {
-        return publishDate;
-    }
-
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
-    }
-
-    public Date getImplementDate() {
-        return implementDate;
-    }
-
-    public void setImplementDate(Date implementDate) {
-        this.implementDate = implementDate;
     }
 
     public String getPublishDepartment() {
@@ -131,12 +110,12 @@ public class Law implements Serializable {
         this.region = region;
     }
 
-    public OrgCategory getOrgCategory() {
-        return orgCategory;
+    public String getOrgCategoryId() {
+        return orgCategoryId;
     }
 
-    public void setOrgCategory(OrgCategory orgCategory) {
-        this.orgCategory = orgCategory;
+    public void setOrgCategoryId(String orgCategoryId) {
+        this.orgCategoryId = orgCategoryId;
     }
 
     public String getNum() {
@@ -153,13 +132,5 @@ public class Law implements Serializable {
 
     public void setTimeliness(String timeliness) {
         this.timeliness = timeliness;
-    }
-
-    public Org getOrg() {
-        return org;
-    }
-
-    public void setOrg(Org org) {
-        this.org = org;
     }
 }

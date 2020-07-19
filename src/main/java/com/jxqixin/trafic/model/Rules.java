@@ -7,18 +7,18 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 法律法规文件
+ * 安全规章制度
  */
 @Entity
-@Table(name = "m004_law")
+@Table(name = "m005_rules")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class Law implements Serializable {
+public class Rules implements Serializable {
     @Id
     @GeneratedValue(generator = "id_gen")
     private String id;
     /**名称*/
     private String name;
-    /**法律法规文件内容*/
+    /**文件内容*/
     private String content;
     /**发布日期*/
     @DateTimeFormat(pattern = "yyyy-MM-dd")
