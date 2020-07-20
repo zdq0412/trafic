@@ -5,6 +5,7 @@ import com.jxqixin.trafic.dto.UserDto;
 import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.repository.CommonRepository;
+import com.jxqixin.trafic.repository.EmployeeRepository;
 import com.jxqixin.trafic.repository.OrgRepository;
 import com.jxqixin.trafic.repository.UserRepository;
 import com.jxqixin.trafic.service.IUserService;
@@ -29,6 +30,8 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	private UserRepository userRepository;
 	@Autowired
 	private OrgRepository orgRepository;
+	@Autowired
+	private EmployeeRepository employeeRepository;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return userRepository;
@@ -74,6 +77,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 		if(!user.isAllowedDelete()){
 			throw new RuntimeException("该用户不允许删除:" + user.getUsername());
 		}
+		employeeRepository.updateUser2NullByUserId(id);
 		userRepository.deleteById(id);
 	}
 	/**

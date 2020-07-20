@@ -41,6 +41,16 @@ public class OrgDto {
 	private String businessScope;
 	/**企业介绍*/
 	private String introduction;
+	/**企业简称*/
+	private String shortName;
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
 
 	public String getIntroduction() {
 		return introduction;

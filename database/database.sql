@@ -34,6 +34,8 @@ create table org(
 
   fourColorPicUrl varchar(100) comment '四色图访问路径',
   fourColorPicRealPath varchar(100) comment '四色图磁盘路径',
+
+  shortName varchar(50) comment '简称',
   constraint fk_org_category_id_org foreign key(org_category_id) references org_category(id)
 ) comment '企业信息表';
 
@@ -69,7 +71,7 @@ create table m004_law(
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
   org_id varchar(36) not null comment '所属企业ID',
-  timeliness varchar(20) comment '时效性，有效或无效',
+  timeliness varchar(20) default '有效' comment '时效性，有效或无效',
   constraint fk_m004_law_org_id foreign key(org_id) references org(id),
   constraint fk_m004_law_orgCategory_id foreign key(orgCategory_id) references org_category(id)
 ) comment '法律法规文件';
@@ -90,7 +92,7 @@ create table m005_rules(
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
   org_id varchar(36) not null comment '所属企业ID',
-  timeliness varchar(20) comment '时效性，有效或无效',
+  timeliness varchar(20) default '有效' comment '时效性，有效或无效',
   constraint fk_m005_rules_org_id foreign key(org_id) references org(id),
   constraint fk_m005_rules_orgCategory_id foreign key(orgCategory_id) references org_category(id)
 ) comment '安全规章制度';
@@ -102,7 +104,6 @@ create table m006_notice(
   name varchar(1000) not null comment '企业发文通知名称',
   content text comment '企业发文通知内容',
   publishDate timestamp comment '发布日期',
-  implementDate timestamp comment '实施日期',
   publishDepartment varchar(100) comment '发文部门',
   note varchar(1000) comment '备注',
   province varchar(200) comment '所属省',
@@ -111,13 +112,13 @@ create table m006_notice(
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
   org_id varchar(36) not null comment '所属企业ID',
-  timeliness varchar(20) comment '时效性，有效或无效',
+  timeliness varchar(20) default '有效' comment '时效性，有效或无效',
   constraint fk_m006_notice_org_id foreign key(org_id) references org(id),
   constraint fk_m006_notice_orgCategory_id foreign key(orgCategory_id) references org_category(id)
 ) comment '企业发文通知';
 
 
-#企业与法律法规文件关联表
+/*#企业与法律法规文件关联表
 drop table if exists org_law;
 create table org_law(
  id varchar(36) primary key comment 'ID主键',
@@ -137,7 +138,7 @@ create table org_rules(
  sended bit default 0 comment '是否已发文:企业发文通知',
  constraint fk_org_org_rules_org_id foreign key(org_id) references org(id),
  constraint fk_org_org_rules_rules_id foreign key(rules_id) references m005_rules(id)
-) comment '企业与法律法规文件关联表';
+) comment '企业与法律法规文件关联表';*/
 
 #企业图片
 drop table if exists m001_org_img;

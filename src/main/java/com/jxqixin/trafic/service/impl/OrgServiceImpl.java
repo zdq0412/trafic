@@ -33,8 +33,8 @@ import java.util.List;
 @Service
 @Transactional
 public class OrgServiceImpl extends CommonServiceImpl<Org> implements IOrgService {
-	@Value("${defaultPassword}")
-	private String defaultPassword;
+	/*@Value("${defaultPassword}")
+	private String defaultPassword;*/
 	@Autowired
 	private OrgRepository orgRepository;
 	@Autowired
@@ -79,7 +79,8 @@ public class OrgServiceImpl extends CommonServiceImpl<Org> implements IOrgServic
 				User user = new User();
 				user.setRole(role);
 				user.setUsername(org.getTel());
-				user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
+				//user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
+				user.setPassword(new BCryptPasswordEncoder().encode(org.getTel().substring(org.getTel().length()-6)));
 				user.setCreateDate(new Date());
 				user.setTel(org.getTel());
 				user.setOrg(org);

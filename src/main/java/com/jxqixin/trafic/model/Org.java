@@ -64,6 +64,17 @@ public class Org {
 	 */
 	@Column(name = "business_scope")
 	private String businessScope;
+	/**简称*/
+	private String shortName;
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
 	public OrgCategory getOrgCategory() {
 		return orgCategory;
 	}

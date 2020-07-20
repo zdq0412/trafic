@@ -115,6 +115,7 @@ public class OrgController extends CommonController{
         savedOrg.setCity(orgDto.getCity());
         savedOrg.setRegion(orgDto.getRegion());
         savedOrg.setReportTel(orgDto.getReportTel());
+        savedOrg.setShortName(orgDto.getShortName());
         savedOrg.setEmail(orgDto.getEmail());
         // savedOrg.setEstablishedTime(orgDto.getEstablishedTime());
         savedOrg.setBusinessScope(orgDto.getBusinessScope());

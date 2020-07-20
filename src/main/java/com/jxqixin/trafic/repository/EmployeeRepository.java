@@ -41,4 +41,7 @@ public interface EmployeeRepository<ID extends Serializable> extends CommonRepos
     @Query(nativeQuery = true,value = "select count(e.id) from m003_employee e " +
             " inner join m002_position d on d.id=e.position_id where d.id=?1")
     Long findCountByPositionId(String positionId);
+    @Modifying
+    @Query(nativeQuery = true,value = "update m003_employee set user_id=null where user_id=?1")
+    void updateUser2NullByUserId(String id);
 }

@@ -27,8 +27,8 @@ import java.util.UUID;
 public class UserController extends CommonController{
     @Autowired
     private IUserService userService;
-    @Value("${defaultPassword}")
-    private String defaultPassword;
+    /*@Value("${defaultPassword}")
+    private String defaultPassword;*/
     @Autowired
     private RedisUtil redisUtil;
     /**
@@ -71,7 +71,7 @@ public class UserController extends CommonController{
     public JsonResult resetPassword(String username){
         User user = userService.queryUserByUsername(username);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(defaultPassword));
+        user.setPassword(passwordEncoder.encode(user.getTel().substring(user.getTel().length()-6)));
         userService.updateObj(user);
         return new JsonResult(Result.SUCCESS);
     }
@@ -137,7 +137,7 @@ public class UserController extends CommonController{
             user.setId(UUID.randomUUID().toString());
             user.setCreateDate(new Date());
             user.setAllowedDelete(true);
-            user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
+            user.setPassword(new BCryptPasswordEncoder().encode(userDto.getTel().substring(userDto.getTel().length()-6)));
             userService.addObj(user);
         }
         return jsonResult;
