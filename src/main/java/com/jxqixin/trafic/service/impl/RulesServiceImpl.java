@@ -1,9 +1,9 @@
 package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.Rules;
-import com.jxqixin.trafic.model.Org;
-import com.jxqixin.trafic.model.OrgCategory;
+import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.CommonRepository;
+import com.jxqixin.trafic.repository.OrgRepository;
+import com.jxqixin.trafic.repository.OrgRulesRepository;
 import com.jxqixin.trafic.repository.RulesRepository;
 import com.jxqixin.trafic.service.IRulesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.criteria.*;
@@ -27,6 +28,10 @@ import java.util.List;
 public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRulesService {
 	@Autowired
 	private RulesRepository rulesRepository;
+	@Autowired
+	private OrgRepository orgRepository;
+	@Autowired
+	private OrgRulesRepository orgRulesRepository;
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy");
 	@Override
 	public CommonRepository getCommonRepository() {
@@ -102,7 +107,28 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 		String newNum = generateNewNum(num,maxNum);
 		rules.setNum(newNum);
 
-		rulesRepository.save(rules);
+		rules = (Rules) rulesRepository.save(rules);
+
+		if(org==null){
+			//查询所有企业
+			List<Org> list = orgRepository.findAll();
+			List<OrgRules> orgRulesList = new ArrayList<>();
+			if(!CollectionUtils.isEmpty(list)){
+				for(Org o : list){
+					OrgRules orgRules = new OrgRules();
+					orgRules.setRules(rules);
+					orgRules.setOrg(o);
+
+					orgRulesList.add(orgRules);
+				}
+				orgRulesRepository.saveAll(orgRulesList);
+			}
+		}else{
+			OrgRules orgRules = new OrgRules();
+			orgRules.setRules(rules);
+			orgRules.setOrg(org);
+			orgRulesRepository.save(orgRules);
+		}
 	}
 	/**
 	 * 根据企业简称生成新的发文字号

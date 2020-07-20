@@ -6,6 +6,7 @@ import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Law;
 import com.jxqixin.trafic.model.OrgCategory;
 import com.jxqixin.trafic.service.ILawService;
+import com.jxqixin.trafic.service.IOrgLawService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,8 @@ import java.text.SimpleDateFormat;
 public class LawController extends CommonController{
     @Autowired
     private ILawService lawService;
+    @Autowired
+    private IOrgLawService orgLawService;
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询法律法规文件
@@ -31,7 +34,8 @@ public class LawController extends CommonController{
      */
     @GetMapping("/law/lawsByPage")
     public ModelMap queryLaws(NameDto nameDto,HttpServletRequest request){
-        Page page = lawService.findLaws(nameDto,getOrg(request));
+        Page page = orgLawService.findOrgLaws(nameDto,getOrg(request));
+        //Page page = lawService.findLaws(nameDto,getOrg(request));
         return pageModelMap(page);
     }
     /**
@@ -64,6 +68,16 @@ public class LawController extends CommonController{
             law.setOrgCategory(orgCategory);
         }
         lawService.addLaw(law,getOrg(request));
+        return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     *  发布通知
+     * @param id
+     * @return
+     */
+    @GetMapping("/law/publishLaw")
+    public JsonResult publishLaw(String id){
+        orgLawService.publishLaw(id);
         return new JsonResult(Result.SUCCESS);
     }
 
@@ -126,7 +140,7 @@ public class LawController extends CommonController{
      */
     @DeleteMapping("/law/law/{id}")
     public JsonResult deleteById(@PathVariable(name="id") String id){
-        lawService.deleteById(id);
+        orgLawService.deleteById(id);
         return new JsonResult(Result.SUCCESS);
     }
 }

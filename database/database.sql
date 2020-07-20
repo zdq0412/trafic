@@ -117,7 +117,27 @@ create table m006_notice(
 ) comment '企业发文通知';
 
 
+#企业与法律法规文件关联表
+drop table if exists org_law;
+create table org_law(
+ id varchar(36) primary key comment 'ID主键',
+ org_id varchar(36) comment '企业ID',
+ law_id varchar(36) comment '法律法规ID',
+ sended bit default 0 comment '是否已发文:企业发文通知',
+ constraint fk_org_org_raw_org_id foreign key(org_id) references org(id),
+ constraint fk_org_org_raw_law_id foreign key(law_id) references m004_law(id)
+) comment '企业与法律法规文件关联表';
 
+#企业与安全规章制度关联表
+drop table if exists org_rules;
+create table org_rules(
+ id varchar(36) primary key comment 'ID主键',
+ org_id varchar(36) comment '企业ID',
+ rules_id varchar(36) comment '法律法规ID',
+ sended bit default 0 comment '是否已发文:企业发文通知',
+ constraint fk_org_org_rules_org_id foreign key(org_id) references org(id),
+ constraint fk_org_org_rules_rules_id foreign key(rules_id) references m005_rules(id)
+) comment '企业与法律法规文件关联表';
 
 #企业图片
 drop table if exists m001_org_img;

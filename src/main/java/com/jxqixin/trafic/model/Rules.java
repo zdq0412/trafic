@@ -50,11 +50,9 @@ public class Rules implements Serializable {
     @ManyToOne
     @JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Org org;
-
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }

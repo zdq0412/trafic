@@ -6,6 +6,7 @@ import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Rules;
 import com.jxqixin.trafic.model.OrgCategory;
+import com.jxqixin.trafic.service.IOrgRulesService;
 import com.jxqixin.trafic.service.IRulesService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ import java.text.SimpleDateFormat;
 public class RulesController extends CommonController{
     @Autowired
     private IRulesService rulesService;
+    @Autowired
+    private IOrgRulesService orgRulesService;
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询安全规章制度文件
@@ -33,7 +36,8 @@ public class RulesController extends CommonController{
      */
     @GetMapping("/rules/rulesByPage")
     public ModelMap queryRuless(NameDto nameDto,HttpServletRequest request){
-        Page page = rulesService.findRules(nameDto,getOrg(request));
+        Page page = orgRulesService.findOrgRules(nameDto,getOrg(request));
+        //Page page = rulesService.findRules(nameDto,getOrg(request));
         return pageModelMap(page);
     }
     /**
@@ -121,6 +125,17 @@ public class RulesController extends CommonController{
         rulesService.updateObj(savedRules);
         return new JsonResult(Result.SUCCESS);
     }
+
+    /**
+     *  发布通知
+     * @param id
+     * @return
+     */
+    @GetMapping("/rules/publishRules")
+    public JsonResult publishRules(String id){
+        orgRulesService.publishRules(id);
+        return new JsonResult(Result.SUCCESS);
+    }
     /**
      * 根据ID删除安全规章制度文件
      * @param id
@@ -128,7 +143,7 @@ public class RulesController extends CommonController{
      */
     @DeleteMapping("/rules/rules/{id}")
     public JsonResult deleteById(@PathVariable(name="id") String id){
-        rulesService.deleteById(id);
+        orgRulesService.deleteById(id);
         return new JsonResult(Result.SUCCESS);
     }
 }
