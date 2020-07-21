@@ -145,7 +145,6 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 	}
 	@Override
 	public void addLaw(Law law, Org org) {
-		String num = law.getNum();
 		String maxNum = "";
 		//查找最大发文字号
 		if(org == null){
@@ -158,7 +157,7 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 			law.setOrgCategory(org.getOrgCategory());
 			law.setOrg(org);
 		}
-		String newNum = generateNewNum(num,maxNum);
+		String newNum = generateNewNum(org.getShortName(),maxNum);
 		law.setNum(newNum);
 
 		law = (Law) lawRepository.save(law);

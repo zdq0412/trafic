@@ -18,11 +18,11 @@ public class NoticeDto implements Serializable {
     /**备注*/
     private String note;
     /**所属省*/
-    private String province;
+    private String provinceId;
     /**所属市*/
-    private String city;
+    private String cityId;
     /**所属地区*/
-    private String region;
+    private String regionId;
     /**企业类别名称*/
     private String orgCategoryId;
     /**发文字号：企业简称+年月日+自增序号*/
@@ -86,28 +86,28 @@ public class NoticeDto implements Serializable {
         this.note = note;
     }
 
-    public String getProvince() {
-        return province;
+    public String getProvinceId() {
+        return provinceId;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
     }
 
-    public String getCity() {
-        return city;
+    public String getCityId() {
+        return cityId;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
     }
 
-    public String getRegion() {
-        return region;
+    public String getRegionId() {
+        return regionId;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
     }
 
     public String getOrgCategoryId() {

@@ -11,11 +11,11 @@ import java.util.Date;
 public class AreaManagerDto {
 	private String id;
 	/**所属省*/
-	private String province;
+	private String provinceId;
 	/**所属市*/
-	private String city;
+	private String cityId;
 	/**所属地区*/
-	private String region;
+	private String regionId;
 	/**用户名*/
 	private String username;
 	/**企业类别id*/
@@ -28,29 +28,30 @@ public class AreaManagerDto {
 		this.id = id;
 	}
 
-	public String getProvince() {
-		return province;
+	public String getProvinceId() {
+		return provinceId;
 	}
 
-	public void setProvince(String province) {
-		this.province = province;
+	public void setProvinceId(String provinceId) {
+		this.provinceId = provinceId;
 	}
 
-	public String getCity() {
-		return city;
+	public String getCityId() {
+		return cityId;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
 	}
 
-	public String getRegion() {
-		return region;
+	public String getRegionId() {
+		return regionId;
 	}
 
-	public void setRegion(String region) {
-		this.region = region;
+	public void setRegionId(String regionId) {
+		this.regionId = regionId;
 	}
+
 	public String getUsername() {
 		return username;
 	}

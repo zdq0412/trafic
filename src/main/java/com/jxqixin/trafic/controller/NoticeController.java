@@ -3,6 +3,7 @@ package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.NoticeDto;
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.model.Category;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Notice;
 import com.jxqixin.trafic.model.OrgCategory;
@@ -92,14 +93,26 @@ public class NoticeController extends CommonController{
         Notice savedNotice = noticeService.queryObjById(noticeDto.getId());
         savedNotice.setName(noticeDto.getName());
         savedNotice.setNote(noticeDto.getNote());
-        savedNotice.setCity(noticeDto.getCity());
         if(!StringUtils.isEmpty(noticeDto.getOrgCategoryId())){
             OrgCategory orgCategory = new OrgCategory();
             orgCategory.setId(noticeDto.getOrgCategoryId());
             savedNotice.setOrgCategory(orgCategory);
         }
-        savedNotice.setProvince(noticeDto.getProvince());
-        savedNotice.setRegion(noticeDto.getRegion());
+        if(!StringUtils.isEmpty(noticeDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(noticeDto.getProvinceId());
+            savedNotice.setProvince(province);
+        }
+        if(!StringUtils.isEmpty(noticeDto.getCityId())){
+            Category city = new Category();
+            city.setId(noticeDto.getCityId());
+            savedNotice.setCity(city);
+        }
+        if(!StringUtils.isEmpty(noticeDto.getRegionId())){
+            Category region = new Category();
+            region.setId(noticeDto.getRegionId());
+            savedNotice.setRegion(region);
+        }
         savedNotice.setPublishDepartment(noticeDto.getPublishDepartment());
         savedNotice.setTimeliness(noticeDto.getTimeliness());
 

@@ -1,7 +1,10 @@
 package com.jxqixin.trafic.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonValue;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -35,11 +38,20 @@ public class Notice implements Serializable {
     /**备注*/
     private String note;
     /**所属省*/
-    private String province;
+    @ManyToOne
+    @JoinColumn(name="province_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Category province;
     /**所属市*/
-    private String city;
+    @ManyToOne
+    @JoinColumn(name="city_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Category city;
     /**所属地区*/
-    private String region;
+    @ManyToOne
+    @JoinColumn(name="region_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Category region;
     /**企业类别名称*/
     @ManyToOne
     @JoinColumn(name = "orgCategory_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -51,7 +63,32 @@ public class Notice implements Serializable {
     /**所属企业，如果没有企业，则所有企业都可见*/
     @ManyToOne
     @JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JsonIgnore
     private Org org;
+    @ManyToOne
+    @JoinColumn(name = "law_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JsonIgnore
+    private Law law;
+    @ManyToOne
+    @JoinColumn(name = "rules_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JsonIgnore
+    private Rules rules;
+
+    public Law getLaw() {
+        return law;
+    }
+
+    public void setLaw(Law law) {
+        this.law = law;
+    }
+
+    public Rules getRules() {
+        return rules;
+    }
+
+    public void setRules(Rules rules) {
+        this.rules = rules;
+    }
 
     public String getId() {
         return id;
@@ -109,27 +146,27 @@ public class Notice implements Serializable {
         this.note = note;
     }
 
-    public String getProvince() {
+    public Category getProvince() {
         return province;
     }
 
-    public void setProvince(String province) {
+    public void setProvince(Category province) {
         this.province = province;
     }
 
-    public String getCity() {
+    public Category getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(Category city) {
         this.city = city;
     }
 
-    public String getRegion() {
+    public Category getRegion() {
         return region;
     }
 
-    public void setRegion(String region) {
+    public void setRegion(Category region) {
         this.region = region;
     }
 

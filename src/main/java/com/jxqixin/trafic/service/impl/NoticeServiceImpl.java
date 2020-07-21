@@ -99,7 +99,7 @@ public class NoticeServiceImpl extends CommonServiceImpl<Notice> implements INot
 			notice.setOrgCategory(org.getOrgCategory());
 			notice.setOrg(org);
 		}
-		String newNum = generateNewNum(num,maxNum);
+		String newNum = generateNewNum(org.getShortName(),maxNum);
 		notice.setNum(newNum);
 
 		noticeRepository.save(notice);

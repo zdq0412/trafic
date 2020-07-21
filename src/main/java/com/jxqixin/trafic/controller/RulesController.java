@@ -3,6 +3,7 @@ package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.RulesDto;
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.model.Category;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Rules;
 import com.jxqixin.trafic.model.OrgCategory;
@@ -57,13 +58,6 @@ public class RulesController extends CommonController{
                 e.printStackTrace();
             }
         }
-        if(!StringUtils.isEmpty(rulesDto.getImplementDate())){
-            try {
-                rules.setImplementDate(format.parse(rulesDto.getImplementDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
         if(!StringUtils.isEmpty(rulesDto.getOrgCategoryId())){
             OrgCategory orgCategory = new OrgCategory();
             orgCategory.setId(rulesDto.getOrgCategoryId());
@@ -96,27 +90,32 @@ public class RulesController extends CommonController{
         Rules savedRules = rulesService.queryObjById(rulesDto.getId());
         savedRules.setName(rulesDto.getName());
         savedRules.setNote(rulesDto.getNote());
-        savedRules.setCity(rulesDto.getCity());
         if(!StringUtils.isEmpty(rulesDto.getOrgCategoryId())){
             OrgCategory orgCategory = new OrgCategory();
             orgCategory.setId(rulesDto.getOrgCategoryId());
             savedRules.setOrgCategory(orgCategory);
         }
-        savedRules.setProvince(rulesDto.getProvince());
-        savedRules.setRegion(rulesDto.getRegion());
+        if(!StringUtils.isEmpty(rulesDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(rulesDto.getProvinceId());
+            savedRules.setProvince(province);
+        }
+        if(!StringUtils.isEmpty(rulesDto.getCityId())){
+            Category city = new Category();
+            city.setId(rulesDto.getCityId());
+            savedRules.setCity(city);
+        }
+        if(!StringUtils.isEmpty(rulesDto.getRegionId())){
+            Category region = new Category();
+            region.setId(rulesDto.getRegionId());
+            savedRules.setRegion(region);
+        }
         savedRules.setPublishDepartment(rulesDto.getPublishDepartment());
         savedRules.setTimeliness(rulesDto.getTimeliness());
 
         if(!StringUtils.isEmpty(rulesDto.getPublishDate())){
             try {
                 savedRules.setPublishDate(format.parse(rulesDto.getPublishDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        if(!StringUtils.isEmpty(rulesDto.getImplementDate())){
-            try {
-                savedRules.setImplementDate(format.parse(rulesDto.getImplementDate()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

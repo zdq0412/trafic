@@ -8,6 +8,18 @@ create table org_category(
   createDate timestamp default current_timestamp comment '创建日期'
 ) comment '企业类别表';
 
+#区域信息表
+drop table if exists category;
+create table category(
+  id varchar(36) primary key comment '主键',
+  name varchar(50) not null comment '区域名称',
+  pid varchar(36) comment '父类ID',
+  createDate timestamp default current_timestamp comment '创建日期',
+  note varchar(2000) comment '区域描述',
+  type varchar(50) comment '类型',
+  constraint fk_category foreign key(pid) references category(id)
+) comment '区域信息表';
+
 #企业信息表
 drop table if exists org;
 create table org(
@@ -18,9 +30,9 @@ create table org(
   tel varchar(20) comment '联系方式',
   addr varchar(200)  comment '企业地址',
   legalPerson varchar(30) comment '法人',
-  province varchar(200) comment '所属省',
-  city varchar(200) comment '所属市',
-  region  varchar(200) comment '所属地区',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
   createDate timestamp default current_timestamp comment '创建日期',
   status char(1) default '0' comment '状态，0：正常，1：禁用，2：删除',
   note varchar(2000) comment '企业描述',
@@ -36,6 +48,9 @@ create table org(
   fourColorPicRealPath varchar(100) comment '四色图磁盘路径',
 
   shortName varchar(50) comment '简称',
+  constraint fk_org_category_province_id foreign key(province_id) references category(id),
+  constraint fk_org_category_city_id foreign key(city_id) references category(id),
+  constraint fk_org_category_region_id foreign key(region_id) references category(id),
   constraint fk_org_category_id_org foreign key(org_category_id) references org_category(id)
 ) comment '企业信息表';
 
@@ -65,13 +80,16 @@ create table m004_law(
   implementDate timestamp comment '实施日期',
   publishDepartment varchar(100) comment '发文部门',
   note varchar(1000) comment '备注',
-  province varchar(200) comment '所属省',
-  city varchar(200) comment '所属市',
-  region  varchar(200) comment '所属地区',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
   org_id varchar(36) not null comment '所属企业ID',
   timeliness varchar(20) default '有效' comment '时效性，有效或无效',
+  constraint fk_m004_law_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m004_law_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m004_law_category_region_id foreign key(region_id) references category(id),
   constraint fk_m004_law_org_id foreign key(org_id) references org(id),
   constraint fk_m004_law_orgCategory_id foreign key(orgCategory_id) references org_category(id)
 ) comment '法律法规文件';
@@ -83,16 +101,18 @@ create table m005_rules(
   name varchar(1000) not null comment '安全规章制度文件名称',
   content text comment '安全规章制度内容',
   publishDate timestamp comment '发布日期',
-  implementDate timestamp comment '实施日期',
   publishDepartment varchar(100) comment '发文部门',
   note varchar(1000) comment '备注',
-  province varchar(200) comment '所属省',
-  city varchar(200) comment '所属市',
-  region  varchar(200) comment '所属地区',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
   org_id varchar(36) not null comment '所属企业ID',
   timeliness varchar(20) default '有效' comment '时效性，有效或无效',
+  constraint fk_m005_rules_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m005_rules_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m005_rules_category_region_id foreign key(region_id) references category(id),
   constraint fk_m005_rules_org_id foreign key(org_id) references org(id),
   constraint fk_m005_rules_orgCategory_id foreign key(orgCategory_id) references org_category(id)
 ) comment '安全规章制度';
@@ -106,39 +126,24 @@ create table m006_notice(
   publishDate timestamp comment '发布日期',
   publishDepartment varchar(100) comment '发文部门',
   note varchar(1000) comment '备注',
-  province varchar(200) comment '所属省',
-  city varchar(200) comment '所属市',
-  region  varchar(200) comment '所属地区',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
   org_id varchar(36) not null comment '所属企业ID',
+  law_id varchar(36) comment '法律法规id',
+  rules_id varchar(36) comment '企业规章制度id',
   timeliness varchar(20) default '有效' comment '时效性，有效或无效',
+  constraint fk_m006_notice_m005_rules_rules_id foreign key(rules_id) references m005_rules(id),
+  constraint fk_m006_notice_m004_law_law_id foreign key(law_id) references m004_law(id),
+  constraint fk_m006_notice_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m006_notice_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m006_notice_category_region_id foreign key(region_id) references category(id),
   constraint fk_m006_notice_org_id foreign key(org_id) references org(id),
   constraint fk_m006_notice_orgCategory_id foreign key(orgCategory_id) references org_category(id)
 ) comment '企业发文通知';
 
-
-/*#企业与法律法规文件关联表
-drop table if exists org_law;
-create table org_law(
- id varchar(36) primary key comment 'ID主键',
- org_id varchar(36) comment '企业ID',
- law_id varchar(36) comment '法律法规ID',
- sended bit default 0 comment '是否已发文:企业发文通知',
- constraint fk_org_org_raw_org_id foreign key(org_id) references org(id),
- constraint fk_org_org_raw_law_id foreign key(law_id) references m004_law(id)
-) comment '企业与法律法规文件关联表';
-
-#企业与安全规章制度关联表
-drop table if exists org_rules;
-create table org_rules(
- id varchar(36) primary key comment 'ID主键',
- org_id varchar(36) comment '企业ID',
- rules_id varchar(36) comment '法律法规ID',
- sended bit default 0 comment '是否已发文:企业发文通知',
- constraint fk_org_org_rules_org_id foreign key(org_id) references org(id),
- constraint fk_org_org_rules_rules_id foreign key(rules_id) references m005_rules(id)
-) comment '企业与法律法规文件关联表';*/
 
 #企业图片
 drop table if exists m001_org_img;
@@ -254,11 +259,14 @@ create table area_manager(
   id varchar(36) primary key comment '主键',
   username varchar(50) not null comment '用户名称',
   password varchar(100) unique default '123456' comment '密码',
-  province varchar(200) comment '所属省',
-  city varchar(200) comment '所属市',
-  region  varchar(200) comment '所属地区',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
   createDate timestamp default current_timestamp comment '创建日期',
   org_category_id varchar(36) comment '企业类别id',
+   constraint fk_area_manager_category_province_id foreign key(province_id) references category(id),
+  constraint fk_area_manager_category_city_id foreign key(city_id) references category(id),
+  constraint fk_area_manager_category_region_id foreign key(region_id) references category(id),
   constraint fk_org_category_area_manager foreign key(org_category_id) references org_category(id)
 ) comment '区域管理员';
 
@@ -285,17 +293,6 @@ create table m003_employee(
   constraint fk_m003_employee_user_id foreign key(user_id) references t_user(id)
 ) comment '企业人员资料表';
 
-#区域信息表
-drop table if exists category;
-create table category(
-  id varchar(36) primary key comment '主键',
-  name varchar(50) not null comment '区域名称',
-  pid varchar(36) comment '父类ID',
-  createDate timestamp default current_timestamp comment '创建日期',
-  note varchar(2000) comment '区域描述',
-  type varchar(50) comment '类型',
-  constraint fk_category foreign key(pid) references category(id)
-) comment '区域信息表';
 
 #角色权限表
 drop table if exists role_functions;

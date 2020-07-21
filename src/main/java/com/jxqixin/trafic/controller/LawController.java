@@ -2,6 +2,7 @@ package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.LawDto;
+import com.jxqixin.trafic.model.Category;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Law;
 import com.jxqixin.trafic.model.OrgCategory;
@@ -104,14 +105,27 @@ public class LawController extends CommonController{
         Law savedLaw = lawService.queryObjById(lawDto.getId());
         savedLaw.setName(lawDto.getName());
         savedLaw.setNote(lawDto.getNote());
-        savedLaw.setCity(lawDto.getCity());
+
         if(!StringUtils.isEmpty(lawDto.getOrgCategoryId())){
             OrgCategory orgCategory = new OrgCategory();
             orgCategory.setId(lawDto.getOrgCategoryId());
             savedLaw.setOrgCategory(orgCategory);
         }
-        savedLaw.setProvince(lawDto.getProvince());
-        savedLaw.setRegion(lawDto.getRegion());
+        if(!StringUtils.isEmpty(lawDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(lawDto.getProvinceId());
+            savedLaw.setProvince(province);
+        }
+        if(!StringUtils.isEmpty(lawDto.getCityId())){
+            Category city = new Category();
+            city.setId(lawDto.getCityId());
+            savedLaw.setCity(city);
+        }
+        if(!StringUtils.isEmpty(lawDto.getRegionId())){
+            Category region = new Category();
+            region.setId(lawDto.getRegionId());
+            savedLaw.setRegion(region);
+        }
         savedLaw.setPublishDepartment(lawDto.getPublishDepartment());
         savedLaw.setTimeliness(lawDto.getTimeliness());
 

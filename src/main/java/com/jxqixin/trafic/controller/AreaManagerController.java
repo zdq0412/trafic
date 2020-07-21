@@ -2,10 +2,7 @@ package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.AreaManagerDto;
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.JsonResult;
-import com.jxqixin.trafic.model.AreaManager;
-import com.jxqixin.trafic.model.OrgCategory;
-import com.jxqixin.trafic.model.User;
+import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.service.IAreaManagerService;
 import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.BeanUtils;
@@ -87,9 +84,21 @@ public class AreaManagerController extends CommonController{
             savedAreaManager.setOrgCategory(orgCategory);
         }
         savedAreaManager.setUsername(areaManagerDto.getUsername());
-        savedAreaManager.setCity(areaManagerDto.getCity());
-        savedAreaManager.setProvince(areaManagerDto.getProvince());
-        savedAreaManager.setRegion(areaManagerDto.getRegion());
+        if(!StringUtils.isEmpty(areaManagerDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(areaManagerDto.getProvinceId());
+            savedAreaManager.setProvince(province);
+        }
+        if(!StringUtils.isEmpty(areaManagerDto.getCityId())){
+            Category city = new Category();
+            city.setId(areaManagerDto.getCityId());
+            savedAreaManager.setCity(city);
+        }
+        if(!StringUtils.isEmpty(areaManagerDto.getRegionId())){
+            Category region = new Category();
+            region.setId(areaManagerDto.getRegionId());
+            savedAreaManager.setRegion(region);
+        }
         areaManagerService.updateObj(savedAreaManager);
         return new JsonResult(Result.SUCCESS);
     }

@@ -111,9 +111,21 @@ public class OrgController extends CommonController{
         savedOrg.setTel(orgDto.getTel());
         savedOrg.setLegalPerson(orgDto.getLegalPerson());
         savedOrg.setNote(orgDto.getNote());
-        savedOrg.setProvince(orgDto.getProvince());
-        savedOrg.setCity(orgDto.getCity());
-        savedOrg.setRegion(orgDto.getRegion());
+        if(!StringUtils.isEmpty(orgDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(orgDto.getProvinceId());
+            savedOrg.setProvince(province);
+        }
+        if(!StringUtils.isEmpty(orgDto.getCityId())){
+            Category city = new Category();
+            city.setId(orgDto.getCityId());
+            savedOrg.setCity(city);
+        }
+        if(!StringUtils.isEmpty(orgDto.getRegionId())){
+            Category region = new Category();
+            region.setId(orgDto.getRegionId());
+            savedOrg.setRegion(region);
+        }
         savedOrg.setReportTel(orgDto.getReportTel());
         savedOrg.setShortName(orgDto.getShortName());
         savedOrg.setEmail(orgDto.getEmail());

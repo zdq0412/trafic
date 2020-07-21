@@ -30,11 +30,20 @@ public class Org {
 	/**法人*/
 	private String legalPerson;
 	/**所属省*/
-	private String province;
+	@ManyToOne
+	@JoinColumn(name="province_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Category province;
 	/**所属市*/
-	private String city;
+	@ManyToOne
+	@JoinColumn(name="city_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Category city;
 	/**所属地区*/
-	private String region;
+	@ManyToOne
+	@JoinColumn(name="region_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Category region;;
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createDate;
@@ -195,30 +204,6 @@ public class Org {
 		this.legalPerson = legalPerson;
 	}
 
-	public String getProvince() {
-		return province;
-	}
-
-	public void setProvince(String province) {
-		this.province = province;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
-	}
-
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -241,5 +226,29 @@ public class Org {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public Category getProvince() {
+		return province;
+	}
+
+	public void setProvince(Category province) {
+		this.province = province;
+	}
+
+	public Category getCity() {
+		return city;
+	}
+
+	public void setCity(Category city) {
+		this.city = city;
+	}
+
+	public Category getRegion() {
+		return region;
+	}
+
+	public void setRegion(Category region) {
+		this.region = region;
 	}
 }

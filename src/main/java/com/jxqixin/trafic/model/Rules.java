@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.model;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -24,20 +26,29 @@ public class Rules implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.TIMESTAMP)
     private Date publishDate;
-    /**实施日期*/
+/*    *//**实施日期*//*
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date implementDate;
+    private Date implementDate;*/
     /**发文部门名称*/
     private String publishDepartment;
     /**备注*/
     private String note;
     /**所属省*/
-    private String province;
+    @ManyToOne
+    @JoinColumn(name="province_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Category province;
     /**所属市*/
-    private String city;
+    @ManyToOne
+    @JoinColumn(name="city_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Category city;
     /**所属地区*/
-    private String region;
+    @ManyToOne
+    @JoinColumn(name="region_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Category region;
     /**企业类别名称*/
     @ManyToOne
     @JoinColumn(name = "orgCategory_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -81,14 +92,6 @@ public class Rules implements Serializable {
         this.publishDate = publishDate;
     }
 
-    public Date getImplementDate() {
-        return implementDate;
-    }
-
-    public void setImplementDate(Date implementDate) {
-        this.implementDate = implementDate;
-    }
-
     public String getPublishDepartment() {
         return publishDepartment;
     }
@@ -105,27 +108,27 @@ public class Rules implements Serializable {
         this.note = note;
     }
 
-    public String getProvince() {
+    public Category getProvince() {
         return province;
     }
 
-    public void setProvince(String province) {
+    public void setProvince(Category province) {
         this.province = province;
     }
 
-    public String getCity() {
+    public Category getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(Category city) {
         this.city = city;
     }
 
-    public String getRegion() {
+    public Category getRegion() {
         return region;
     }
 
-    public void setRegion(String region) {
+    public void setRegion(Category region) {
         this.region = region;
     }
 
