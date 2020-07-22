@@ -4,6 +4,8 @@ import com.jxqixin.trafic.model.Notice;
 import com.jxqixin.trafic.model.Org;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface INoticeService extends ICommonService<Notice> {
     /**
      * 分页查询企业发文通知信息
@@ -21,4 +23,17 @@ public interface INoticeService extends ICommonService<Notice> {
      * @param org 企业对象
      */
     void addNotice(Notice notice, Org org);
+    /**
+     * 根据法律法规ID查找
+     * @param lawId
+     * @return
+     */
+    List<Notice> findByLawId(String lawId);
+
+    /**
+     * 根据安全规章制度ID查找
+     * @param rulesId
+     * @return
+     */
+    List<Notice> findByRulesId(String rulesId);
 }

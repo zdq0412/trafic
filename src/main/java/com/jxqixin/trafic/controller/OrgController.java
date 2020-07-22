@@ -74,6 +74,21 @@ public class OrgController extends CommonController{
                 orgCategory.setId(orgDto.getOrgCategoryId());
                 org.setOrgCategory(orgCategory);
             }
+            if(!StringUtils.isEmpty(orgDto.getProvinceId())){
+                Category province = new Category();
+                province.setId(orgDto.getProvinceId());
+                org.setProvince(province);
+            }
+            if(!StringUtils.isEmpty(orgDto.getCityId())){
+                Category city = new Category();
+                city.setId(orgDto.getCityId());
+                org.setCity(city);
+            }
+            if(!StringUtils.isEmpty(orgDto.getRegionId())){
+                Category region = new Category();
+                region.setId(orgDto.getRegionId());
+                org.setRegion(region);
+            }
             try {
                 orgService.addOrg(org);
             }catch (RuntimeException e){

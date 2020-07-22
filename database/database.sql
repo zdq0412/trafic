@@ -85,7 +85,7 @@ create table m004_law(
   region_id  varchar(36) comment '所属地区',
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
-  org_id varchar(36) not null comment '所属企业ID',
+  org_id varchar(36) comment '所属企业ID',
   timeliness varchar(20) default '有效' comment '时效性，有效或无效',
   constraint fk_m004_law_category_province_id foreign key(province_id) references category(id),
   constraint fk_m004_law_category_city_id foreign key(city_id) references category(id),
@@ -108,7 +108,7 @@ create table m005_rules(
   region_id  varchar(36) comment '所属地区',
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
-  org_id varchar(36) not null comment '所属企业ID',
+  org_id varchar(36)  comment '所属企业ID',
   timeliness varchar(20) default '有效' comment '时效性，有效或无效',
   constraint fk_m005_rules_category_province_id foreign key(province_id) references category(id),
   constraint fk_m005_rules_category_city_id foreign key(city_id) references category(id),
@@ -131,7 +131,7 @@ create table m006_notice(
   region_id  varchar(36) comment '所属地区',
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
-  org_id varchar(36) not null comment '所属企业ID',
+  org_id varchar(36)  comment '所属企业ID',
   law_id varchar(36) comment '法律法规id',
   rules_id varchar(36) comment '企业规章制度id',
   timeliness varchar(20) default '有效' comment '时效性，有效或无效',
@@ -156,6 +156,17 @@ create table m001_org_img(
   org_id varchar(36) not null comment '所属企业ID',
   constraint fk_m001_org_img_org_id foreign key(org_id) references org(id)
 ) comment '企业图片';
+
+#模板管理
+drop table if exists template;
+create table template(
+ id varchar(36) primary key comment 'ID主键',
+  name varchar(50) not null comment '模板名称',
+  content text comment '模板内容',
+  createDate timestamp  comment '创建时间',
+  creator varchar(50) comment '创建人用户名',
+  note varchar(500) commnet '备注'
+) comment '模板管理';
 
 #企业资质文件
 drop table if exists m001_org_doc;

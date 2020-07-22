@@ -29,10 +29,6 @@ public class Notice implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.TIMESTAMP)
     private Date publishDate;
-    /**实施日期*/
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date implementDate;
     /**发文部门名称*/
     private String publishDepartment;
     /**备注*/
@@ -120,14 +116,6 @@ public class Notice implements Serializable {
 
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
-    }
-
-    public Date getImplementDate() {
-        return implementDate;
-    }
-
-    public void setImplementDate(Date implementDate) {
-        this.implementDate = implementDate;
     }
 
     public String getPublishDepartment() {

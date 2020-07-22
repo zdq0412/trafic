@@ -20,4 +20,9 @@ public interface ILawService extends ICommonService<Law> {
      * @param org 企业对象
      */
     void addLaw(Law law, Org org);
+    /**
+     * 发布通知
+     * @param id
+     */
+    void publishLaw(String id);
 }

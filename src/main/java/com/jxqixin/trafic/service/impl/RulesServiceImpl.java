@@ -1,11 +1,15 @@
 package com.jxqixin.trafic.service.impl;
+
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.*;
+import com.jxqixin.trafic.model.Notice;
+import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.OrgCategory;
+import com.jxqixin.trafic.model.Rules;
 import com.jxqixin.trafic.repository.CommonRepository;
-import com.jxqixin.trafic.repository.OrgRepository;
-import com.jxqixin.trafic.repository.OrgRulesRepository;
+import com.jxqixin.trafic.repository.NoticeRepository;
 import com.jxqixin.trafic.repository.RulesRepository;
 import com.jxqixin.trafic.service.IRulesService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.criteria.*;
@@ -29,9 +32,7 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 	@Autowired
 	private RulesRepository rulesRepository;
 	@Autowired
-	private OrgRepository orgRepository;
-	@Autowired
-	private OrgRulesRepository orgRulesRepository;
+	private NoticeRepository noticeRepository;
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy");
 	@Override
 	public CommonRepository getCommonRepository() {
@@ -59,6 +60,7 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 			return rulesRepository.findAll(new Specification() {
 				@Override
 				public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+
 					List<Predicate> list = new ArrayList<>();
 					//企业字段不为空的
 					if(!StringUtils.isEmpty(nameDto.getName())){
@@ -91,7 +93,6 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 	}
 	@Override
 	public void addRule(Rules rules, Org org) {
-		String num = rules.getNum();
 		String maxNum = "";
 		//查找最大发文字号
 		if(org == null){
@@ -104,32 +105,31 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 			rules.setOrgCategory(org.getOrgCategory());
 			rules.setOrg(org);
 		}
-		String newNum = generateNewNum(num,maxNum);
+		String newNum = generateNewNum(org==null?null:org.getShortName(),maxNum);
 		rules.setNum(newNum);
-
-		rules = (Rules) rulesRepository.save(rules);
-
-		if(org==null){
-			//查询所有企业
-			List<Org> list = orgRepository.findAll();
-			List<OrgRules> orgRulesList = new ArrayList<>();
-			if(!CollectionUtils.isEmpty(list)){
-				for(Org o : list){
-					OrgRules orgRules = new OrgRules();
-					orgRules.setRules(rules);
-					orgRules.setOrg(o);
-
-					orgRulesList.add(orgRules);
-				}
-				orgRulesRepository.saveAll(orgRulesList);
-			}
-		}else{
-			OrgRules orgRules = new OrgRules();
-			orgRules.setRules(rules);
-			orgRules.setOrg(org);
-			orgRulesRepository.save(orgRules);
-		}
+		rulesRepository.save(rules);
 	}
+
+	@Override
+	public void publishRules(String id) {
+		Rules rules = (Rules) rulesRepository.findById(id).get();
+		Notice notice = new Notice();
+		BeanUtils.copyProperties(rules,notice);
+		notice.setRules(rules);
+		noticeRepository.save(notice);
+	}
+
+	@Override
+	public Page findTemplates(NameDto nameDto) {
+		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit(), Sort.Direction.DESC,"publishDate");
+		return rulesRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				return criteriaBuilder.and(criteriaBuilder.isNull(root.get("org")));
+			}
+		}, pageable);
+	}
+
 	/**
 	 * 根据企业简称生成新的发文字号
 	 * @param num 企业简称

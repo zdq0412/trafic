@@ -22,4 +22,15 @@ public interface IRulesService extends ICommonService<Rules> {
      * @param org 企业对象
      */
     void addRule(Rules rule, Org org);
+    /**
+     * 发布通知
+     * @param id
+     */
+    void publishRules(String id);
+    /**
+     * 查找模板
+     * @param nameDto
+     * @return
+     */
+    Page findTemplates(NameDto nameDto);
 }

@@ -1,6 +1,5 @@
 package com.jxqixin.trafic.service.impl;
 
-import com.alibaba.druid.sql.PagerUtils;
 import com.jxqixin.trafic.dto.Menus;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.*;
@@ -8,11 +7,9 @@ import com.jxqixin.trafic.repository.*;
 import com.jxqixin.trafic.service.IFunctionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.StringUtils;
@@ -174,6 +171,7 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 			role.setName(orgCategory.getName() + "管理员角色");
 			role.setOrgCategory(orgCategory);
 			role.setCreateDate(new Date());
+			role.setStatus("0");
 			role= (Role) roleRepository.save(role);
 			modifyOrgCategoryRole(functionIdArray,role);
 		}else{

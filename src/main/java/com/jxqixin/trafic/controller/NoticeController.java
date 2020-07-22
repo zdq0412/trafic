@@ -18,6 +18,8 @@ import org.thymeleaf.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 企业发文通知文件控制器
@@ -50,13 +52,6 @@ public class NoticeController extends CommonController{
         if(!StringUtils.isEmpty(noticeDto.getPublishDate())){
             try {
                 notice.setPublishDate(format.parse(noticeDto.getPublishDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        if(!StringUtils.isEmpty(noticeDto.getImplementDate())){
-            try {
-                notice.setImplementDate(format.parse(noticeDto.getImplementDate()));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -123,14 +118,6 @@ public class NoticeController extends CommonController{
                 e.printStackTrace();
             }
         }
-        if(!StringUtils.isEmpty(noticeDto.getImplementDate())){
-            try {
-                savedNotice.setImplementDate(format.parse(noticeDto.getImplementDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
         noticeService.updateObj(savedNotice);
         return new JsonResult(Result.SUCCESS);
     }
@@ -143,5 +130,20 @@ public class NoticeController extends CommonController{
     public JsonResult deleteById(@PathVariable(name="id") String id){
         noticeService.deleteById(id);
         return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     * 根据法律法规ID或安全规章制度ID查找企业通知
+     * @param lawOrRulesId
+     * @return
+     */
+    @GetMapping("/notice/notices")
+    public List<Notice> findByLawIdOrRulesId(String lawOrRulesId,String type){
+        if("law".equals(type)){
+            return noticeService.findByLawId(lawOrRulesId);
+        }
+        if("rules".equals(type)){
+            return noticeService.findByRulesId(lawOrRulesId);
+        }
+        return new ArrayList<>();
     }
 }

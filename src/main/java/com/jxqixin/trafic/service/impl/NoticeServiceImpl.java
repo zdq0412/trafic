@@ -104,6 +104,17 @@ public class NoticeServiceImpl extends CommonServiceImpl<Notice> implements INot
 
 		noticeRepository.save(notice);
 	}
+
+	@Override
+	public List<Notice> findByLawId(String lawId) {
+		return noticeRepository.findByLawId(lawId);
+	}
+
+	@Override
+	public List<Notice> findByRulesId(String rulesId) {
+		return noticeRepository.findByRulesId(rulesId);
+	}
+
 	/**
 	 * 根据企业简称生成新的发文字号
 	 * @param num 企业简称

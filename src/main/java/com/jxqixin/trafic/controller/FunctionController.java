@@ -118,7 +118,7 @@ public class FunctionController extends CommonController{
         return new JsonResult(Result.SUCCESS);
     }
     /**
-     * 为目录赋权限
+     * 为企业类别赋权限
      * @param functionsId
      * @param orgCategoryId
      * @return

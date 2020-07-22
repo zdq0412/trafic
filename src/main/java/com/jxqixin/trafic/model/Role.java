@@ -19,7 +19,7 @@ public class Role implements Serializable{
 	/**角色名称*/
 	private String name;
 	/**状态，0：正常，1：禁用，2：删除*/
-	private String status;
+	private String status="0";
 	/**创建人*/
 	private String creator;
 	@Temporal(TemporalType.TIMESTAMP)
