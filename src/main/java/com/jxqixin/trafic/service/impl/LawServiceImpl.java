@@ -61,21 +61,27 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 					if(!StringUtils.isEmpty(nameDto.getName())){
 						list.add(criteriaBuilder.like(root.get("name"),"%" + nameDto.getName() +"%"));
 					}
-
-					Join<Law, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("province"),orgJoin.get("province")),
-							criteriaBuilder.equal(root.get("city"),orgJoin.get("city")),
-							criteriaBuilder.equal(root.get("region"),orgJoin.get("region"))))	;
-
-					OrgCategory orgCategory = org.getOrgCategory();
-					if(orgCategory!=null){
-						Join<Law,OrgCategory> lawOrgCategoryJoin = root.join("orgCategory",JoinType.INNER);
-						Join<Org,OrgCategory> orgOrgCategoryJoin = orgJoin.join("orgCategory",JoinType.INNER);
-						list.add(criteriaBuilder.equal(orgOrgCategoryJoin.get("id"), lawOrgCategoryJoin.get("id")));
+					Join<Law, Org> orgJoin = root.join("org",JoinType.LEFT);
+					list.add(criteriaBuilder.or(criteriaBuilder.equal(orgJoin.get("id"),org.getId()),criteriaBuilder.isNull(root.get("org"))));
+					//企业类别
+					if(org.getOrgCategory()!=null) {
+						Join<Law, OrgCategory> orgCategoryJoin = root.join("orgCategory", JoinType.LEFT);
+						list.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("orgCategory")), criteriaBuilder.equal(orgCategoryJoin.get("id"), org.getOrgCategory().getId())));
+					}
+					//省市区
+					if(org.getProvince()!=null) {
+						Join<Law, Category> provinceJoin = root.join("province", JoinType.LEFT);
+						list.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("province")),criteriaBuilder.equal(provinceJoin.get("id"),org.getProvince().getId())));
+					}
+					if(org.getCity()!=null) {
+						Join<Law, Category> cityJoin = root.join("city", JoinType.LEFT);
+						list.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("city")),criteriaBuilder.equal(cityJoin.get("id"),org.getCity().getId())));
+					}
+					if(org.getRegion()!=null){
+						Join<Law,Category> regionJoin = root.join("region",JoinType.LEFT);
+						list.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("region")),criteriaBuilder.equal(regionJoin.get("id"),org.getRegion().getId())));
 					}
 
-					//过滤本企业发布或超级管理员发布的法律法规文件
-					list.add(criteriaBuilder.or(criteriaBuilder.equal(orgJoin.get("id"),org.getId()),criteriaBuilder.isNull(root.get("org"))));
 					Predicate[] predicates = new Predicate[list.size()];
 					return criteriaBuilder.and(list.toArray(predicates));
 				}

@@ -165,7 +165,7 @@ create table template(
   content text comment '模板内容',
   createDate timestamp  comment '创建时间',
   creator varchar(50) comment '创建人用户名',
-  note varchar(500) commnet '备注'
+  note varchar(500) comment '备注'
 ) comment '模板管理';
 
 #企业资质文件

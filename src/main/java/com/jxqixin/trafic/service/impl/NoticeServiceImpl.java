@@ -61,19 +61,9 @@ public class NoticeServiceImpl extends CommonServiceImpl<Notice> implements INot
 					}
 
 					Join<Notice, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("province"),orgJoin.get("province")),
-							criteriaBuilder.equal(root.get("city"),orgJoin.get("city")),
-							criteriaBuilder.equal(root.get("region"),orgJoin.get("region"))))	;
-
-					OrgCategory orgCategory = org.getOrgCategory();
-					if(orgCategory!=null){
-						Join<Notice,OrgCategory> noticeOrgCategoryJoin = root.join("orgCategory",JoinType.INNER);
-						Join<Org,OrgCategory> orgOrgCategoryJoin = orgJoin.join("orgCategory",JoinType.INNER);
-						list.add(criteriaBuilder.equal(orgOrgCategoryJoin.get("id"), noticeOrgCategoryJoin.get("id")));
-					}
 
 					//过滤本企业发布或超级管理员发布的法律法规文件
-					list.add(criteriaBuilder.or(criteriaBuilder.equal(orgJoin.get("id"),org.getId()),criteriaBuilder.isNull(root.get("org"))));
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 					Predicate[] predicates = new Predicate[list.size()];
 					return criteriaBuilder.and(list.toArray(predicates));
 				}

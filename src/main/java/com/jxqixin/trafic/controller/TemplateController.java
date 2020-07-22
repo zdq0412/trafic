@@ -2,6 +2,7 @@ package com.jxqixin.trafic.controller;
 
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.dto.TemplateDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Template;
 import com.jxqixin.trafic.service.ITemplateService;
@@ -49,30 +50,30 @@ public class TemplateController extends CommonController{
     }
     /**
      * 编辑模板
-     * @param template
+     * @param templateDto
      * @return
      */
     @PutMapping("/template/template")
-    public JsonResult updateTemplate(Template template){
-        Template s = templateService.findByName(template.getName());
-        if(s!=null && !s.getId().equals(template.getId())){
+    public JsonResult updateTemplate(TemplateDto templateDto){
+        Template s = templateService.findByName(templateDto.getName());
+        if(s!=null && !s.getId().equals(templateDto.getId())){
             return new JsonResult(Result.FAIL);
         }
-        Template savedTemplate = templateService.queryObjById(template.getId());
-        savedTemplate.setName(template.getName());
-        savedTemplate.setNote(template.getNote());
+        Template savedTemplate = templateService.queryObjById(templateDto.getId());
+        savedTemplate.setName(templateDto.getName());
+        savedTemplate.setNote(templateDto.getNote());
         templateService.updateObj(savedTemplate);
         return new JsonResult(Result.SUCCESS);
     }
     /**
      * 修改模板内容
-     * @param template
+     * @param templateDto
      * @return
      */
     @PutMapping("/template/content")
-    public JsonResult updateContent(Template template){
-        Template savedTemplate = templateService.queryObjById(template.getId());
-        savedTemplate.setContent(template.getContent());
+    public JsonResult updateContent(TemplateDto templateDto){
+        Template savedTemplate = templateService.queryObjById(templateDto.getId());
+        savedTemplate.setContent(templateDto.getContent());
         templateService.updateObj(savedTemplate);
         return new JsonResult(Result.SUCCESS);
     }

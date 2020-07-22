@@ -1,13 +1,11 @@
 package com.jxqixin.trafic.service.impl;
 
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.Notice;
-import com.jxqixin.trafic.model.Org;
-import com.jxqixin.trafic.model.OrgCategory;
-import com.jxqixin.trafic.model.Rules;
+import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.NoticeRepository;
 import com.jxqixin.trafic.repository.RulesRepository;
+import com.jxqixin.trafic.repository.TemplateRepository;
 import com.jxqixin.trafic.service.IRulesService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +31,8 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 	private RulesRepository rulesRepository;
 	@Autowired
 	private NoticeRepository noticeRepository;
+	@Autowired
+	private TemplateRepository templateRepository;
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy");
 	@Override
 	public CommonRepository getCommonRepository() {
@@ -60,27 +60,14 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 			return rulesRepository.findAll(new Specification() {
 				@Override
 				public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
-
 					List<Predicate> list = new ArrayList<>();
 					//企业字段不为空的
 					if(!StringUtils.isEmpty(nameDto.getName())){
 						list.add(criteriaBuilder.like(root.get("name"),"%" + nameDto.getName() +"%"));
 					}
-
 					Join<Rules, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("province"),orgJoin.get("province")),
-							criteriaBuilder.equal(root.get("city"),orgJoin.get("city")),
-							criteriaBuilder.equal(root.get("region"),orgJoin.get("region"))))	;
-
-					OrgCategory orgCategory = org.getOrgCategory();
-					if(orgCategory!=null){
-						Join<Rules,OrgCategory> rulesOrgCategoryJoin = root.join("orgCategory",JoinType.INNER);
-						Join<Org,OrgCategory> orgOrgCategoryJoin = orgJoin.join("orgCategory",JoinType.INNER);
-						list.add(criteriaBuilder.equal(orgOrgCategoryJoin.get("id"), rulesOrgCategoryJoin.get("id")));
-					}
-
 					//过滤本企业发布或超级管理员发布的法律法规文件
-					list.add(criteriaBuilder.or(criteriaBuilder.equal(orgJoin.get("id"),org.getId()),criteriaBuilder.isNull(root.get("org"))));
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 					Predicate[] predicates = new Predicate[list.size()];
 					return criteriaBuilder.and(list.toArray(predicates));
 				}
@@ -128,6 +115,27 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 				return criteriaBuilder.and(criteriaBuilder.isNull(root.get("org")));
 			}
 		}, pageable);
+	}
+
+	@Override
+	public void importTemplate(String templateId, Org org) {
+		Template template = (Template) templateRepository.findById(templateId).get();
+		Rules rules = new Rules();
+		rules.setName(template.getName());
+		rules.setNote(template.getNote());
+		rules.setContent(template.getContent());
+		rules.setPublishDate(new Date());
+		rules.setTimeliness("有效");
+		rules.setNum(generateNewNum(org==null?"":org.getShortName(),rulesRepository.findMaxNumByOrgId(org==null?null:org.getId())));
+		if(org!=null){
+			rules.setOrg(org);
+			rules.setProvince(org.getProvince());
+			rules.setCity(org.getCity());
+			rules.setRegion(org.getRegion());
+			rules.setOrgCategory(org.getOrgCategory());
+		}
+
+		rulesRepository.save(rules);
 	}
 
 	/**

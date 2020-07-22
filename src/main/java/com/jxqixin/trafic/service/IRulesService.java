@@ -33,4 +33,11 @@ public interface IRulesService extends ICommonService<Rules> {
      * @return
      */
     Page findTemplates(NameDto nameDto);
+
+    /**
+     * 引入模板
+     * @param templateId
+     * @param org
+     */
+    void importTemplate(String templateId, Org org);
 }

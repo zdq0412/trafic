@@ -72,6 +72,16 @@ public class RulesController extends CommonController{
         rulesService.addRule(rules,getOrg(request));
         return new JsonResult(Result.SUCCESS);
     }
+    /**
+     * 引入模板
+     * @param templateId
+     * @return
+     */
+    @PostMapping("/rules/template")
+    public JsonResult importTemplate(String templateId, HttpServletRequest request){
+        rulesService.importTemplate(templateId,getOrg(request));
+        return new JsonResult(Result.SUCCESS);
+    }
 
     /**
      * 修改安全规章制度内容
