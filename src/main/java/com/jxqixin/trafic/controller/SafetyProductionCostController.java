@@ -3,6 +3,7 @@ package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.model.SafetyProductionCost;
 import com.jxqixin.trafic.service.ISafetyProductionCostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.thymeleaf.util.StringUtils;
@@ -25,6 +26,7 @@ public class SafetyProductionCostController extends CommonController{
      * @param request
      * @return
      */
+    @GetMapping("/safetyProductionCost/safetyProductionCost")
     public SafetyProductionCost findByDate(String year, HttpServletRequest request){
         int intYear = 0;
         if(StringUtils.isEmpty(year)){
