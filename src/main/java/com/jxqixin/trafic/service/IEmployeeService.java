@@ -33,4 +33,10 @@ public interface IEmployeeService extends ICommonService<Employee> {
      * @param id
      */
     void deleteEmployee(String id);
+    /**
+     * 根据当前登录用户名查找员工信息
+     * @param username
+     * @return
+     */
+    Employee findByUsername(String username);
 }

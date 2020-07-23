@@ -44,4 +44,6 @@ public interface EmployeeRepository<ID extends Serializable> extends CommonRepos
     @Modifying
     @Query(nativeQuery = true,value = "update m003_employee set user_id=null where user_id=?1")
     void updateUser2NullByUserId(String id);
+    @Query(nativeQuery = true,value = "select e.* from m003_employee e inner join t_user u on u.id=e.user_id where u.username=?1")
+    Employee findByUsername(String username);
 }

@@ -168,6 +168,58 @@ create table template(
   note varchar(500) comment '备注'
 ) comment '模板管理';
 
+#安全生产费用支出类别
+drop table if exists m019_safety_investment_category;
+create table m019_safety_investment_category(
+ id varchar(36) primary key comment 'ID主键',
+  serialNo varchar(10) not null comment '类别序号',
+  name varchar(500) comment ' 类别名称'
+) comment '安全生产费用支出类别';
+
+#年度安全生产费用
+drop table if exists m019_safety_production_cost;
+create table m019_safety_production_cost(
+ id varchar(36) primary key comment 'ID主键',
+  safetyYear int  comment '年度',
+  lastYearActualIncome decimal default 0.00  comment '上年度实际营业收入',
+  currentYearCost decimal default 0.00   comment '本年度应提取的安全费用,计算：通过上年度营业收入计算，普货：1%，客运和威货：1.5%',
+  lastYearCarryCost decimal default 0.00  comment '上年度结转安全费用',
+  currentYearActualCost decimal default 0.00  comment '本年度实际可用安全费用，计算：本年度应提取+上年度结转',
+  unit varchar(20) default '元' comment '费用单位',
+  createDate TIMESTAMP comment '创建日期',
+  org_id varchar(36) comment '所属企业ID',
+  isFillIn bit default 0 comment '是否已填写安全生产费用使用计划',
+  constraint fk_m019_safety_production_cost_org_org_id foreign  key(org_id) references org(id)
+) comment '年度安全生产费用';
+
+#年度安全生产费用使用计划
+drop table if exists m019_safety_production_cost_plan;
+create table m019_safety_production_cost_plan(
+ id varchar(36) primary key comment 'ID主键',
+ serialNo varchar(20) not null comment '序号',
+ name varchar(500) comment '名称',
+ planCost decimal default 0.00 comment '计划金额',
+ safety_production_cost_id varchar(36),
+ constraint fk_m019_safety_production_cost_plan_safety_production_cost_id foreign key(safety_production_cost_id) references m019_safety_production_cost(id)
+) comment '年度安全生产费用使用计划';
+
+#年度安全生产费用使用明细
+drop table if exists m019_safety_production_cost_plan_detail;
+create table m019_safety_production_cost_plan_detail(
+ id varchar(36) primary key comment 'ID主键',
+ billingDate timestamp comment '开票日期',
+ createDate timestamp comment '创建日期',
+ content varchar(2000) comment '内容摘要',
+ sumOfMoney decimal default 0.00 comment '金额',
+ billNo varchar(100) comment '票据号码',
+ operator varchar(500) comment '经办人',
+ note varchar(2000) comment '备注',
+ org_id varchar(36) comment '所属企业ID',
+ plan_id varchar(36) comment '年度安全生产费用使用计划id',
+ constraint fk_m019_safety_production_cost_plan_plan_id foreign key(plan_id) references m019_safety_production_cost_plan(id),
+  constraint fk_m019_safety_production_cost_plan_detail_org_org_id foreign  key(org_id) references org(id)
+) comment '年度安全生产费用使用明细';
+
 #企业资质文件
 drop table if exists m001_org_doc;
 create table m001_org_doc(

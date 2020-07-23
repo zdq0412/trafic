@@ -184,4 +184,9 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 	public void deleteEmployee(String id) {
 		employeeRepository.updateOrg2Null(id);
 	}
+
+	@Override
+	public Employee findByUsername(String username) {
+		return employeeRepository.findByUsername(username);
+	}
 }

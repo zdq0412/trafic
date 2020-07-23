@@ -2,10 +2,7 @@ package com.jxqixin.trafic;
 
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.service.*;
-import com.jxqixin.trafic.util.ExcelUtil;
-import com.jxqixin.trafic.util.ImportDirectoryUtil;
-import com.jxqixin.trafic.util.ImportFunctionUtil;
-import com.jxqixin.trafic.util.ImportSchemaUtil;
+import com.jxqixin.trafic.util.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +41,8 @@ public class Init{
     private IDirectoryFunctionsService directoryFunctionsService;
     @Autowired
     private IRoleFunctionsService roleFunctionsService;
+    @Autowired
+    private ISafetyInvestmentCategoryService safetyInvestmentCategoryService;
     @Test
     public void initAdminRoleAndUser(){
         Role adminRole = new Role();
@@ -124,8 +123,18 @@ public class Init{
             RoleFunctions roleFunctions = new RoleFunctions();
             roleFunctions.setRole(role);
             roleFunctions.setFunctions(function);
-
            roleFunctionsService.addObj(roleFunctions);
+        });
+    }
+
+
+    @Test
+    public void importSafetyInvestmentCategory(){
+        ExcelUtil excelUtil = new ImportSafetyInvestmentCategoryUtil();
+        File file = new File("d:/safetyInvestmentCategory.xlsx");
+        List<SafetyInvestmentCategory> list = excelUtil.getSafetyInvestmentCategoryData(file);
+        list.forEach(safetyInvestmentCategory -> {
+            safetyInvestmentCategoryService.addObj(safetyInvestmentCategory);
         });
     }
 }
