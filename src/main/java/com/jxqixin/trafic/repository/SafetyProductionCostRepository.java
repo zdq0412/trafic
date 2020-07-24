@@ -3,6 +3,8 @@ import com.jxqixin.trafic.model.SafetyProductionCost;
 import org.springframework.data.jpa.repository.Query;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 public interface SafetyProductionCostRepository<ID extends Serializable> extends CommonRepository<SafetyProductionCost,ID> {
     /**
      * 根据企业ID和年份查找安全生产费用

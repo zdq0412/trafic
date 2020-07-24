@@ -67,6 +67,7 @@ public class SafetyProductionCostPlanDetailController extends CommonController{
         String username = getCurrentUsername(request);
         Employee employee = employeeService.findByUsername(username);
         detail.setOperator(employee==null?username:employee.getName());
+        detail.setOrg(getOrg(request));
         safetyProductionCostPlanDetailService.addObj(detail);
         return new JsonResult(Result.SUCCESS);
     }

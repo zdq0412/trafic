@@ -1,16 +1,25 @@
 package com.jxqixin.trafic.controller;
 
+import com.jxqixin.trafic.constant.Result;
+import com.jxqixin.trafic.dto.SafetyProductionCostDto;
+import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.SafetyProductionCost;
+import com.jxqixin.trafic.model.SafetyProductionCostPlan;
 import com.jxqixin.trafic.service.ISafetyProductionCostService;
+import com.jxqixin.trafic.vo.SafetyProductionCostVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 年度安全生产费用控制器
@@ -20,6 +29,7 @@ public class SafetyProductionCostController extends CommonController{
     @Autowired
     private ISafetyProductionCostService safetyProductionCostService;
 
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 根据日期查找安全生产费用
      * @param year
@@ -37,7 +47,56 @@ public class SafetyProductionCostController extends CommonController{
         }else{
             intYear = Integer.parseInt(year);
         }
-
        return  safetyProductionCostService.findByOrgAndYear(getOrg(request),intYear);
     }
+    /**
+     * 根据日期查找安全生产费用
+     * @param date
+     * @param type 按年或按月
+     * @param request
+     * @return
+     */
+    @GetMapping("/safetyProductionCost/statistics")
+    public SafetyProductionCostVo statistics(String date,@RequestParam(defaultValue = "year") String type, HttpServletRequest request){
+        Date d = new Date();
+        if(!StringUtils.isEmpty(date)){
+            try {
+                d = format.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                d = new Date();
+            }
+        }
+       return  safetyProductionCostService.findByOrgAndDate(getOrg(request),d,type);
+    }
+    /**
+     * 添加(实际上是更新)生产安全费用使用计划
+     * @return
+     */
+    @PostMapping("/safetyProductionCost/safetyProductionCost")
+    public JsonResult updateSafetyProductionCost(SafetyProductionCostDto safetyProductionCostDto){
+        SafetyProductionCost cost = new SafetyProductionCost();
+        BeanUtils.copyProperties(safetyProductionCostDto,cost);
+        String planStr = safetyProductionCostDto.getPlans();
+
+        List<SafetyProductionCostPlan> plans = new ArrayList<>();
+        if(!StringUtils.isEmpty(planStr)){
+            //通过逗号截取安全费用计划的ID和计划费用
+            String[] idAndPlanCost = planStr.split(",");
+            if(idAndPlanCost!=null && idAndPlanCost.length>0){
+                for(int i = 0;i<idAndPlanCost.length;i++){
+                    String[] planObj = idAndPlanCost[i].split(":");
+                    SafetyProductionCostPlan p = new SafetyProductionCostPlan();
+                    p.setId(planObj[0]);
+                    p.setPlanCost(new BigDecimal(planObj[1]));
+
+                    plans.add(p);
+                }
+            }
+        }
+        safetyProductionCostService.updateCostAndPlans(cost,plans);
+        return new JsonResult(Result.SUCCESS);
+    }
+
+
 }

@@ -22,6 +22,16 @@ public class OrgCategory implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
+    /**
+     * 安全生产费用提取百分比
+     */
+    private Float safetyCostRatio;
+    public Float getSafetyCostRatio() {
+        return safetyCostRatio;
+    }
+    public void setSafetyCostRatio(Float safetyCostRatio) {
+        this.safetyCostRatio = safetyCostRatio;
+    }
     public String getId() {
         return id;
     }

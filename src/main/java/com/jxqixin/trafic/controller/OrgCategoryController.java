@@ -63,13 +63,13 @@ public class OrgCategoryController extends CommonController{
     @PutMapping("/orgCategory/orgCategory")
     public JsonResult updateOrgCategory(OrgCategoryDto orgCategoryDto){
         OrgCategory s = orgCategoryService.findByName(orgCategoryDto.getName());
-
         if(s!=null && !s.getId().equals(orgCategoryDto.getId())){
             return new JsonResult(Result.FAIL);
         }
         OrgCategory savedOrgCategory = orgCategoryService.queryObjById(orgCategoryDto.getId());
         savedOrgCategory.setName(orgCategoryDto.getName());
         savedOrgCategory.setNote(orgCategoryDto.getNote());
+        savedOrgCategory.setSafetyCostRatio(orgCategoryDto.getSafetyCostRatio());
         orgCategoryService.updateObj(savedOrgCategory);
         return new JsonResult(Result.SUCCESS);
     }

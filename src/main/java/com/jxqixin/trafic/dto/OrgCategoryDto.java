@@ -10,6 +10,18 @@ public class OrgCategoryDto {
     private String name;
 
     private String note;
+    /**
+     * 安全生产费用提取百分比
+     */
+    private float safetyCostRatio;
+
+    public float getSafetyCostRatio() {
+        return safetyCostRatio;
+    }
+
+    public void setSafetyCostRatio(float safetyCostRatio) {
+        this.safetyCostRatio = safetyCostRatio;
+    }
 
     public String getId() {
         return id;
