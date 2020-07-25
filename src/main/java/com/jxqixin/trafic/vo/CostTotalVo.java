@@ -1,16 +1,14 @@
 package com.jxqixin.trafic.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.jxqixin.trafic.model.SafetyProductionCostPlan;
 
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 /**
  * 安全生产费用报表
  */
-public class SafetyProductionCostVo implements Serializable {
+public class CostTotalVo implements Serializable {
     private String id;
     /**年度*/
     private int safetyYear;
@@ -24,8 +22,28 @@ public class SafetyProductionCostVo implements Serializable {
     private BigDecimal lastYearCarryCost= new BigDecimal("0.00");
     /**本年度实际可用安全费用，计算：本年度应提取+上年度结转*/
     private BigDecimal currentYearActualCost= new BigDecimal("0.00");
+    /**本年度实际使用支出的安全费用*/
+    private BigDecimal currentYearActualUsed=new BigDecimal("0.00");
+    /**年度结余资金*/
+    private BigDecimal costLeft = new BigDecimal("0.0");
+
+    public BigDecimal getCurrentYearActualUsed() {
+        return currentYearActualUsed;
+    }
+
+    public void setCurrentYearActualUsed(BigDecimal currentYearActualUsed) {
+        this.currentYearActualUsed = currentYearActualUsed;
+    }
+    public BigDecimal getCostLeft() {
+        return costLeft;
+    }
+
+    public void setCostLeft(BigDecimal costLeft) {
+        this.costLeft = costLeft;
+    }
+
     @JsonIgnoreProperties(value = {"safetyProductionCost"})
-    private List<SafetyProductionCostPlan> plans;
+    private List<SafetyProductionCostPlanVo> plans;
 
     public Double getTotal() {
         return total;
@@ -35,11 +53,11 @@ public class SafetyProductionCostVo implements Serializable {
         this.total = total;
     }
 
-    public List<SafetyProductionCostPlan> getPlans() {
+    public List<SafetyProductionCostPlanVo> getPlans() {
         return plans;
     }
 
-    public void setPlans(List<SafetyProductionCostPlan> plans) {
+    public void setPlans(List<SafetyProductionCostPlanVo> plans) {
         this.plans = plans;
     }
 

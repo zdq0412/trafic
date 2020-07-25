@@ -3,9 +3,12 @@ package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.*;
 import com.jxqixin.trafic.service.ISafetyProductionCostService;
+import com.jxqixin.trafic.vo.CostTotalVo;
+import com.jxqixin.trafic.vo.SafetyProductionCostPlanVo;
 import com.jxqixin.trafic.vo.SafetyProductionCostVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -141,6 +144,67 @@ public class SafetyProductionCostServiceImpl extends CommonServiceImpl<SafetyPro
 			}
 		}
 		vo.setPlans(plans);
+		return vo;
+	}
+	@Override
+	public CostTotalVo findTotal(Org org, int year) {
+		if(org == null)return null;
+		//查询安全生产费用对象
+		SafetyProductionCost cost = safetyProductionCostRepository.findByOrgIdAndYear(org.getId(),year);
+		CostTotalVo vo = new CostTotalVo();
+		if(cost == null)return vo;
+		BeanUtils.copyProperties(cost,vo);
+		//本年度实际使用支出的安全费用
+		Double total = safetyProductionCostPlanDetailRepository.findSumByOrgIdAndYear(org.getId(),year);
+		vo.setCurrentYearActualUsed(new BigDecimal(total));
+		BigDecimal costLeft = vo.getCurrentYearActualCost().subtract(vo.getCurrentYearActualUsed());
+		vo.setCostLeft(costLeft.doubleValue()<0?new BigDecimal("0.00"):costLeft);
+
+		//查询所有类别
+		List<SafetyProductionCostPlan> planList = safetyProductionCostPlanRepository.findBySafetyProductionCostId(cost.getId());
+		List<Object[]> totalUse = safetyProductionCostPlanRepository.findTotalUse(org.getId(),year);
+		List<SafetyProductionCostPlanVo> planVos = new ArrayList<>();
+		if(!CollectionUtils.isEmpty(totalUse)){
+			for(Object[] objArr:totalUse){
+				SafetyProductionCostPlanVo planVo = new SafetyProductionCostPlanVo();
+				planVo.setName(objArr[0]+"");
+				planVo.setOneMonth(objArr[1]==null?0:Double.parseDouble(objArr[1]+""));
+				planVo.setTwoMonth(objArr[2]==null?0:Double.parseDouble(objArr[2]+""));
+				planVo.setThreeMonth(objArr[3]==null?0:Double.parseDouble(objArr[3]+""));
+				planVo.setFourMonth(objArr[4]==null?0:Double.parseDouble(objArr[4]+""));
+				planVo.setFiveMonth(objArr[5]==null?0:Double.parseDouble(objArr[5]+""));
+				planVo.setSixMonth(objArr[6]==null?0:Double.parseDouble(objArr[6]+""));
+				planVo.setSevenMonth(objArr[7]==null?0:Double.parseDouble(objArr[7]+""));
+				planVo.setEightMonth(objArr[8]==null?0:Double.parseDouble(objArr[8]+""));
+				planVo.setNineMonth(objArr[9]==null?0:Double.parseDouble(objArr[9]+""));
+				planVo.setTenMonth(objArr[10]==null?0:Double.parseDouble(objArr[10]+""));
+				planVo.setElevenMonth(objArr[11]==null?0:Double.parseDouble(objArr[11]+""));
+				planVo.setTwelveMonth(objArr[12]==null?0:Double.parseDouble(objArr[12]+""));
+				planVo.setId(objArr[13]+"");
+
+				planVos.add(planVo);
+			};
+		}
+		vo.setPlans(planVos);
+
+		if(!CollectionUtils.isEmpty(planList)){
+			for(SafetyProductionCostPlan plan : planList){
+				boolean isExist = false;
+				for(SafetyProductionCostPlanVo planVo : planVos){
+					if(plan.getId().equals(planVo.getId())){
+						isExist = true;
+						break;
+					}
+				}
+				if(!isExist){
+					SafetyProductionCostPlanVo planVo = new SafetyProductionCostPlanVo();
+					planVo.setId(plan.getId());
+					planVo.setName(plan.getName());
+
+					planVos.add(planVo);
+				}
+			}
+		}
 		return vo;
 	}
 

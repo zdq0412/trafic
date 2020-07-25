@@ -6,6 +6,7 @@ import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.SafetyProductionCost;
 import com.jxqixin.trafic.model.SafetyProductionCostPlan;
 import com.jxqixin.trafic.service.ISafetyProductionCostService;
+import com.jxqixin.trafic.vo.CostTotalVo;
 import com.jxqixin.trafic.vo.SafetyProductionCostVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,25 @@ public class SafetyProductionCostController extends CommonController{
             }
         }
        return  safetyProductionCostService.findByOrgAndDate(getOrg(request),d,type);
+    }
+    /**
+     * 根据年份对安全生产费用汇总
+     * @param year 年份
+     * @param request
+     * @return
+     */
+    @GetMapping("/safetyProductionCost/total")
+    public CostTotalVo total(String year, HttpServletRequest request){
+        int intYear = 0;
+        if(!StringUtils.isEmpty(year)){
+           intYear = Integer.parseInt(year);
+        }else{
+            Calendar c = Calendar.getInstance();
+            c.setTime(new Date());
+
+            intYear = c.get(Calendar.YEAR);
+        }
+       return  safetyProductionCostService.findTotal(getOrg(request),intYear);
     }
     /**
      * 添加(实际上是更新)生产安全费用使用计划

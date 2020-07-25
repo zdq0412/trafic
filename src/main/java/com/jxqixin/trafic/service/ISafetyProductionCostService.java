@@ -3,6 +3,7 @@ package com.jxqixin.trafic.service;
 import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.SafetyProductionCost;
 import com.jxqixin.trafic.model.SafetyProductionCostPlan;
+import com.jxqixin.trafic.vo.CostTotalVo;
 import com.jxqixin.trafic.vo.SafetyProductionCostVo;
 
 import java.util.Date;
@@ -30,4 +31,11 @@ public interface ISafetyProductionCostService extends ICommonService<SafetyProdu
      * @return
      */
     SafetyProductionCostVo findByOrgAndDate(Org org, Date d, String type);
+    /**
+     * 按年度对安全生产费用进行汇总
+     * @param org
+     * @param year
+     * @return
+     */
+    CostTotalVo findTotal(Org org, int year);
 }
