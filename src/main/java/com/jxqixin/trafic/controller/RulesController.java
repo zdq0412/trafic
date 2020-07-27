@@ -64,11 +64,11 @@ public class RulesController extends CommonController{
                 e.printStackTrace();
             }
         }
-        if(!StringUtils.isEmpty(rulesDto.getOrgCategoryId())){
+       /* if(!StringUtils.isEmpty(rulesDto.getOrgCategoryId())){
             OrgCategory orgCategory = new OrgCategory();
             orgCategory.setId(rulesDto.getOrgCategoryId());
             rules.setOrgCategory(orgCategory);
-        }
+        }*/
         rulesService.addRule(rules,getOrg(request));
         return new JsonResult(Result.SUCCESS);
     }
@@ -88,7 +88,7 @@ public class RulesController extends CommonController{
      * @param rulesDto
      * @return
      */
-    @PutMapping("/rules/content")
+    @PostMapping("/rules/content")
     public JsonResult rulesContent(RulesDto rulesDto){
         Rules rules = rulesService.queryObjById(rulesDto.getId());
         rules.setContent(rulesDto.getContent());
@@ -106,7 +106,7 @@ public class RulesController extends CommonController{
         Rules savedRules = rulesService.queryObjById(rulesDto.getId());
         savedRules.setName(rulesDto.getName());
         savedRules.setNote(rulesDto.getNote());
-        if(!StringUtils.isEmpty(rulesDto.getOrgCategoryId())){
+       /* if(!StringUtils.isEmpty(rulesDto.getOrgCategoryId())){
             OrgCategory orgCategory = new OrgCategory();
             orgCategory.setId(rulesDto.getOrgCategoryId());
             savedRules.setOrgCategory(orgCategory);
@@ -125,7 +125,7 @@ public class RulesController extends CommonController{
             Category region = new Category();
             region.setId(rulesDto.getRegionId());
             savedRules.setRegion(region);
-        }
+        }*/
         savedRules.setPublishDepartment(rulesDto.getPublishDepartment());
         savedRules.setTimeliness(rulesDto.getTimeliness());
 
