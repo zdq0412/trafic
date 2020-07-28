@@ -83,7 +83,7 @@ public class LawController extends CommonController{
      * @param lawDto
      * @return
      */
-    @PutMapping("/law/content")
+    @PostMapping("/law/content")
     public JsonResult lawContent(LawDto lawDto){
         Law law = lawService.queryObjById(lawDto.getId());
         law.setContent(lawDto.getContent());

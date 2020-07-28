@@ -70,7 +70,7 @@ public class NoticeController extends CommonController{
      * @param noticeDto
      * @return
      */
-    @PutMapping("/notice/content")
+    @PostMapping("/notice/content")
     public JsonResult noticeContent(NoticeDto noticeDto){
         Notice notice = noticeService.queryObjById(noticeDto.getId());
         notice.setContent(noticeDto.getContent());

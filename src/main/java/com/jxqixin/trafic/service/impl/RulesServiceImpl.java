@@ -1,11 +1,14 @@
 package com.jxqixin.trafic.service.impl;
 
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.*;
+import com.jxqixin.trafic.model.Notice;
+import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.RuleTemplate;
+import com.jxqixin.trafic.model.Rules;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.NoticeRepository;
+import com.jxqixin.trafic.repository.RuleTemplateRepository;
 import com.jxqixin.trafic.repository.RulesRepository;
-import com.jxqixin.trafic.repository.TemplateRepository;
 import com.jxqixin.trafic.service.IRulesService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +35,7 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 	@Autowired
 	private NoticeRepository noticeRepository;
 	@Autowired
-	private TemplateRepository templateRepository;
+	private RuleTemplateRepository templateRepository;
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy");
 	@Override
 	public CommonRepository getCommonRepository() {
@@ -119,7 +122,7 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 
 	@Override
 	public void importTemplate(String templateId, Org org) {
-		Template template = (Template) templateRepository.findById(templateId).get();
+		RuleTemplate template = (RuleTemplate) templateRepository.findById(templateId).get();
 		Rules rules = new Rules();
 		rules.setName(template.getName());
 		rules.setNote(template.getNote());

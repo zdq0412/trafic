@@ -92,25 +92,8 @@ public class Init{
     public void importFunctions(){
         ExcelUtil excelUtil = new ImportFunctionUtil(functionsService,directoryService,directoryFunctionsService);
         File file = new File("d:/function.xlsx");
-        List<Functions> list = excelUtil.getFunctionsData(file);
-      //  list.forEach(function ->functionsService.addObj(function));
+        excelUtil.getFunctionsData(file);
     }
-  /*  *//**
-     * 添加目录与权限关系
-     *//*
-    @Test
-    public void addDirectoryFunctions(){
-        List<Functions> list = functionsService.findAll();
-        Directory directory = directoryService.queryObjById("1");
-
-        list.forEach(function -> {
-            DirectoryFunctions directoryFunctions = new DirectoryFunctions();
-            directoryFunctions.setDirectory(directory);
-            directoryFunctions.setFunctions(function);
-
-            directoryFunctionsService.addObj(directoryFunctions);
-        });
-    }*/
     /**
      * 为超级管理员角色赋予权限
      */

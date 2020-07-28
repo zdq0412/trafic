@@ -158,16 +158,24 @@ create table m001_org_img(
   constraint fk_m001_org_img_org_id foreign key(org_id) references org(id)
 ) comment '企业图片';
 
-#模板管理
-drop table if exists template;
-create table template(
+#安全规章制度模板
+drop table if exists m041_ruleTemplate;
+create table m041_ruleTemplate(
  id varchar(36) primary key comment 'ID主键',
   name varchar(50) not null comment '模板名称',
   content text comment '模板内容',
   createDate timestamp  comment '创建时间',
   creator varchar(50) comment '创建人用户名',
-  note varchar(500) comment '备注'
-) comment '模板管理';
+  note varchar(500) comment '备注',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  constraint fk_m041_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m041_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m041_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m041_template foreign key(org_category_id) references org_category(id)
+) comment '安全规章制度模板';
 
 #安全生产费用支出类别
 drop table if exists m019_safety_investment_category;
@@ -415,5 +423,58 @@ create table directory_functions(
   constraint fk_directory_id foreign key(directory_id) references directory(id)
 ) comment '目录菜单表';
 
+#安全会议模板表 安全培训模板表
+drop table if exists m046_meeting_template;
+create table m046_meeting_template(
+  id varchar(36) primary key comment '主键',
+ name varchar(500) comment '模板名称',
+ type varchar(50) comment '类别：meeting:安全会议,training:安全培训',
+ createDate timestamp comment '模板创建日期',
+ meetingName varchar(100) comment '会议名称',
+ meetingDate timestamp  comment '开会时间',
+ meetingPlace varchar(500) comment '会议地点',
+  president varchar(100) comment '主持人',
+  recorder varchar(100) comment '记录人',
+  attendants varchar(500) comment '到场人员',
+  attendance int comment '到场人数',
+  absent int default  0 comment '缺席人数',
+  theme varchar(500) comment '会议主题',
+  content varchar(2000) comment '会议内容',
+  problems varchar(2000) comment '需解决问题',
+  methods varchar(2000) comment '解决办法',
+  templateNote varchar(2000) comment '模板内容中的备注',
+  note varchar(2000) comment '备注',
+  creator varchar(100) comment '创建人',
+    url varchar(500) comment '签名图片访问路径,多个以逗号间隔',
+  realPath varchar(500) comment '实际存储路径,多个以逗号间隔',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  constraint fk_m046_meeting_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m046_meeting_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m046_meeting_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m046_meeting_template foreign key(org_category_id) references org_category(id)
+) comment '安全会议模板表';
 
+#责任书模板表
+drop table if exists m048_responsibility_template;
+create table m048_responsibility_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  content text comment '模板内容',
+  note varchar(2000) comment '备注',
+  url varchar(500) comment '签名图片访问路径,多个以逗号间隔',
+  realPath varchar(500) comment '实际存储路径,多个以逗号间隔',
+  createDate timestamp comment '创建日期',
+   creator varchar(100) comment '创建人',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  constraint fk_m048_responsibility_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m048_responsibility_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m048_responsibility_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m048_responsibility_template foreign key(org_category_id) references org_category(id)
+) comment '责任书模板表';
 
