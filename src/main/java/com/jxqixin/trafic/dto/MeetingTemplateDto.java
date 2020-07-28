@@ -1,16 +1,7 @@
 package com.jxqixin.trafic.dto;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.util.Date;
-
 /**
  * 会议或培训模板
  */
-@GenericGenerator(name="id_gen",strategy = "uuid")
 public class MeetingTemplateDto {
 	private String id;
 	/**名称*/

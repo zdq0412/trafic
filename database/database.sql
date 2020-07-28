@@ -464,8 +464,6 @@ create table m048_responsibility_template(
   name varchar(500) comment '名称',
   content text comment '模板内容',
   note varchar(2000) comment '备注',
-  url varchar(500) comment '签名图片访问路径,多个以逗号间隔',
-  realPath varchar(500) comment '实际存储路径,多个以逗号间隔',
   createDate timestamp comment '创建日期',
    creator varchar(100) comment '创建人',
   province_id varchar(36) comment '所属省',
@@ -477,4 +475,103 @@ create table m048_responsibility_template(
   constraint fk_m048_responsibility_template_category_region_id foreign key(region_id) references category(id),
   constraint fk_org_category_m048_responsibility_template foreign key(org_category_id) references org_category(id)
 ) comment '责任书模板表';
+
+#安全检查模板表
+drop table if exists m042_security_check_template;
+create table m042_security_check_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  checkObject varchar(500) comment '检查对象',
+  deptAndEmp varchar(500) comment '监督检查的部门及人员',
+  content varchar(2000) comment '检查的内容',
+  problems varchar(2000) comment '提出的问题',
+  result varchar(2000) comment '整改结果',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  checkDate timestamp comment '安全检查日期',
+  supervisorsSign varchar(500) comment '检查人员签字,以后可能为签字图片路径',
+  checkedObjectSign varchar(500) comment '受检查对象签字,以后可能为签字图片路径',
+  creator varchar(100) comment '创建人',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  constraint fk_m042_security_check_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m042_security_check_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m042_security_check_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m042_security_check_template foreign key(org_category_id) references org_category(id)
+) comment '安全检查模板表';
+
+#危险货物运输企业安全生产隐患排查整改台账模板表
+drop table if exists m049_danger_goods_check_template;
+create table m049_danger_goods_check_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  orgPersonSign varchar(500) comment '企业负责人签字',
+  securityPersonSign varchar(500) comment '安全检查人员签字',
+  creator varchar(100) comment '创建人',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  constraint fk_m049_danger_goods_check_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m049_danger_goods_check_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m049_danger_goods_check_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m049_danger_goods_check_template foreign key(org_category_id) references org_category(id)
+) comment '危险货物运输企业安全生产隐患排查整改台账模板表';
+
+#危险货物运输企业安全生产隐患排查整改台账模板详情表
+drop table if exists m049_danger_goods_check_detial;
+create table m049_danger_goods_check_detial(
+  id varchar(36) primary key comment '主键',
+  checkDate timestamp comment '检查日期',
+  checkedOrg varchar(200) comment '被检查单位',
+  hiddenDanger varchar(2000) comment '存在的安全隐患',
+  correctiveAction varchar(2000) comment '整改措施',
+  timelimit varchar(100) comment '整改时限',
+  person varchar(100) comment '责任人',
+  endTime timestamp  comment '整改到位时间',
+  cancelDate timestamp comment '销号时间',
+  danger_goods_check_id varchar(36) comment '危险货物运输企业安全生产隐患排查整改台账模板id',
+  constraint fk_m049_danger_goods_check_template_check_detail foreign key(danger_goods_check_id) references m049_danger_goods_check_template(id)
+) comment '危险货物运输企业安全生产隐患排查整改台账模板详情表';
+
+#危险货物道路运输罐式车辆罐体检查记录模板表
+drop table if exists m044_tank_vehicle_template;
+create table m044_tank_vehicle_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  checkDate timestamp comment '检查日期',
+  carNo varchar(200) comment '车号',
+  checkItem1 varchar(500) comment '检查项，罐体有无破损、罐体是否整洁、罐体灯光是否完整',
+  checkItem2 varchar(500) comment '检查项，反光条是否完整、反光标示是否完整、反光牌是否有',
+  checkItem3 varchar(500) comment '检查项，罐后保险杠是否合格',
+  checkItem4 varchar(500) comment '检查项，静电接地带是否有效',
+  checkItem5 varchar(500) comment '检查项，罐体两边防护网是否完整',
+  checkItem6 varchar(500) comment '检查项，轮胎是否符合行车安全要求',
+  checkItem7 varchar(500) comment '检查项，灭火器是否合格',
+  checkItem8 varchar(500) comment '检查项，确认罐体上喷涂的介质名称是否与《公告》、《合格证》上记载的一致',
+  checkItem9 varchar(500) comment '检查项，喷涂的介质与记载的内容一致，运输介质属于国家安监总局等五部委文件《关于明确在用液体危险货物罐车加装紧急切断装置液体介质范围的通知》（安监总管三〔2014〕135号）中列举的17种介质范围。检查其卸料口处是否安装有紧急切断阀、紧急切断阀是否有远程控制系统。',
+  checkItem10 varchar(500) comment '检查项，检查紧急切断阀有无腐蚀、生锈、裂纹等缺陷，有无松脱、渗漏等现象，检查紧急切断阀控制按钮是否完好。',
+  checkItem11 varchar(500) comment '检查项，检查紧急切断阀是否处于关闭状态，没有关闭的要求当场关闭，并对驾驶人进行一次面对面的教育提示。',
+  checkItem12 varchar(500) comment '检查项，备用',
+  checkItem13 varchar(500) comment '检查项，备用',
+  checkItem14 varchar(500) comment '检查项，备用',
+  checkItem15 varchar(500) comment '检查项，备用',
+  suggestion varchar(2000) comment '处理意见',
+  checkPersonSign varchar(500) comment '检查人员签字',
+  creator varchar(100) comment '创建人',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  constraint fk_m044_tank_vehicle_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m044_tank_vehicle_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m044_tank_vehicle_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m044_tank_vehicle_template foreign key(org_category_id) references org_category(id)
+) comment '危险货物道路运输罐式车辆罐体检查记录模板表';
 

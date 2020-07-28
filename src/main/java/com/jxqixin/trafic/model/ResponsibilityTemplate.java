@@ -27,10 +27,6 @@ public class ResponsibilityTemplate {
 	private String content;
 	/**创建人*/
 	private String creator;
-	/**图片访问路径*/
-	private String url;
-	/**实际路径*/
-	private String realPath;
 	/**所属省*/
 	@ManyToOne
 	@JoinColumn(name="province_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -50,22 +46,6 @@ public class ResponsibilityTemplate {
 	@JoinColumn(name="org_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private OrgCategory orgCategory;
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getRealPath() {
-		return realPath;
-	}
-
-	public void setRealPath(String realPath) {
-		this.realPath = realPath;
-	}
 
 	public Category getProvince() {
 		return province;
