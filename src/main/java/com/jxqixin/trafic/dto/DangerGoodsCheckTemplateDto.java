@@ -19,8 +19,6 @@ public class DangerGoodsCheckTemplateDto {
 	private String endTime;
 	/**销号时间*/
 	private String cancelDate;
-	/**检查日期*/
-	private String checkDate;
 	/**备注*/
 	private String note;
 	private String provinceId;
@@ -90,14 +88,6 @@ public class DangerGoodsCheckTemplateDto {
 
 	public void setCancelDate(String cancelDate) {
 		this.cancelDate = cancelDate;
-	}
-
-	public String getCheckDate() {
-		return checkDate;
-	}
-
-	public void setCheckDate(String checkDate) {
-		this.checkDate = checkDate;
 	}
 
 	public String getNote() {

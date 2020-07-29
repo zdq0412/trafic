@@ -20,30 +20,10 @@ public class DangerGoodsCheckTemplate {
 	private String id;
 	/**名称*/
 	private String name;
-	/**被检查单位*/
-	private String checkedOrg;
-	/**存在的安全隐患*/
-	private String hiddenDanger;
-	/**整改措施*/
-	private String correctiveAction;
-	/**整改时限*/
-	private String timelimit;
-	/**整改到位时间*/
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date endTime;
-	/**销号时间*/
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date cancelDate;
 	/**创建日期*/
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createDate;
-	/**检查日期*/
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date checkDate;
 	/**创建人*/
 	private String creator;
 	/**备注*/
@@ -104,54 +84,6 @@ public class DangerGoodsCheckTemplate {
 		this.name = name;
 	}
 
-	public String getCheckedOrg() {
-		return checkedOrg;
-	}
-
-	public void setCheckedOrg(String checkedOrg) {
-		this.checkedOrg = checkedOrg;
-	}
-
-	public String getHiddenDanger() {
-		return hiddenDanger;
-	}
-
-	public void setHiddenDanger(String hiddenDanger) {
-		this.hiddenDanger = hiddenDanger;
-	}
-
-	public String getCorrectiveAction() {
-		return correctiveAction;
-	}
-
-	public void setCorrectiveAction(String correctiveAction) {
-		this.correctiveAction = correctiveAction;
-	}
-
-	public String getTimelimit() {
-		return timelimit;
-	}
-
-	public void setTimelimit(String timelimit) {
-		this.timelimit = timelimit;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
-	public Date getCancelDate() {
-		return cancelDate;
-	}
-
-	public void setCancelDate(Date cancelDate) {
-		this.cancelDate = cancelDate;
-	}
-
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -159,15 +91,6 @@ public class DangerGoodsCheckTemplate {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-
-	public Date getCheckDate() {
-		return checkDate;
-	}
-
-	public void setCheckDate(Date checkDate) {
-		this.checkDate = checkDate;
-	}
-
 	public String getCreator() {
 		return creator;
 	}

@@ -26,17 +26,49 @@ public class DangerGoodsCheckDetail {
 	private String correctiveAction;
 	/**整改时限*/
 	private String timelimit;
+	/**责任人*/
+	private String person;
+	/**详情中的备注*/
+	private String detailNote;
 	/**整改到位时间*/
-	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
-	/**销号时间*/
-	@Temporal(TemporalType.TIMESTAMP)
+	/**检查日期*/
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date cancelDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date checkDate;
 	@ManyToOne
 	@JoinColumn(name="danger_goods_check_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private DangerGoodsCheckTemplate dangerGoodsCheckTemplate;
+	/**销号时间*/
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date cancelDate;
+
+	public String getDetailNote() {
+		return detailNote;
+	}
+
+	public void setDetailNote(String detailNote) {
+		this.detailNote = detailNote;
+	}
+
+	public String getPerson() {
+		return person;
+	}
+
+	public void setPerson(String person) {
+		this.person = person;
+	}
+
+	public Date getCheckDate() {
+		return checkDate;
+	}
+
+	public void setCheckDate(Date checkDate) {
+		this.checkDate = checkDate;
+	}
 
 	public String getId() {
 		return id;

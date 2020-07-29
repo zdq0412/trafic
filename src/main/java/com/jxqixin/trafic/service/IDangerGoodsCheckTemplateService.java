@@ -1,8 +1,11 @@
 package com.jxqixin.trafic.service;
 
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.model.DangerGoodsCheckDetail;
 import com.jxqixin.trafic.model.DangerGoodsCheckTemplate;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface IDangerGoodsCheckTemplateService extends ICommonService<DangerGoodsCheckTemplate> {
     /**
@@ -21,4 +24,10 @@ public interface IDangerGoodsCheckTemplateService extends ICommonService<DangerG
      * 根据ID删除模板，同时删除模板下的所有目录
      */
     void deleteById(String id);
+    /**
+     * 删除template下的详情，添加新的详情
+     * @param id  template id
+     * @param detailList 详情
+     */
+    void updateDetails(String id, List<DangerGoodsCheckDetail> detailList);
 }

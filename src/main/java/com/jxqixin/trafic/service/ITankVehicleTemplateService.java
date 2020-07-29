@@ -10,7 +10,7 @@ public interface ITankVehicleTemplateService extends ICommonService<TankVehicleT
      * @param nameDto
      * @return
      */
-    Page findTankVehicleTemplates(NameDto nameDto, String type);
+    Page findTankVehicleTemplates(NameDto nameDto);
     /**
      * 根据模板名称查找
      * @param name

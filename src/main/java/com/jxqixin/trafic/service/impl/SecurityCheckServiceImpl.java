@@ -1,9 +1,9 @@
 package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.TankVehicleTemplate;
+import com.jxqixin.trafic.model.SecurityCheck;
 import com.jxqixin.trafic.repository.CommonRepository;
-import com.jxqixin.trafic.repository.TankVehicleTemplateRepository;
-import com.jxqixin.trafic.service.ITankVehicleTemplateService;
+import com.jxqixin.trafic.repository.SecurityCheckRepository;
+import com.jxqixin.trafic.service.ISecurityCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,22 +15,17 @@ import javax.transaction.Transactional;
 
 @Service
 @Transactional
-public class TankVehicleTemplateServiceImpl extends CommonServiceImpl<TankVehicleTemplate> implements ITankVehicleTemplateService {
+public class SecurityCheckServiceImpl extends CommonServiceImpl<SecurityCheck> implements ISecurityCheckService {
 	@Autowired
-	private TankVehicleTemplateRepository templateRepository;
+	private SecurityCheckRepository templateRepository;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return templateRepository;
 	}
 	@Override
-	public Page findTankVehicleTemplates(NameDto nameDto) {
+	public Page findSecurityChecks(NameDto nameDto,String type) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit(), Sort.Direction.DESC,"createDate");
 		return templateRepository.findAll(pageable);
-	}
-
-	@Override
-	public TankVehicleTemplate findByName(String name) {
-		return templateRepository.findByName(name);
 	}
 
 	@Override

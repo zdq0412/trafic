@@ -35,8 +35,8 @@ public class TankVehicleTemplateController extends CommonController{
      * @return
      */
     @GetMapping("/tankVehicleTemplate/tankVehicleTemplatesByPage")
-    public ModelMap queryTankVehicleTemplates(NameDto nameDto,String type){
-        Page page = tankVehicleTemplateService.findTankVehicleTemplates(nameDto,type);
+    public ModelMap queryTankVehicleTemplates(NameDto nameDto){
+        Page page = tankVehicleTemplateService.findTankVehicleTemplates(nameDto);
         return pageModelMap(page);
     }
     /**
@@ -47,7 +47,8 @@ public class TankVehicleTemplateController extends CommonController{
     @PostMapping("/tankVehicleTemplate/tankVehicleTemplate")
     public JsonResult addTankVehicleTemplate(TankVehicleTemplateDto tankVehicleTemplateDto,HttpServletRequest request){
         TankVehicleTemplate savedTankVehicleTemplate = new TankVehicleTemplate();
-        BeanUtils.copyProperties(tankVehicleTemplateDto,savedTankVehicleTemplate);
+        //BeanUtils.copyProperties(tankVehicleTemplateDto,savedTankVehicleTemplate);
+        savedTankVehicleTemplate.setName(tankVehicleTemplateDto.getName());
         if(!StringUtils.isEmpty(tankVehicleTemplateDto.getProvinceId())){
             Category province = new Category();
             province.setId(tankVehicleTemplateDto.getProvinceId());
@@ -73,14 +74,14 @@ public class TankVehicleTemplateController extends CommonController{
             savedTankVehicleTemplate.setOrgCategory(orgCategory);
         }
 
-        if(!StringUtils.isEmpty(tankVehicleTemplateDto.getCheckDate())){
+       /* if(!StringUtils.isEmpty(tankVehicleTemplateDto.getCheckDate())){
             try {
                 savedTankVehicleTemplate.setCheckDate(format.parse(tankVehicleTemplateDto.getCheckDate()));
             } catch (ParseException e) {
                 e.printStackTrace();
                 savedTankVehicleTemplate.setCheckDate(new Date());
             }
-        }
+        }*/
         savedTankVehicleTemplate.setCreateDate(new Date());
         savedTankVehicleTemplate.setCreator(getCurrentUsername(request));
         tankVehicleTemplateService.addObj(savedTankVehicleTemplate);
@@ -163,6 +164,22 @@ public class TankVehicleTemplateController extends CommonController{
         savedTankVehicleTemplate.setCheckItem13(tankVehicleTemplateDto.getCheckItem13());
         savedTankVehicleTemplate.setCheckItem14(tankVehicleTemplateDto.getCheckItem14());
         savedTankVehicleTemplate.setCheckItem15(tankVehicleTemplateDto.getCheckItem15());
+
+        savedTankVehicleTemplate.setCheckItem1Msg(tankVehicleTemplateDto.getCheckItem1Msg());
+        savedTankVehicleTemplate.setCheckItem2Msg(tankVehicleTemplateDto.getCheckItem2Msg());
+        savedTankVehicleTemplate.setCheckItem3Msg(tankVehicleTemplateDto.getCheckItem3Msg());
+        savedTankVehicleTemplate.setCheckItem4Msg(tankVehicleTemplateDto.getCheckItem4Msg());
+        savedTankVehicleTemplate.setCheckItem5Msg(tankVehicleTemplateDto.getCheckItem5Msg());
+        savedTankVehicleTemplate.setCheckItem6Msg(tankVehicleTemplateDto.getCheckItem6Msg());
+        savedTankVehicleTemplate.setCheckItem7Msg(tankVehicleTemplateDto.getCheckItem7Msg());
+        savedTankVehicleTemplate.setCheckItem8Msg(tankVehicleTemplateDto.getCheckItem8Msg());
+        savedTankVehicleTemplate.setCheckItem9Msg(tankVehicleTemplateDto.getCheckItem9Msg());
+        savedTankVehicleTemplate.setCheckItem10Msg(tankVehicleTemplateDto.getCheckItem10Msg());
+        savedTankVehicleTemplate.setCheckItem11Msg(tankVehicleTemplateDto.getCheckItem11Msg());
+        savedTankVehicleTemplate.setCheckItem12Msg(tankVehicleTemplateDto.getCheckItem12Msg());
+        savedTankVehicleTemplate.setCheckItem13Msg(tankVehicleTemplateDto.getCheckItem13Msg());
+        savedTankVehicleTemplate.setCheckItem14Msg(tankVehicleTemplateDto.getCheckItem14Msg());
+        savedTankVehicleTemplate.setCheckItem15Msg(tankVehicleTemplateDto.getCheckItem15Msg());
         savedTankVehicleTemplate.setName(tankVehicleTemplateDto.getName());
         savedTankVehicleTemplate.setSuggestion(tankVehicleTemplateDto.getSuggestion());
         tankVehicleTemplateService.updateObj(savedTankVehicleTemplate);
