@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,8 +36,8 @@ public class DangerGoodsCheckTemplateController extends CommonController{
      * @return
      */
     @GetMapping("/dangerGoodsCheckTemplate/dangerGoodsCheckTemplatesByPage")
-    public ModelMap queryDangerGoodsCheckTemplates(NameDto nameDto,String type){
-        Page page = dangerGoodsCheckTemplateService.findDangerGoodsCheckTemplates(nameDto,type);
+    public ModelMap queryDangerGoodsCheckTemplates(NameDto nameDto,HttpServletRequest request){
+        Page page = dangerGoodsCheckTemplateService.findDangerGoodsCheckTemplates(nameDto,getOrg(request));
         return pageModelMap(page);
     }
 
@@ -71,17 +74,9 @@ public class DangerGoodsCheckTemplateController extends CommonController{
 
             savedDangerGoodsCheckTemplate.setOrgCategory(orgCategory);
         }
-
-        /*if(!StringUtils.isEmpty(dangerGoodsCheckTemplateDto.getCheckDate())){
-            try {
-                savedDangerGoodsCheckTemplate.setCheckDate(format.parse(dangerGoodsCheckTemplateDto.getCheckDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-                savedDangerGoodsCheckTemplate.setCheckDate(new Date());
-            }
-        }*/
         savedDangerGoodsCheckTemplate.setCreateDate(new Date());
         savedDangerGoodsCheckTemplate.setCreator(getCurrentUsername(request));
+        savedDangerGoodsCheckTemplate.setOrg(getOrg(request));
         dangerGoodsCheckTemplateService.addObj(savedDangerGoodsCheckTemplate);
         return new JsonResult(Result.SUCCESS);
     }
@@ -194,15 +189,6 @@ public class DangerGoodsCheckTemplateController extends CommonController{
         }
         dangerGoodsCheckTemplateService.updateDetails(id,detailList);
         return new JsonResult(Result.SUCCESS);
-    }
-
-    public static void main(String[] args) {
-        String[] str = "|a||b|".split("\\|");
-        for(int i = 0;i<str.length;i++){
-            System.out.println(str[i]);
-        }
-
-        System.out.println(str.length);
     }
     /**
      * 根据ID删除危险货物隐患

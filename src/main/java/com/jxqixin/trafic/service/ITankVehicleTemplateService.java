@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.service;
 
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.TankVehicleTemplate;
 import org.springframework.data.domain.Page;
 
@@ -10,7 +11,7 @@ public interface ITankVehicleTemplateService extends ICommonService<TankVehicleT
      * @param nameDto
      * @return
      */
-    Page findTankVehicleTemplates(NameDto nameDto);
+    Page findTankVehicleTemplates(NameDto nameDto, Org org);
     /**
      * 根据模板名称查找
      * @param name

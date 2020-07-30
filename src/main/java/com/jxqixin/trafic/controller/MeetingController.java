@@ -53,7 +53,7 @@ public class MeetingController extends CommonController{
             }
         }
         savedMeeting.setCreateDate(new Date());
-        savedMeeting.setOrg(getOrg(request));
+        savedMeeting.setOrg(getOrg(request ));
         savedMeeting.setCreator(getCurrentUsername(request));
         meetingService.addObj(savedMeeting);
         return new JsonResult(Result.SUCCESS);

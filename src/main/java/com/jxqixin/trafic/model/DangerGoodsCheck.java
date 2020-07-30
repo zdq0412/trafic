@@ -9,12 +9,12 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 危险货物运输企业安全生产隐患排查整改台账模板表
+ * 危险货物运输企业安全生产隐患排查整改台账表
  */
 @Entity
-@Table(name = "m049_danger_goods_check_template")
+@Table(name = "m024_danger_goods_check")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class DangerGoodsCheckTemplate {
+public class DangerGoodsCheck {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;
@@ -32,57 +32,14 @@ public class DangerGoodsCheckTemplate {
 	private String orgPersonSign;
 	/**安全检查人员签字*/
 	private String securityPersonSign;
-	/**模板文件访问路径*/
+	/**签字文件访问路径*/
 	private String url;
-	/**模板文件真实存储路径*/
+	/**签字文件真实存储路径*/
 	private String realPath;
-	/**所属省*/
-	@ManyToOne
-	@JoinColumn(name="province_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private Category province;
-	/**所属市*/
-	@ManyToOne
-	@JoinColumn(name="city_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private Category city;
-	/**所属地区*/
-	@ManyToOne
-	@JoinColumn(name="region_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private Category region;
-	@ManyToOne
-	@JoinColumn(name="org_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private OrgCategory orgCategory;
 	@ManyToOne
 	@JoinColumn(name="org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Org org;
-
-	public Org getOrg() {
-		return org;
-	}
-
-	public void setOrg(Org org) {
-		this.org = org;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getRealPath() {
-		return realPath;
-	}
-
-	public void setRealPath(String realPath) {
-		this.realPath = realPath;
-	}
 
 	public String getId() {
 		return id;
@@ -139,35 +96,27 @@ public class DangerGoodsCheckTemplate {
 		this.note = note;
 	}
 
-	public Category getProvince() {
-		return province;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setProvince(Category province) {
-		this.province = province;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
-	public Category getCity() {
-		return city;
+	public String getRealPath() {
+		return realPath;
 	}
 
-	public void setCity(Category city) {
-		this.city = city;
+	public void setRealPath(String realPath) {
+		this.realPath = realPath;
 	}
 
-	public Category getRegion() {
-		return region;
+	public Org getOrg() {
+		return org;
 	}
 
-	public void setRegion(Category region) {
-		this.region = region;
-	}
-
-	public OrgCategory getOrgCategory() {
-		return orgCategory;
-	}
-
-	public void setOrgCategory(OrgCategory orgCategory) {
-		this.orgCategory = orgCategory;
+	public void setOrg(Org org) {
+		this.org = org;
 	}
 }

@@ -2,6 +2,7 @@ package com.jxqixin.trafic.service;
 
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.MeetingTemplate;
+import com.jxqixin.trafic.model.Org;
 import org.springframework.data.domain.Page;
 
 public interface IMeetingTemplateService extends ICommonService<MeetingTemplate> {
@@ -10,7 +11,7 @@ public interface IMeetingTemplateService extends ICommonService<MeetingTemplate>
      * @param nameDto
      * @return
      */
-    Page findMeetingTemplates(NameDto nameDto,String type);
+    Page findMeetingTemplates(NameDto nameDto, String type, Org org);
     /**
      * 根据模板名称查找
      * @param name

@@ -35,8 +35,8 @@ public class SecurityCheckTemplateController extends CommonController{
      * @return
      */
     @GetMapping("/securityCheckTemplate/securityCheckTemplatesByPage")
-    public ModelMap querySecurityCheckTemplates(NameDto nameDto,String type){
-        Page page = securityCheckTemplateService.findSecurityCheckTemplates(nameDto,type);
+    public ModelMap querySecurityCheckTemplates(NameDto nameDto,HttpServletRequest request){
+        Page page = securityCheckTemplateService.findSecurityCheckTemplates(nameDto,getOrg(request));
         return pageModelMap(page);
     }
     /**
@@ -83,6 +83,7 @@ public class SecurityCheckTemplateController extends CommonController{
         }
         savedSecurityCheckTemplate.setCreateDate(new Date());
         savedSecurityCheckTemplate.setCreator(getCurrentUsername(request));
+        savedSecurityCheckTemplate.setOrg(getOrg(request));
         securityCheckTemplateService.addObj(savedSecurityCheckTemplate);
         return new JsonResult(Result.SUCCESS);
     }

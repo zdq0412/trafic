@@ -33,8 +33,8 @@ public class MeetingTemplateController extends CommonController{
      * @return
      */
     @GetMapping("/meetingTemplate/meetingTemplatesByPage")
-    public ModelMap queryMeetingTemplates(NameDto nameDto,String type){
-        Page page = meetingTemplateService.findMeetingTemplates(nameDto,type);
+    public ModelMap queryMeetingTemplates(NameDto nameDto,String type,HttpServletRequest request){
+        Page page = meetingTemplateService.findMeetingTemplates(nameDto,type,getOrg(request));
         return pageModelMap(page);
     }
     /**
@@ -81,6 +81,7 @@ public class MeetingTemplateController extends CommonController{
         }
         savedMeetingTemplate.setCreateDate(new Date());
         savedMeetingTemplate.setCreator(getCurrentUsername(request));
+        savedMeetingTemplate.setOrg(getOrg(request));
         meetingTemplateService.addObj(savedMeetingTemplate);
         return new JsonResult(Result.SUCCESS);
     }

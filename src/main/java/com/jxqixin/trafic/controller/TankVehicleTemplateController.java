@@ -35,8 +35,8 @@ public class TankVehicleTemplateController extends CommonController{
      * @return
      */
     @GetMapping("/tankVehicleTemplate/tankVehicleTemplatesByPage")
-    public ModelMap queryTankVehicleTemplates(NameDto nameDto){
-        Page page = tankVehicleTemplateService.findTankVehicleTemplates(nameDto);
+    public ModelMap queryTankVehicleTemplates(NameDto nameDto,HttpServletRequest request){
+        Page page = tankVehicleTemplateService.findTankVehicleTemplates(nameDto,getOrg(request));
         return pageModelMap(page);
     }
     /**
@@ -47,43 +47,30 @@ public class TankVehicleTemplateController extends CommonController{
     @PostMapping("/tankVehicleTemplate/tankVehicleTemplate")
     public JsonResult addTankVehicleTemplate(TankVehicleTemplateDto tankVehicleTemplateDto,HttpServletRequest request){
         TankVehicleTemplate savedTankVehicleTemplate = new TankVehicleTemplate();
-        //BeanUtils.copyProperties(tankVehicleTemplateDto,savedTankVehicleTemplate);
         savedTankVehicleTemplate.setName(tankVehicleTemplateDto.getName());
         if(!StringUtils.isEmpty(tankVehicleTemplateDto.getProvinceId())){
             Category province = new Category();
             province.setId(tankVehicleTemplateDto.getProvinceId());
-
             savedTankVehicleTemplate.setProvince(province);
         }
         if(!StringUtils.isEmpty(tankVehicleTemplateDto.getCityId())){
             Category city = new Category();
             city.setId(tankVehicleTemplateDto.getCityId());
-
             savedTankVehicleTemplate.setCity(city);
         }
         if(!StringUtils.isEmpty(tankVehicleTemplateDto.getRegionId())){
             Category region = new Category();
             region.setId(tankVehicleTemplateDto.getRegionId());
-
             savedTankVehicleTemplate.setRegion(region);
         }
         if(!StringUtils.isEmpty(tankVehicleTemplateDto.getOrgCategoryId())){
             OrgCategory orgCategory = new OrgCategory();
             orgCategory.setId(tankVehicleTemplateDto.getOrgCategoryId());
-
             savedTankVehicleTemplate.setOrgCategory(orgCategory);
         }
-
-       /* if(!StringUtils.isEmpty(tankVehicleTemplateDto.getCheckDate())){
-            try {
-                savedTankVehicleTemplate.setCheckDate(format.parse(tankVehicleTemplateDto.getCheckDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-                savedTankVehicleTemplate.setCheckDate(new Date());
-            }
-        }*/
         savedTankVehicleTemplate.setCreateDate(new Date());
         savedTankVehicleTemplate.setCreator(getCurrentUsername(request));
+        savedTankVehicleTemplate.setOrg(getOrg(request));
         tankVehicleTemplateService.addObj(savedTankVehicleTemplate);
         return new JsonResult(Result.SUCCESS);
     }

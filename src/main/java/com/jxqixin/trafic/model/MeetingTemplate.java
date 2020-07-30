@@ -55,6 +55,10 @@ public class MeetingTemplate {
 	private String content;
 	/**创建人*/
 	private String creator;
+	/**模板文件访问路径*/
+	private String url;
+	/**模板文件真实存储路径*/
+	private String realPath;
 	/**所属省*/
 	@ManyToOne
 	@JoinColumn(name="province_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -74,7 +78,34 @@ public class MeetingTemplate {
 	@JoinColumn(name="org_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private OrgCategory orgCategory;
+	@ManyToOne
+	@JoinColumn(name="org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Org org;
 
+	public Org getOrg() {
+		return org;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getRealPath() {
+		return realPath;
+	}
+
+	public void setRealPath(String realPath) {
+		this.realPath = realPath;
+	}
+
+	public void setOrg(Org org) {
+		this.org = org;
+	}
 	public Category getProvince() {
 		return province;
 	}

@@ -30,8 +30,8 @@ public class RuleTemplateController extends CommonController{
      * @return
      */
     @GetMapping("/template/templatesByPage")
-    public ModelMap queryRuleTemplates(NameDto nameDto){
-        Page page = templateService.findRuleTemplates(nameDto);
+    public ModelMap queryRuleTemplates(NameDto nameDto,HttpServletRequest request){
+        Page page = templateService.findRuleTemplates(nameDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

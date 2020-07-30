@@ -29,8 +29,8 @@ public class ResponsibilityTemplateController extends CommonController{
      * @return
      */
     @GetMapping("/responsibilityTemplate/responsibilityTemplatesByPage")
-    public ModelMap queryResponsibilityTemplates(NameDto nameDto){
-        Page page = templateService.findResponsibilityTemplates(nameDto);
+    public ModelMap queryResponsibilityTemplates(NameDto nameDto,HttpServletRequest request){
+        Page page = templateService.findResponsibilityTemplates(nameDto,getOrg(request));
         return pageModelMap(page);
     }
     /**
@@ -68,6 +68,7 @@ public class ResponsibilityTemplateController extends CommonController{
         }
         savedResponsibilityTemplate.setCreateDate(new Date());
         savedResponsibilityTemplate.setCreator(getCurrentUsername(request));
+        savedResponsibilityTemplate.setOrg(getOrg(request));
         templateService.addObj(savedResponsibilityTemplate);
         return new JsonResult(Result.SUCCESS);
     }

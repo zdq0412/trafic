@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.service;
 
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.RuleTemplate;
 import org.springframework.data.domain.Page;
 
@@ -10,7 +11,7 @@ public interface IRuleTemplateService extends ICommonService<RuleTemplate> {
      * @param nameDto
      * @return
      */
-    Page findRuleTemplates(NameDto nameDto);
+    Page findRuleTemplates(NameDto nameDto, Org org);
     /**
      * 根据模板名称查找
      * @param name

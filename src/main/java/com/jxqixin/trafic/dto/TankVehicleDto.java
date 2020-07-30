@@ -1,22 +1,9 @@
-package com.jxqixin.trafic.model;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
-import java.util.Date;
+package com.jxqixin.trafic.dto;
 
 /**
  * 危险货物道路运输罐式车辆罐体检查记录模板表
  */
-@Entity
-@Table(name = "m044_tank_vehicle_template")
-@GenericGenerator(name="id_gen",strategy = "uuid")
-public class TankVehicleTemplate {
-	@Id
-	@GeneratedValue(generator = "id_gen")
+public class TankVehicleDto {
 	private String id;
 	/**名称*/
 	private String name;
@@ -27,33 +14,33 @@ public class TankVehicleTemplate {
 	/**检查人员签字，至少两人*/
 	private String checkPersonSign;
 	/**检查项，罐体有无破损、罐体是否整洁、罐体灯光是否完整*/
-	private Boolean  checkItem1 = true;
+	private Boolean  checkItem1;
 	/**检查项，反光条是否完整、反光标示是否完整、反光牌是否有*/
-	private Boolean checkItem2= true;
+	private Boolean checkItem2;
 	/**检查项，罐后保险杠是否合格*/
-	private Boolean checkItem3= true;
+	private Boolean checkItem3;
 	/**检查项，静电接地带是否有效*/
-	private Boolean checkItem4= true;
+	private Boolean checkItem4;
 	/**检查项，罐体两边防护网是否完整*/
-	private Boolean checkItem5= true;
+	private Boolean checkItem5;
 	/**检查项，轮胎是否符合行车安全要求*/
-	private Boolean checkItem6= true;
+	private Boolean checkItem6;
 	/**检查项，灭火器是否合格*/
-	private Boolean checkItem7= true;
+	private Boolean checkItem7;
 	/**检查项，确认罐体上喷涂的介质名称是否与《公告》、《合格证》上记载的一致*/
-	private Boolean checkItem8= true;
+	private Boolean checkItem8;
 	/**检查项，喷涂的介质与记载的内容一致，运输介质属于国家安监总局等五部委文件《关于明确在用液体危险货物罐车加装紧急切断装置液体介质范围的通知》（安监总管三〔2014〕135号）中列举的17种介质范围。检查其卸料口处是否安装有紧急切断阀、紧急切断阀是否有远程控制系统。*/
-	private Boolean checkItem9= true;
+	private Boolean checkItem9;
 	/**检查项，检查紧急切断阀有无腐蚀、生锈、裂纹等缺陷，有无松脱、渗漏等现象，检查紧急切断阀控制按钮是否完好。*/
-	private Boolean checkItem10= true;
+	private Boolean checkItem10;
 	/**检查项，检查紧急切断阀是否处于关闭状态，没有关闭的要求当场关闭，并对驾驶人进行一次面对面的教育提示。*/
-	private Boolean checkItem11= true;
+	private Boolean checkItem11;
 	/**检查项，备用*/
-	private Boolean checkItem12= true;
+	private Boolean checkItem12;
 	/**检查项，备用*/
-	private Boolean checkItem13= true;
+	private Boolean checkItem13;
 	/**检查项，备用*/
-	private Boolean checkItem14= true;
+	private Boolean checkItem14;
 	/**检查项，备用*/
 	private Boolean checkItem15;
 	private String checkItem1Msg;
@@ -71,223 +58,64 @@ public class TankVehicleTemplate {
 	private String checkItem13Msg;
 	private String checkItem14Msg;
 	private String checkItem15Msg;
-	/**创建日期*/
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createDate;
 	/**检查日期*/
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date checkDate;
-	/**创建人*/
-	private String creator;
+	private String checkDate;
 	/**备注*/
 	private String note;
-	/**所属省*/
-	@ManyToOne
-	@JoinColumn(name="province_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private Category province;
-	/**所属市*/
-	@ManyToOne
-	@JoinColumn(name="city_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private Category city;
-	/**所属地区*/
-	@ManyToOne
-	@JoinColumn(name="region_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private Category region;
-	@ManyToOne
-	@JoinColumn(name="org_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private OrgCategory orgCategory;
-	@ManyToOne
-	@JoinColumn(name="org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	@NotFound(action = NotFoundAction.IGNORE)
-	private Org org;
-	/**模板文件访问路径*/
-	private String url;
-	/**模板文件真实存储路径*/
-	private String realPath;
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getRealPath() {
-		return realPath;
-	}
-
-	public void setRealPath(String realPath) {
-		this.realPath = realPath;
-	}
-
-	public Org getOrg() {
-		return org;
-	}
-
-	public void setOrg(Org org) {
-		this.org = org;
-	}
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCarNo() {
-		return carNo;
-	}
-
-	public void setCarNo(String carNo) {
-		this.carNo = carNo;
-	}
-
-	public String getSuggestion() {
-		return suggestion;
-	}
-
-	public void setSuggestion(String suggestion) {
-		this.suggestion = suggestion;
-	}
-
-	public String getCheckPersonSign() {
-		return checkPersonSign;
-	}
-
-	public void setCheckPersonSign(String checkPersonSign) {
-		this.checkPersonSign = checkPersonSign;
-	}
-
-	public Boolean getCheckItem1() {
-		return checkItem1;
-	}
-
 	public void setCheckItem1(Boolean checkItem1) {
 		this.checkItem1 = checkItem1;
-	}
-
-	public Boolean getCheckItem2() {
-		return checkItem2;
 	}
 
 	public void setCheckItem2(Boolean checkItem2) {
 		this.checkItem2 = checkItem2;
 	}
 
-	public Boolean getCheckItem3() {
-		return checkItem3;
-	}
-
 	public void setCheckItem3(Boolean checkItem3) {
 		this.checkItem3 = checkItem3;
-	}
-
-	public Boolean getCheckItem4() {
-		return checkItem4;
 	}
 
 	public void setCheckItem4(Boolean checkItem4) {
 		this.checkItem4 = checkItem4;
 	}
 
-	public Boolean getCheckItem5() {
-		return checkItem5;
-	}
-
 	public void setCheckItem5(Boolean checkItem5) {
 		this.checkItem5 = checkItem5;
-	}
-
-	public Boolean getCheckItem6() {
-		return checkItem6;
 	}
 
 	public void setCheckItem6(Boolean checkItem6) {
 		this.checkItem6 = checkItem6;
 	}
 
-	public Boolean getCheckItem7() {
-		return checkItem7;
-	}
-
 	public void setCheckItem7(Boolean checkItem7) {
 		this.checkItem7 = checkItem7;
-	}
-
-	public Boolean getCheckItem8() {
-		return checkItem8;
 	}
 
 	public void setCheckItem8(Boolean checkItem8) {
 		this.checkItem8 = checkItem8;
 	}
 
-	public Boolean getCheckItem9() {
-		return checkItem9;
-	}
-
 	public void setCheckItem9(Boolean checkItem9) {
 		this.checkItem9 = checkItem9;
-	}
-
-	public Boolean getCheckItem10() {
-		return checkItem10;
 	}
 
 	public void setCheckItem10(Boolean checkItem10) {
 		this.checkItem10 = checkItem10;
 	}
 
-	public Boolean getCheckItem11() {
-		return checkItem11;
-	}
-
 	public void setCheckItem11(Boolean checkItem11) {
 		this.checkItem11 = checkItem11;
-	}
-
-	public Boolean getCheckItem12() {
-		return checkItem12;
 	}
 
 	public void setCheckItem12(Boolean checkItem12) {
 		this.checkItem12 = checkItem12;
 	}
 
-	public Boolean getCheckItem13() {
-		return checkItem13;
-	}
-
 	public void setCheckItem13(Boolean checkItem13) {
 		this.checkItem13 = checkItem13;
 	}
 
-	public Boolean getCheckItem14() {
-		return checkItem14;
-	}
-
 	public void setCheckItem14(Boolean checkItem14) {
 		this.checkItem14 = checkItem14;
-	}
-
-	public Boolean getCheckItem15() {
-		return checkItem15;
 	}
 
 	public void setCheckItem15(Boolean checkItem15) {
@@ -414,28 +242,112 @@ public class TankVehicleTemplate {
 		this.checkItem15Msg = checkItem15Msg;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
+	public String getId() {
+		return id;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public Date getCheckDate() {
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCarNo() {
+		return carNo;
+	}
+
+	public void setCarNo(String carNo) {
+		this.carNo = carNo;
+	}
+
+	public String getSuggestion() {
+		return suggestion;
+	}
+
+	public void setSuggestion(String suggestion) {
+		this.suggestion = suggestion;
+	}
+
+	public String getCheckPersonSign() {
+		return checkPersonSign;
+	}
+
+	public void setCheckPersonSign(String checkPersonSign) {
+		this.checkPersonSign = checkPersonSign;
+	}
+
+	public Boolean getCheckItem1() {
+		return checkItem1;
+	}
+
+	public Boolean getCheckItem2() {
+		return checkItem2;
+	}
+
+	public Boolean getCheckItem3() {
+		return checkItem3;
+	}
+
+	public Boolean getCheckItem4() {
+		return checkItem4;
+	}
+
+	public Boolean getCheckItem5() {
+		return checkItem5;
+	}
+
+	public Boolean getCheckItem6() {
+		return checkItem6;
+	}
+
+	public Boolean getCheckItem7() {
+		return checkItem7;
+	}
+
+	public Boolean getCheckItem8() {
+		return checkItem8;
+	}
+
+	public Boolean getCheckItem9() {
+		return checkItem9;
+	}
+
+	public Boolean getCheckItem10() {
+		return checkItem10;
+	}
+
+	public Boolean getCheckItem11() {
+		return checkItem11;
+	}
+
+	public Boolean getCheckItem12() {
+		return checkItem12;
+	}
+
+	public Boolean getCheckItem13() {
+		return checkItem13;
+	}
+
+	public Boolean getCheckItem14() {
+		return checkItem14;
+	}
+
+	public Boolean getCheckItem15() {
+		return checkItem15;
+	}
+
+	public String getCheckDate() {
 		return checkDate;
 	}
 
-	public void setCheckDate(Date checkDate) {
+	public void setCheckDate(String checkDate) {
 		this.checkDate = checkDate;
-	}
-
-	public String getCreator() {
-		return creator;
-	}
-
-	public void setCreator(String creator) {
-		this.creator = creator;
 	}
 
 	public String getNote() {
@@ -444,37 +356,5 @@ public class TankVehicleTemplate {
 
 	public void setNote(String note) {
 		this.note = note;
-	}
-
-	public Category getProvince() {
-		return province;
-	}
-
-	public void setProvince(Category province) {
-		this.province = province;
-	}
-
-	public Category getCity() {
-		return city;
-	}
-
-	public void setCity(Category city) {
-		this.city = city;
-	}
-
-	public Category getRegion() {
-		return region;
-	}
-
-	public void setRegion(Category region) {
-		this.region = region;
-	}
-
-	public OrgCategory getOrgCategory() {
-		return orgCategory;
-	}
-
-	public void setOrgCategory(OrgCategory orgCategory) {
-		this.orgCategory = orgCategory;
 	}
 }

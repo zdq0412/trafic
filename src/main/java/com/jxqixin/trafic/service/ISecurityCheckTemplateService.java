@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.service;
 
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.SecurityCheckTemplate;
 import org.springframework.data.domain.Page;
 
@@ -10,7 +11,7 @@ public interface ISecurityCheckTemplateService extends ICommonService<SecurityCh
      * @param nameDto
      * @return
      */
-    Page findSecurityCheckTemplates(NameDto nameDto, String type);
+    Page findSecurityCheckTemplates(NameDto nameDto, Org org);
     /**
      * 根据模板名称查找
      * @param name
