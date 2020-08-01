@@ -7,13 +7,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+
 /**
- * 安全会议
+ * 安全培训模板
  */
 @Entity
-@Table(name = "m021_meeting")
+@Table(name = "m047_training_template")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class Meeting {
+public class TrainingTemplate {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;
@@ -23,56 +24,76 @@ public class Meeting {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createDate;
-	/**会议名称*/
-	private String meetingName;
-	/**开会日期*/
+	/**培训名称*/
+	private String trainingName;
+	/**培训日期*/
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date meetingDate;
-	/**闭会日期*/
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date endMeetingDate;
-	/**会议地点*/
-	private String meetingPlace;
+	private Date trainingDate;
+	/**培训地点*/
+	private String trainingPlace;
 	/**主持人*/
 	private String president;
 	/**记录人*/
 	private String recorder;
-	/**出席人*/
+	/**参加对象*/
 	private String attendants;
-	/**最后形成意见或决定*/
-	private String finalDecision;
+	/**应到人数*/
+	private Integer attendance;
+	/**实到人数*/
+	private Integer realAttendance;
 	/**备注*/
 	private String note;
-	/**会议或培训内容*/
+	/**培训内容*/
 	private String content;
 	/**创建人*/
 	private String creator;
-	/**上传文件访问路径*/
+	/**模板文件访问路径*/
 	private String url;
-	/**实际存储路径*/
+	/**模板文件真实存储路径*/
 	private String realPath;
-	/**所属企业*/
+	/**所属省*/
+	@ManyToOne
+	@JoinColumn(name="province_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Category province;
+	/**所属市*/
+	@ManyToOne
+	@JoinColumn(name="city_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Category city;
+	/**所属地区*/
+	@ManyToOne
+	@JoinColumn(name="region_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Category region;
+	@ManyToOne
+	@JoinColumn(name="org_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@NotFound(action = NotFoundAction.IGNORE)
+	private OrgCategory orgCategory;
 	@ManyToOne
 	@JoinColumn(name="org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Org org;
 
-	public Date getEndMeetingDate() {
-		return endMeetingDate;
+	public Integer getAttendance() {
+		return attendance;
 	}
 
-	public void setEndMeetingDate(Date endMeetingDate) {
-		this.endMeetingDate = endMeetingDate;
+	public void setAttendance(Integer attendance) {
+		this.attendance = attendance;
 	}
 
-	public String getFinalDecision() {
-		return finalDecision;
+	public Integer getRealAttendance() {
+		return realAttendance;
 	}
 
-	public void setFinalDecision(String finalDecision) {
-		this.finalDecision = finalDecision;
+	public void setRealAttendance(Integer realAttendance) {
+		this.realAttendance = realAttendance;
+	}
+
+	public Org getOrg() {
+		return org;
 	}
 
 	public String getUrl() {
@@ -91,36 +112,63 @@ public class Meeting {
 		this.realPath = realPath;
 	}
 
-	public Org getOrg() {
-		return org;
-	}
-
 	public void setOrg(Org org) {
 		this.org = org;
 	}
-
-	public String getMeetingName() {
-		return meetingName;
+	public Category getProvince() {
+		return province;
 	}
 
-	public void setMeetingName(String meetingName) {
-		this.meetingName = meetingName;
+	public void setProvince(Category province) {
+		this.province = province;
 	}
 
-	public Date getMeetingDate() {
-		return meetingDate;
+	public Category getCity() {
+		return city;
 	}
 
-	public void setMeetingDate(Date meetingDate) {
-		this.meetingDate = meetingDate;
+	public void setCity(Category city) {
+		this.city = city;
 	}
 
-	public String getMeetingPlace() {
-		return meetingPlace;
+	public Category getRegion() {
+		return region;
 	}
 
-	public void setMeetingPlace(String meetingPlace) {
-		this.meetingPlace = meetingPlace;
+	public void setRegion(Category region) {
+		this.region = region;
+	}
+
+	public OrgCategory getOrgCategory() {
+		return orgCategory;
+	}
+
+	public void setOrgCategory(OrgCategory orgCategory) {
+		this.orgCategory = orgCategory;
+	}
+
+	public String getTrainingName() {
+		return trainingName;
+	}
+
+	public void setTrainingName(String trainingName) {
+		this.trainingName = trainingName;
+	}
+
+	public Date getTrainingDate() {
+		return trainingDate;
+	}
+
+	public void setTrainingDate(Date trainingDate) {
+		this.trainingDate = trainingDate;
+	}
+
+	public String getTrainingPlace() {
+		return trainingPlace;
+	}
+
+	public void setTrainingPlace(String trainingPlace) {
+		this.trainingPlace = trainingPlace;
 	}
 
 	public String getPresident() {

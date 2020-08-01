@@ -25,6 +25,8 @@ public class TemplateUploadController  extends CommonController {
     @Autowired
     private IMeetingTemplateService meetingTemplateService;
     @Autowired
+    private ITrainingTemplateService trainingTemplateService;
+    @Autowired
     private ISecurityCheckTemplateService securityCheckTemplateService;
     @Autowired
     private ITankVehicleTemplateService tankVehicleTemplateService;
@@ -34,6 +36,20 @@ public class TemplateUploadController  extends CommonController {
     private IRuleTemplateService ruleTemplateService;
     @Autowired
     private IResponsibilityTemplateService responsibilityTemplateService;
+    @Autowired
+    private IMeetingService meetingService;
+    @Autowired
+    private ITrainingService trainingService;
+    @Autowired
+    private ISecurityCheckService securityCheckService;
+    @Autowired
+    private ITankVehicleService tankVehicleService;
+    @Autowired
+    private IDangerGoodsCheckService dangerGoodsCheckService;
+    @Autowired
+    private IRulesService rulesService;
+    @Autowired
+    private IResponsibilityService responsibilityService;
     /**
      * 上传公司图片
      * @return
@@ -62,8 +78,7 @@ public class TemplateUploadController  extends CommonController {
      */
     private void updateUrlAndRealPath(String url,String realPath,UploadFileDto uploadFileDto){
         switch (uploadFileDto.getType()){
-            case "meetingTemplate":
-            case "trainingTemplate":{
+            case "meetingTemplate":{
                 MeetingTemplate meetingTemplate = meetingTemplateService.queryObjById(uploadFileDto.getId());
                 if(!StringUtils.isEmpty(meetingTemplate.getRealPath())){
                     deleteTemplateFile(meetingTemplate.getRealPath());
@@ -71,6 +86,16 @@ public class TemplateUploadController  extends CommonController {
                 meetingTemplate.setUrl(url);
                 meetingTemplate.setRealPath(realPath);
                 meetingTemplateService.updateObj(meetingTemplate);
+                break;
+            }
+            case "trainingTemplate":{
+               TrainingTemplate trainingTemplate = trainingTemplateService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(trainingTemplate.getRealPath())){
+                    deleteTemplateFile(trainingTemplate.getRealPath());
+                }
+                trainingTemplate.setUrl(url);
+                trainingTemplate.setRealPath(realPath);
+                trainingTemplateService.updateObj(trainingTemplate);
                 break;
             }
             case "securityCheckTemplate":{
@@ -121,6 +146,76 @@ public class TemplateUploadController  extends CommonController {
                 dangerGoodsCheckTemplate.setUrl(url);
                 dangerGoodsCheckTemplate.setRealPath(realPath);
                 dangerGoodsCheckTemplateService.updateObj(dangerGoodsCheckTemplate);
+                break;
+            }
+            case "training":{
+                Training training = trainingService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(training.getRealPath())){
+                    deleteTemplateFile(training.getRealPath());
+                }
+                training.setUrl(url);
+                training.setRealPath(realPath);
+                trainingService.updateObj(training);
+                break;
+            }
+            case "meeting":{
+                Meeting meeting = meetingService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(meeting.getRealPath())){
+                    deleteTemplateFile(meeting.getRealPath());
+                }
+                meeting.setUrl(url);
+                meeting.setRealPath(realPath);
+                meetingService.updateObj(meeting);
+                break;
+            }
+            case "securityCheck":{
+                SecurityCheck securityCheck = securityCheckService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(securityCheck.getRealPath())){
+                    deleteTemplateFile(securityCheck.getRealPath());
+                }
+                securityCheck.setUrl(url);
+                securityCheck.setRealPath(realPath);
+                securityCheckService.updateObj(securityCheck);
+                break;
+            }
+            case "tankVehicle":{
+                TankVehicle tankVehicle = tankVehicleService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(tankVehicle.getRealPath())){
+                    deleteTemplateFile(tankVehicle.getRealPath());
+                }
+                tankVehicle.setUrl(url);
+                tankVehicle.setRealPath(realPath);
+                tankVehicleService.updateObj(tankVehicle);
+                break;
+            }
+            case "rule":{
+                Rules rules = rulesService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(rules.getRealPath())){
+                    deleteTemplateFile(rules.getRealPath());
+                }
+                rules.setUrl(url);
+                rules.setRealPath(realPath);
+                rulesService.updateObj(rules);
+                break;
+            }
+            case "responsibility":{
+                Responsibility responsibility = responsibilityService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(responsibility.getRealPath())){
+                    deleteTemplateFile(responsibility.getRealPath());
+                }
+                responsibility.setUrl(url);
+                responsibility.setRealPath(realPath);
+                responsibilityService.updateObj(responsibility);
+                break;
+            }
+            case "dangerGoodsCheck":{
+                DangerGoodsCheck dangerGoodsCheck = dangerGoodsCheckService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(dangerGoodsCheck.getRealPath())){
+                    deleteTemplateFile(dangerGoodsCheck.getRealPath());
+                }
+                dangerGoodsCheck.setUrl(url);
+                dangerGoodsCheck.setRealPath(realPath);
+                dangerGoodsCheckService.updateObj(dangerGoodsCheck);
                 break;
             }
         }

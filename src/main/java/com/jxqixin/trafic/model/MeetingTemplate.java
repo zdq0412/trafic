@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 /**
- * 安全会议模板表 安全培训模板表 通过type字段区分
+ * 安全会议模板表
  */
 @Entity
 @Table(name = "m046_meeting_template")
@@ -17,8 +17,6 @@ public class MeetingTemplate {
 	private String id;
 	/**名称*/
 	private String name;
-	/**类别 meeting:安全会议,training:安全培训*/
-	private String type;
 	/**创建日期*/
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -29,29 +27,23 @@ public class MeetingTemplate {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date meetingDate;
+	/**闭会日期*/
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date endMeetingDate;
 	/**会议地点*/
 	private String meetingPlace;
 	/**主持人*/
 	private String president;
 	/**记录人*/
 	private String recorder;
-	/**到场人员*/
+	/**出席人*/
 	private String attendants;
-	/**到场人数*/
-	private int attendance;
-	/**缺席人数*/
-	private int absent;
-	/**会议主题*/
-	private String theme;
-	/**需解决的问题或反馈的问题*/
-	private String problems;
-	/**解决方法*/
-	private String methods;
-	/**模板备注*/
-	private String templateNote;
+	/**最后形成意见或决定*/
+	private String finalDecision;
 	/**备注*/
 	private String note;
-	/**会议或培训内容*/
+	/**会议内容*/
 	private String content;
 	/**创建人*/
 	private String creator;
@@ -82,6 +74,22 @@ public class MeetingTemplate {
 	@JoinColumn(name="org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Org org;
+
+	public Date getEndMeetingDate() {
+		return endMeetingDate;
+	}
+
+	public void setEndMeetingDate(Date endMeetingDate) {
+		this.endMeetingDate = endMeetingDate;
+	}
+
+	public String getFinalDecision() {
+		return finalDecision;
+	}
+
+	public void setFinalDecision(String finalDecision) {
+		this.finalDecision = finalDecision;
+	}
 
 	public Org getOrg() {
 		return org;
@@ -138,14 +146,6 @@ public class MeetingTemplate {
 		this.orgCategory = orgCategory;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public String getMeetingName() {
 		return meetingName;
 	}
@@ -192,54 +192,6 @@ public class MeetingTemplate {
 
 	public void setAttendants(String attendants) {
 		this.attendants = attendants;
-	}
-
-	public int getAttendance() {
-		return attendance;
-	}
-
-	public void setAttendance(int attendance) {
-		this.attendance = attendance;
-	}
-
-	public int getAbsent() {
-		return absent;
-	}
-
-	public void setAbsent(int absent) {
-		this.absent = absent;
-	}
-
-	public String getTheme() {
-		return theme;
-	}
-
-	public void setTheme(String theme) {
-		this.theme = theme;
-	}
-
-	public String getProblems() {
-		return problems;
-	}
-
-	public void setProblems(String problems) {
-		this.problems = problems;
-	}
-
-	public String getMethods() {
-		return methods;
-	}
-
-	public void setMethods(String methods) {
-		this.methods = methods;
-	}
-
-	public String getTemplateNote() {
-		return templateNote;
-	}
-
-	public void setTemplateNote(String templateNote) {
-		this.templateNote = templateNote;
 	}
 
 	public String getId() {

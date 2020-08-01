@@ -110,4 +110,15 @@ public class SecurityCheckController extends CommonController{
         securityCheckService.deleteById(id);
         return new JsonResult(Result.SUCCESS);
     }
+
+    /**
+     * 引入模板
+     * @param templateId
+     * @return
+     */
+    @PostMapping("/securityCheck/template")
+    public JsonResult importTemplate(String templateId, HttpServletRequest request){
+        securityCheckService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
+        return new JsonResult(Result.SUCCESS);
+    }
 }

@@ -129,4 +129,14 @@ public class TankVehicleController extends CommonController{
         tankVehicleService.deleteById(id);
         return new JsonResult(Result.SUCCESS);
     }
+    /**
+     * 引入模板
+     * @param templateId
+     * @return
+     */
+    @PostMapping("/tankVehicle/template")
+    public JsonResult importTemplate(String templateId, HttpServletRequest request){
+        tankVehicleService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
+        return new JsonResult(Result.SUCCESS);
+    }
 }

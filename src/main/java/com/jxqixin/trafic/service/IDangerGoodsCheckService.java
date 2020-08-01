@@ -4,6 +4,7 @@ import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.DangerGoodsCheck;
 import com.jxqixin.trafic.model.DangerGoodsCheckDetail;
 import com.jxqixin.trafic.model.DangerGoodsCheckDetailRecord;
+import com.jxqixin.trafic.model.Org;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -25,4 +26,12 @@ public interface IDangerGoodsCheckService extends ICommonService<DangerGoodsChec
      * @param detailList 详情
      */
     void updateDetails(String id, List<DangerGoodsCheckDetailRecord> detailList);
+
+    /**
+     * 导入模板
+     * @param templateId
+     * @param org
+     * @param currentUsername
+     */
+    void importTemplate(String templateId, Org org, String currentUsername);
 }

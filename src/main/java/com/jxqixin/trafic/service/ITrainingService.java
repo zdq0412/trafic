@@ -1,18 +1,17 @@
 package com.jxqixin.trafic.service;
 
 import com.jxqixin.trafic.dto.NameDto;
-import com.jxqixin.trafic.model.Meeting;
+import com.jxqixin.trafic.model.Training;
 import com.jxqixin.trafic.model.Org;
-import com.jxqixin.trafic.model.User;
 import org.springframework.data.domain.Page;
 
-public interface IMeetingService extends ICommonService<Meeting> {
+public interface ITrainingService extends ICommonService<Training> {
     /**
      * 分页查询
      * @param nameDto
      * @return
      */
-    Page findMeetings(NameDto nameDto, String type);
+    Page findTrainings(NameDto nameDto);
     /**
      * 根据ID删除
      */

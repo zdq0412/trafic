@@ -28,6 +28,8 @@ public class SecurityCheck {
 	private String problems;
 	/**整改结果*/
 	private String result;
+	/**检查组处理意见*/
+	private String suggestion ;
 	/**检查人员签字,以后可能为签字图片路径*/
 	private String supervisorsSign;
 	/**受检查对象签字,以后可能为签字图片路径*/
@@ -49,9 +51,17 @@ public class SecurityCheck {
 	/**签名文件实际路径*/
 	private String realPath;
 	@ManyToOne
-	@JoinColumn(name="org_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	@JoinColumn(name="org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Org org;
+
+	public String getSuggestion() {
+		return suggestion;
+	}
+
+	public void setSuggestion(String suggestion) {
+		this.suggestion = suggestion;
+	}
 
 	public String getUrl() {
 		return url;

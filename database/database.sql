@@ -109,6 +109,8 @@ create table m005_rules(
   region_id  varchar(36) comment '所属地区',
   orgCategory_id varchar(36) comment '企业类别',
   num varchar(500) comment '发文字号:企业简称+年+自增序号',
+  url varchar(200) comment '安全规章制度文件访问路径',
+  realPath varchar(200) comment '安全规章制度存储路径',
   org_id varchar(36)  comment '所属企业ID',
   timeliness varchar(20) default '有效' comment '时效性，有效或无效',
   constraint fk_m005_rules_category_province_id foreign key(province_id) references category(id),
@@ -427,26 +429,21 @@ create table directory_functions(
   constraint fk_directory_id foreign key(directory_id) references directory(id)
 ) comment '目录菜单表';
 
-#安全会议模板表 安全培训模板表
+#安全会议模板表
 drop table if exists m046_meeting_template;
 create table m046_meeting_template(
   id varchar(36) primary key comment '主键',
  name varchar(500) comment '模板名称',
- type varchar(50) comment '类别：meeting:安全会议,training:安全培训',
  createDate timestamp comment '模板创建日期',
- meetingName varchar(100) comment '会议名称',
+ meetingName varchar(100) comment '会议名称或主要议题',
  meetingDate timestamp  comment '开会时间',
+ endMeetingDate timestamp  comment '闭会时间',
  meetingPlace varchar(500) comment '会议地点',
   president varchar(100) comment '主持人',
   recorder varchar(100) comment '记录人',
-  attendants varchar(500) comment '到场人员',
-  attendance int comment '到场人数',
-  absent int default  0 comment '缺席人数',
-  theme varchar(500) comment '会议主题',
+  attendants varchar(500) comment '出席人',
   content varchar(2000) comment '会议内容',
-  problems varchar(2000) comment '需解决问题',
-  methods varchar(2000) comment '解决办法',
-  templateNote varchar(2000) comment '模板内容中的备注',
+  finalDecision varchar(2000) comment '最后形成意见或决定',
   note varchar(2000) comment '备注',
   url varchar(500) comment '签名文件访问路径',
   realPath varchar(500) comment '实际存储路径',
@@ -463,33 +460,82 @@ create table m046_meeting_template(
   constraint fk_org_category_m046_meeting_template foreign key(org_category_id) references org_category(id)
 ) comment '安全会议模板表';
 
-#安全会议表 安全培训表
+#安全培训模板表
+drop table if exists m047_training_template;
+create table m047_training_template(
+  id varchar(36) primary key comment '主键',
+ name varchar(500) comment '模板名称',
+ createDate timestamp comment '模板创建日期',
+ trainingName varchar(100) comment '培训名称',
+ trainingDate timestamp  comment '培训时间',
+ trainingPlace varchar(500) comment '培训地点',
+  president varchar(100) comment '主持人',
+  recorder varchar(100) comment '记录人',
+  attendants varchar(500) comment '参加对象',
+  attendance int comment '应到人数',
+  realAttendance int comment '实到人数',
+  content text comment '培训内容',
+  note varchar(2000) comment '备注',
+  url varchar(500) comment '签名文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  creator varchar(100) comment '创建人',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '企业ID',
+   constraint fk_m047_training_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m047_training_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m047_training_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m047_training_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_m047_training_template_meeting_template foreign key(org_category_id) references org_category(id)
+) comment '安全培训模板表';
+
+#安全培训表
+drop table if exists m022_training;
+create table m022_training(
+  id varchar(36) primary key comment '主键',
+ name varchar(500) comment '模板名称',
+ createDate timestamp comment '模板创建日期',
+ trainingName varchar(100) comment '培训名称',
+ trainingDate timestamp  comment '培训时间',
+ trainingPlace varchar(500) comment '培训地点',
+  president varchar(100) comment '主持人',
+  recorder varchar(100) comment '记录人',
+  attendants varchar(500) comment '参加对象',
+  attendance int comment '应到人数',
+  realAttendance int comment '实到人数',
+  content text comment '培训内容',
+  note varchar(2000) comment '备注',
+  url varchar(500) comment '签名文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  creator varchar(100) comment '创建人',
+  org_id varchar(36) comment '所属企业',
+  constraint fk_m022_training_org_org_id foreign key(org_id) references org(id)
+) comment '安全培训表';
+
+#安全会议表
 drop table if exists m021_meeting;
 create table m021_meeting(
   id varchar(36) primary key comment '主键',
  name varchar(500) comment '名称',
- type varchar(50) comment '类别：meeting:安全会议,training:安全培训',
  createDate timestamp comment '创建日期',
  meetingName varchar(100) comment '会议名称',
  meetingDate timestamp  comment '开会时间',
+ endMeetingDate timestamp  comment '闭会时间',
  meetingPlace varchar(500) comment '会议地点',
   president varchar(100) comment '主持人',
   recorder varchar(100) comment '记录人',
-  attendants varchar(500) comment '到场人员',
-  attendance int comment '到场人数',
-  absent int default  0 comment '缺席人数',
-  theme varchar(500) comment '会议主题',
-  content varchar(2000) comment '会议内容',
-  problems varchar(2000) comment '需解决问题',
-  methods varchar(2000) comment '解决办法',
-  templateNote varchar(2000) comment '模板内容中的备注',
+  attendants varchar(500) comment '出席人',
+  content text comment '会议内容',
+  finalDecision varchar(2000) comment '最后形成意见或决定',
   note varchar(2000) comment '备注',
   creator varchar(100) comment '创建人',
   url varchar(500) comment '签名文件访问路径',
   realPath varchar(500) comment '实际存储路径',
   org_id varchar(36) comment '所属企业',
   constraint fk_m021_meeting_org_org_id foreign key(org_id) references org(id)
-) comment '安全会议表 安全培训表';
+) comment '安全会议表';
 
 #责任书模板表
 drop table if exists m048_responsibility_template;
@@ -514,6 +560,21 @@ create table m048_responsibility_template(
   constraint fk_org_category_m048_responsibility_template foreign key(org_category_id) references org_category(id)
 ) comment '责任书模板表';
 
+#责任书表
+drop table if exists m025_responsibility;
+create table m025_responsibility(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  content text comment '模板内容',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '签名文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  org_id varchar(36) comment '企业ID',
+  constraint fk_m025_responsibility_org_org_id foreign key(org_id) references org(id)
+) comment '责任书表';
+
 #安全检查模板表
 drop table if exists m042_security_check_template;
 create table m042_security_check_template(
@@ -522,8 +583,9 @@ create table m042_security_check_template(
   checkObject varchar(500) comment '检查对象',
   deptAndEmp varchar(500) comment '监督检查的部门及人员',
   content varchar(2000) comment '检查的内容',
-  problems varchar(2000) comment '提出的问题',
+  problems varchar(2000) comment '查出的问题',
   result varchar(2000) comment '整改结果',
+  suggestion varchar(2000) comment '检查组处理意见',
   note varchar(2000) comment '备注',
   createDate timestamp comment '创建日期',
   checkDate timestamp comment '安全检查日期',
@@ -554,6 +616,7 @@ create table m023_security_check(
   content varchar(2000) comment '检查的内容',
   problems varchar(2000) comment '提出的问题',
   result varchar(2000) comment '整改结果',
+  suggestion varchar(2000) comment '检查组处理意见',
   note varchar(2000) comment '备注',
   createDate timestamp comment '创建日期',
   checkDate timestamp comment '安全检查日期',

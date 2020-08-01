@@ -1,10 +1,13 @@
 package com.jxqixin.trafic.service.impl;
+
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.CommonRepository;
-import com.jxqixin.trafic.repository.MeetingTemplateRepository;
-import com.jxqixin.trafic.service.IMeetingTemplateService;
+import com.jxqixin.trafic.repository.ResponsibilityRepository;
+import com.jxqixin.trafic.repository.ResponsibilityTemplateRepository;
+import com.jxqixin.trafic.service.IResponsibilityService;
 import com.jxqixin.trafic.util.FileUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,19 +20,22 @@ import org.thymeleaf.util.StringUtils;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Transactional
-public class MeetingTemplateServiceImpl extends CommonServiceImpl<MeetingTemplate> implements IMeetingTemplateService {
+public class ResponsibilityServiceImpl extends CommonServiceImpl<Responsibility> implements IResponsibilityService {
 	@Autowired
-	private MeetingTemplateRepository templateRepository;
+	private ResponsibilityRepository templateRepository;
+	@Autowired
+	private ResponsibilityTemplateRepository responsibilityTemplateRepository;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return templateRepository;
 	}
 	@Override
-	public Page findMeetingTemplates(NameDto nameDto,Org org) {
+	public Page findResponsibilitys(NameDto nameDto, Org org) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit(), Sort.Direction.DESC,"createDate");
 		if (org == null) {
 			return templateRepository.findAll(new Specification() {
@@ -50,30 +56,12 @@ public class MeetingTemplateServiceImpl extends CommonServiceImpl<MeetingTemplat
 				public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 
 					List<Predicate> list = new ArrayList<>();
-					//企业字段不为空的
 					if (!StringUtils.isEmpty(nameDto.getName())) {
 						list.add(criteriaBuilder.like(root.get("name"), "%" + nameDto.getName() + "%"));
 					}
-					Join<MeetingTemplate, Org> orgJoin = root.join("org", JoinType.LEFT);
-					list.add(criteriaBuilder.or(criteriaBuilder.equal(orgJoin.get("id"), org.getId()), criteriaBuilder.isNull(root.get("org"))));
-					//企业类别
-					if (org.getOrgCategory() != null) {
-						Join<MeetingTemplate, OrgCategory> orgCategoryJoin = root.join("orgCategory", JoinType.LEFT);
-						list.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("orgCategory")), criteriaBuilder.equal(orgCategoryJoin.get("id"), org.getOrgCategory().getId())));
-					}
-					//省市区
-					if (org.getProvince() != null) {
-						Join<MeetingTemplate, Category> provinceJoin = root.join("province", JoinType.LEFT);
-						list.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("province")), criteriaBuilder.equal(provinceJoin.get("id"), org.getProvince().getId())));
-					}
-					if (org.getCity() != null) {
-						Join<MeetingTemplate, Category> cityJoin = root.join("city", JoinType.LEFT);
-						list.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("city")), criteriaBuilder.equal(cityJoin.get("id"), org.getCity().getId())));
-					}
-					if (org.getRegion() != null) {
-						Join<MeetingTemplate, Category> regionJoin = root.join("region", JoinType.LEFT);
-						list.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("region")), criteriaBuilder.equal(regionJoin.get("id"), org.getRegion().getId())));
-					}
+					Join<Responsibility, Org> orgJoin = root.join("org", JoinType.LEFT);
+					list.add(criteriaBuilder.or(criteriaBuilder.equal(orgJoin.get("id"), org.getId())));
+
 					Predicate[] predicates = new Predicate[list.size()];
 					return criteriaBuilder.and(list.toArray(predicates));
 				}
@@ -82,16 +70,31 @@ public class MeetingTemplateServiceImpl extends CommonServiceImpl<MeetingTemplat
 	}
 
 	@Override
-	public MeetingTemplate findByName(String name) {
+	public Responsibility findByName(String name) {
 		return templateRepository.findByName(name);
 	}
 
 	@Override
 	public void deleteById(String id) {
-		MeetingTemplate meetingTemplate = (MeetingTemplate) templateRepository.findById(id).get();
-		if(!StringUtils.isEmpty(meetingTemplate.getRealPath())){
-			FileUtil.deleteFile(meetingTemplate.getRealPath());
+		Responsibility responsibility = (Responsibility) templateRepository.findById(id).get();
+		if(!StringUtils.isEmpty(responsibility.getRealPath())){
+			FileUtil.deleteFile(responsibility.getRealPath());
 		}
 		templateRepository.deleteById(id);
+	}
+
+	@Override
+	public void importTemplate(String templateId, Org org, String currentUsername) {
+		ResponsibilityTemplate template = (ResponsibilityTemplate) responsibilityTemplateRepository.findById(templateId).get();
+		Responsibility responsibility = new Responsibility();
+		BeanUtils.copyProperties(template,responsibility);
+		if(org!=null){
+			responsibility.setOrg(org);
+		}
+		responsibility.setUrl(null);
+		responsibility.setRealPath(null);
+		responsibility.setCreateDate(new Date());
+		responsibility.setCreator(currentUsername);
+		templateRepository.save(responsibility);
 	}
 }

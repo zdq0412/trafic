@@ -33,8 +33,8 @@ public class MeetingTemplateController extends CommonController{
      * @return
      */
     @GetMapping("/meetingTemplate/meetingTemplatesByPage")
-    public ModelMap queryMeetingTemplates(NameDto nameDto,String type,HttpServletRequest request){
-        Page page = meetingTemplateService.findMeetingTemplates(nameDto,type,getOrg(request));
+    public ModelMap queryMeetingTemplates(NameDto nameDto,HttpServletRequest request){
+        Page page = meetingTemplateService.findMeetingTemplates(nameDto,getOrg(request));
         return pageModelMap(page);
     }
     /**
@@ -139,7 +139,7 @@ public class MeetingTemplateController extends CommonController{
         return new JsonResult(Result.SUCCESS);
     }
     /**
-     * 修改会议或培训内容
+     * 修改会议内容
      * @param meetingTemplateDto
      * @return
      */
@@ -147,17 +147,12 @@ public class MeetingTemplateController extends CommonController{
     public JsonResult updateContent(MeetingTemplateDto meetingTemplateDto){
         MeetingTemplate savedMeetingTemplate = meetingTemplateService.queryObjById(meetingTemplateDto.getId());
         savedMeetingTemplate.setContent(meetingTemplateDto.getContent());
-        savedMeetingTemplate.setTheme(meetingTemplateDto.getTheme());
         savedMeetingTemplate.setMeetingName(meetingTemplateDto.getMeetingName());
         savedMeetingTemplate.setMeetingPlace(meetingTemplateDto.getMeetingPlace());
-        savedMeetingTemplate.setAbsent(meetingTemplateDto.getAbsent());
-        savedMeetingTemplate.setAttendance(meetingTemplateDto.getAttendance());
         savedMeetingTemplate.setAttendants(meetingTemplateDto.getAttendants());
-        savedMeetingTemplate.setProblems(meetingTemplateDto.getProblems());
-        savedMeetingTemplate.setMethods(meetingTemplateDto.getMethods());
         savedMeetingTemplate.setPresident(meetingTemplateDto.getPresident());
         savedMeetingTemplate.setRecorder(meetingTemplateDto.getRecorder());
-        savedMeetingTemplate.setTemplateNote(meetingTemplateDto.getTemplateNote());
+        savedMeetingTemplate.setFinalDecision(meetingTemplateDto.getFinalDecision());
         meetingTemplateService.updateObj(savedMeetingTemplate);
         return new JsonResult(Result.SUCCESS);
     }

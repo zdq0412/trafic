@@ -30,6 +30,8 @@ public class SecurityCheckTemplate {
 	private String problems;
 	/**整改结果*/
 	private String result;
+	/**检查组处理意见*/
+	private String suggestion ;
 	/**检查人员签字,以后可能为签字图片路径*/
 	private String supervisorsSign;
 	/**受检查对象签字,以后可能为签字图片路径*/
@@ -73,6 +75,14 @@ public class SecurityCheckTemplate {
 	private String url;
 	/**模板文件真实存储路径*/
 	private String realPath;
+
+	public String getSuggestion() {
+		return suggestion;
+	}
+
+	public void setSuggestion(String suggestion) {
+		this.suggestion = suggestion;
+	}
 
 	public String getUrl() {
 		return url;

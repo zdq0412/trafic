@@ -61,6 +61,27 @@ public class Rules implements Serializable {
     @ManyToOne
     @JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Org org;
+
+    private String url;
+
+    private String realPath;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getRealPath() {
+        return realPath;
+    }
+
+    public void setRealPath(String realPath) {
+        this.realPath = realPath;
+    }
+
     public String getId() {
         return id;
     }

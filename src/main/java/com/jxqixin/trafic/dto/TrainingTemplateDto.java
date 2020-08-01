@@ -1,8 +1,8 @@
 package com.jxqixin.trafic.dto;
 /**
- * 会议或培训模板
+ * 培训模板
  */
-public class MeetingTemplateDto {
+public class TrainingTemplateDto {
 	private String id;
 	/**名称*/
 	private String name;
@@ -10,50 +10,81 @@ public class MeetingTemplateDto {
 	private String note;
 	/**模板文本内容*/
 	private String content;
-	/**会议名称*/
-	private String meetingName;
-	/**开会日期*/
-	private String meetingDate;
-	/**闭会日期*/
-	private String emdMeetingDate;
-	/**会议地点*/
-	private String meetingPlace;
+	/**培训名称*/
+	private String trainingName;
+	/**开会日期，年月日*/
+	private String trainingDate;
+	/**培训地点*/
+	private String trainingPlace;
 	/**主持人*/
 	private String president;
 	/**记录人*/
 	private String recorder;
-	/**到场人员*/
+	/**参加对象*/
 	private String attendants;
-	/**到场人数*/
+	/**应到人数*/
 	private int attendance;
-	/**最后形成意见或决定*/
-	private String finalDecision;
+	/**实到人数*/
+	private int realAttendance;
 	private String provinceId;
 	private String cityId;
 	private String regionId;
 	private String orgCategoryId;
-	public String getMeetingName() {
-		return meetingName;
+
+	public String getId() {
+		return id;
 	}
 
-	public void setMeetingName(String meetingName) {
-		this.meetingName = meetingName;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getMeetingDate() {
-		return meetingDate;
+	public String getName() {
+		return name;
 	}
 
-	public void setMeetingDate(String meetingDate) {
-		this.meetingDate = meetingDate;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getMeetingPlace() {
-		return meetingPlace;
+	public String getNote() {
+		return note;
 	}
 
-	public void setMeetingPlace(String meetingPlace) {
-		this.meetingPlace = meetingPlace;
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getTrainingName() {
+		return trainingName;
+	}
+
+	public void setTrainingName(String trainingName) {
+		this.trainingName = trainingName;
+	}
+
+	public String getTrainingDate() {
+		return trainingDate;
+	}
+
+	public void setTrainingDate(String trainingDate) {
+		this.trainingDate = trainingDate;
+	}
+
+	public String getTrainingPlace() {
+		return trainingPlace;
+	}
+
+	public void setTrainingPlace(String trainingPlace) {
+		this.trainingPlace = trainingPlace;
 	}
 
 	public String getPresident() {
@@ -88,20 +119,12 @@ public class MeetingTemplateDto {
 		this.attendance = attendance;
 	}
 
-	public String getEmdMeetingDate() {
-		return emdMeetingDate;
+	public int getRealAttendance() {
+		return realAttendance;
 	}
 
-	public void setEmdMeetingDate(String emdMeetingDate) {
-		this.emdMeetingDate = emdMeetingDate;
-	}
-
-	public String getFinalDecision() {
-		return finalDecision;
-	}
-
-	public void setFinalDecision(String finalDecision) {
-		this.finalDecision = finalDecision;
+	public void setRealAttendance(int realAttendance) {
+		this.realAttendance = realAttendance;
 	}
 
 	public String getProvinceId() {
@@ -134,37 +157,5 @@ public class MeetingTemplateDto {
 
 	public void setOrgCategoryId(String orgCategoryId) {
 		this.orgCategoryId = orgCategoryId;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
 	}
 }

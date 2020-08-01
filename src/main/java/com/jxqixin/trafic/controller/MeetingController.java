@@ -35,6 +35,17 @@ public class MeetingController extends CommonController{
         Page page = meetingService.findMeetings(nameDto,type);
         return pageModelMap(page);
     }
+
+    /**
+     * 引入模板
+     * @param templateId
+     * @return
+     */
+    @PostMapping("/meeting/template")
+    public JsonResult importTemplate(String templateId, HttpServletRequest request){
+        meetingService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
+        return new JsonResult(Result.SUCCESS);
+    }
     /**
      * 新增会议或培训
      * @param meetingDto
@@ -88,17 +99,12 @@ public class MeetingController extends CommonController{
     public JsonResult updateContent(MeetingDto meetingDto){
         Meeting savedMeeting = meetingService.queryObjById(meetingDto.getId());
         savedMeeting.setContent(meetingDto.getContent());
-        savedMeeting.setTheme(meetingDto.getTheme());
         savedMeeting.setMeetingName(meetingDto.getMeetingName());
         savedMeeting.setMeetingPlace(meetingDto.getMeetingPlace());
-        savedMeeting.setAbsent(meetingDto.getAbsent());
-        savedMeeting.setAttendance(meetingDto.getAttendance());
         savedMeeting.setAttendants(meetingDto.getAttendants());
-        savedMeeting.setProblems(meetingDto.getProblems());
-        savedMeeting.setMethods(meetingDto.getMethods());
         savedMeeting.setPresident(meetingDto.getPresident());
         savedMeeting.setRecorder(meetingDto.getRecorder());
-        savedMeeting.setTemplateNote(meetingDto.getTemplateNote());
+        savedMeeting.setFinalDecision(meetingDto.getFinalDecision());
         meetingService.updateObj(savedMeeting);
         return new JsonResult(Result.SUCCESS);
     }

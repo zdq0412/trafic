@@ -131,14 +131,15 @@ public class DangerGoodsCheckController extends CommonController{
         dangerGoodsCheckService.updateDetails(id,detailList);
         return new JsonResult(Result.SUCCESS);
     }
-
-    public static void main(String[] args) {
-        String[] str = "|a||b|".split("\\|");
-        for(int i = 0;i<str.length;i++){
-            System.out.println(str[i]);
-        }
-
-        System.out.println(str.length);
+    /**
+     * 引入模板
+     * @param templateId
+     * @return
+     */
+    @PostMapping("/dangerGoodsCheck/template")
+    public JsonResult importTemplate(String templateId, HttpServletRequest request){
+        dangerGoodsCheckService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
+        return new JsonResult(Result.SUCCESS);
     }
     /**
      * 根据ID删除危险货物隐患
