@@ -81,7 +81,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			}
 
 			//根据手机号查找人员
-			Employee employee1 = employeeRepository.findByTel(employeeDto.getTel());
+			User employee1 = userRepository.findByUsername(employeeDto.getTel());
 			if(employee1!=null){
 				throw new RuntimeException("手机号已被使用!");
 			}
@@ -107,7 +107,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		if(StringUtils.isEmpty(employeeDto.getIdnum())){
 			throw new RuntimeException("身份证号不能为空!");
 		}else {
-			Employee employee1 = employeeRepository.findByIdnum(employeeDto.getIdnum());
+			Employee employee1 = employeeRepository.findByIdnum(employeeDto.getIdnum(),org.getId());
 			if(employee1!=null){
 				throw new RuntimeException("身份证号已被使用!");
 			}
@@ -132,7 +132,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 	}
 
 	@Override
-	public void updateEmployee(EmployeeDto employeeDto) {
+	public void updateEmployee(EmployeeDto employeeDto,Org org) {
 		Employee employee = (Employee) employeeRepository.findById(employeeDto.getId()).get();
 		if(!StringUtils.isEmpty(employeeDto.getPhoto()) && !employeeDto.getPhoto().equals(employee.getPhoto())){
 				File photo = new File(employee.getRealPath());
@@ -165,7 +165,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		if(StringUtils.isEmpty(employeeDto.getIdnum())){
 			throw new RuntimeException("身份证号不能为空!");
 		}else {
-			Employee employee1 = employeeRepository.findByIdnum(employeeDto.getIdnum());
+			Employee employee1 = employeeRepository.findByIdnum(employeeDto.getIdnum(),org.getId());
 			if(employee1!=null && !employee1.getId().equals(employeeDto.getId())){
 				throw new RuntimeException("身份证号已被使用!");
 			}
@@ -203,7 +203,11 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 
 	@Override
 	public void deleteEmployee(String id) {
+		Employee employee = (Employee) employeeRepository.findById(id).get();
 		employeeRepository.updateOrg2Null(id);
+		String userId = employee.getUser().getId();
+		employeeRepository.updateUser2NullByUserId(userId);
+		userRepository.deleteById(userId);
 	}
 
 	@Override

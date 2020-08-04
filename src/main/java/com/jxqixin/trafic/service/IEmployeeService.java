@@ -24,12 +24,11 @@ public interface IEmployeeService extends ICommonService<Employee> {
      * @param employeeDto
      */
     void addEmployee(EmployeeDto employeeDto, Org org);
-
     /**
      * 更新人员
      * @param employeeDto
      */
-    void updateEmployee(EmployeeDto employeeDto);
+    void updateEmployee(EmployeeDto employeeDto,Org org);
 
     /**
      * 根据ID删除人员

@@ -109,7 +109,7 @@ public class EmployeeController extends CommonController{
             }
             employeeDto.setPhoto(urlMapping);
             employeeDto.setRealPath(savedFile.getAbsolutePath());
-            employeeService.updateEmployee(employeeDto);
+            employeeService.updateEmployee(employeeDto,getOrg(request));
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
             result = Result.FAIL;
@@ -127,7 +127,7 @@ public class EmployeeController extends CommonController{
         User user = userService.queryUserByUsername(getCurrentUsername(request));
         Result result = Result.SUCCESS;
         try {
-            employeeService.updateEmployee(employeeDto);
+            employeeService.updateEmployee(employeeDto,getOrg(request));
         } catch (RuntimeException  e) {
             e.printStackTrace();
             result = Result.FAIL;

@@ -810,6 +810,137 @@ create table m024_tank_vehicle(
    constraint fk_m024_tank_vehicle_org_org_id foreign key(org_id) references org(id)
 ) comment '危险货物道路运输罐式车辆罐体检查记录表';
 
+#人员档案：简历
+drop table if exists m011_resume;
+create table m011_resume(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+  deleted bit default 0 comment '删除标识',
+  emp_id varchar(36) comment '所属人员',
+  constraint fk_m011_resume_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
+  )comment '人员档案：简历';
+
+#人员档案：身份证
+drop table if exists m011_idcard;
+create table m011_idcard(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  beginDate timestamp comment '起始日期',
+  endDate timestamp comment '终止日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+   deleted bit default 0  comment '删除标识',
+  emp_id varchar(36) comment '所属人员',
+  constraint fk_m011_idcard_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
+  )comment '人员档案：身份证';
+
+#人员档案：劳动合同
+drop table if exists m011_contract;
+create table m011_contract(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  beginDate timestamp comment '起始日期',
+  endDate timestamp comment '终止日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+   deleted bit default 0  comment '删除标识',
+  emp_id varchar(36) comment '所属人员',
+  constraint fk_m011_contract_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
+  )comment '人员档案：劳动合同';
+
+#人员档案：资质文件
+drop table if exists m011_qualification_document;
+create table m011_qualification_document(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  beginDate timestamp comment '起始日期',
+  endDate timestamp comment '终止日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+   deleted bit default 0  comment '删除标识',
+  emp_id varchar(36) comment '所属人员',
+  constraint fk_m011_qualification_document_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
+  )comment '人员档案：资质文件';
+
+#人员档案：从业情况历史
+drop table if exists m011_job_history;
+create table m011_job_history(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+   deleted bit default 0  comment '删除标识',
+  emp_id varchar(36) comment '所属人员',
+  constraint fk_m011_job_history_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
+  )comment '人员档案：从业情况历史';
+
+#人员档案：三级教育(入职培训)
+drop table if exists m011_induction_training;
+create table m011_induction_training(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+   deleted bit default 0  comment '删除标识',
+  emp_id varchar(36) comment '所属人员',
+  constraint fk_m011_induction_training_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
+  )comment '人员档案：三级教育(入职培训)';
 
 
+#人员档案：安全责任书
+drop table if exists m011_safety_responsibility_agreement;
+create table m011_safety_responsibility_agreement(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  beginDate timestamp comment '起始日期',
+  endDate timestamp comment '终止日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+   deleted bit  default 0  comment '删除标识',
+  emp_id varchar(36) comment '所属人员',
+  constraint fk_m011_safety_responsibility_agreement_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
+  )comment '人员档案：安全责任书';
 
+#人员档案：培训考核情况
+drop table if exists m011_training_examine;
+create table m011_training_examine(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+   deleted bit default 0  comment '删除标识',
+  emp_id varchar(36) comment '所属人员',
+  constraint fk_m011_training_examine_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
+  )comment '人员档案：培训考核情况';
+
+#人员档案：其他人员档案，打包上传
+drop table if exists m011_other_document;
+create table m011_other_document(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp comment '创建日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+   deleted bit default 0  comment '删除标识',
+  emp_id varchar(36) comment '所属人员',
+  constraint fk_m011_other_document_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
+  )comment '人员档案：其他人员档案，打包上传';

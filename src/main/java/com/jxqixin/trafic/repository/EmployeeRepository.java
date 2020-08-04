@@ -17,7 +17,8 @@ public interface EmployeeRepository<ID extends Serializable> extends CommonRepos
      * @param idnum
      * @return
      */
-    Employee findByIdnum(String idnum);
+    @Query(nativeQuery = true,value = "select e.* from m003_employee e where idnum=?1 and org_id=?2")
+    Employee findByIdnum(String idnum,String orgId);
     /**
      * 将企业信息设置为空
      * @param id
