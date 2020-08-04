@@ -590,6 +590,7 @@ create table m042_security_check_template(
   createDate timestamp comment '创建日期',
   checkDate timestamp comment '安全检查日期',
   supervisorsSign varchar(500) comment '检查人员签字,以后可能为签字图片路径',
+  confirmerSign varchar(500) comment '整改结果确认人签字,以后可能为签字图片路径',
   checkedObjectSign varchar(500) comment '受检查对象签字,以后可能为签字图片路径',
   creator varchar(100) comment '创建人',
   url varchar(500) comment '签名文件访问路径',
@@ -611,17 +612,18 @@ drop table if exists m023_security_check;
 create table m023_security_check(
   id varchar(36) primary key comment '主键',
   name varchar(500) comment '名称',
-  checkObject varchar(500) comment '检查对象',
-  deptAndEmp varchar(500) comment '监督检查的部门及人员',
-  content varchar(2000) comment '检查的内容',
-  problems varchar(2000) comment '提出的问题',
+  checkObject varchar(500) comment '受检单位(部门、车辆)',
+  deptAndEmp varchar(500) comment '参加监督检查的单位(部门)及人员',
+  content varchar(2000) comment '监督检查的主要内容',
+  problems varchar(2000) comment '监督检查中查出的问题',
   result varchar(2000) comment '整改结果',
   suggestion varchar(2000) comment '检查组处理意见',
   note varchar(2000) comment '备注',
   createDate timestamp comment '创建日期',
   checkDate timestamp comment '安全检查日期',
   supervisorsSign varchar(500) comment '检查人员签字,以后可能为签字图片路径',
-  checkedObjectSign varchar(500) comment '受检查对象签字,以后可能为签字图片路径',
+  confirmerSign varchar(500) comment '整改结果确认人签字,以后可能为签字图片路径',
+  checkedObjectSign varchar(500) comment '受检单位代表人签字,以后可能为签字图片路径',
   creator varchar(100) comment '创建人',
    url varchar(500) comment '签名文件访问路径',
   realPath varchar(500) comment '实际存储路径',
@@ -807,4 +809,7 @@ create table m024_tank_vehicle(
   org_id varchar(36) comment '企业ID',
    constraint fk_m024_tank_vehicle_org_org_id foreign key(org_id) references org(id)
 ) comment '危险货物道路运输罐式车辆罐体检查记录表';
+
+
+
 

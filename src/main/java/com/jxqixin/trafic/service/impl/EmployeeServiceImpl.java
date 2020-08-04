@@ -8,19 +8,24 @@ import com.jxqixin.trafic.repository.EmployeeRepository;
 import com.jxqixin.trafic.repository.UserRepository;
 import com.jxqixin.trafic.service.IEmployeeService;
 import com.jxqixin.trafic.util.IdCardUtil;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -42,9 +47,25 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 	}
 
 	@Override
-	public Page findEmployees(NameDto nameDto) {
+	public Page findEmployees(NameDto nameDto,Org org) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
-		return employeeRepository.findAll(new NameSpecification(nameDto),pageable);
+		return employeeRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> list = new ArrayList<>();
+				if(org!=null) {
+					Join<Employee, Org> orgJoin = root.join("org", JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
+				}
+
+				if(!StringUtils.isEmpty(nameDto.getName())){
+					list.add(criteriaBuilder.like(root.get("name"),"%" + nameDto.getName() +"%"));
+				}
+
+				Predicate[] predicates = new Predicate[list.size()];
+				return criteriaBuilder.and(list.toArray(predicates));
+			}
+		}, pageable);
 	}
 	@Override
 	public void addEmployee(EmployeeDto employeeDto, Org org) {
@@ -188,5 +209,19 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 	@Override
 	public Employee findByUsername(String username) {
 		return employeeRepository.findByUsername(username);
+	}
+
+	@Override
+	public List<Employee> findAllEmployees(Org org) {
+		if(org==null){
+			return employeeRepository.findAll();
+		}
+		return employeeRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				Join<Employee,Org> orgJoin = root.join("org");
+				return criteriaBuilder.equal(orgJoin.get("id"),org.getId());
+			}
+		});
 	}
 }

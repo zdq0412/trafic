@@ -40,3 +40,6 @@ mybatis:
   type-aliases-package: com.jxqixin.trafic.model
   mapper-locations: classpath:mapper/*.xml
 
+#超级管理员角色名称
+superRole: admin
+

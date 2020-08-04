@@ -70,11 +70,11 @@ public class MeetingController extends CommonController{
         return new JsonResult(Result.SUCCESS);
     }
     /**
-     * 编辑会议或培训
+     * 编辑会议
      * @param meetingDto
      * @return
      */
-    @PutMapping("/meeting/meeting")
+    @PostMapping("/meeting/updateMeeting")
     public JsonResult updateMeeting(MeetingDto meetingDto){
         Meeting savedMeeting = meetingService.queryObjById(meetingDto.getId());
         if(!StringUtils.isEmpty(meetingDto.getMeetingDate())){

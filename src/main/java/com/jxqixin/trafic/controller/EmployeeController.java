@@ -33,8 +33,8 @@ public class EmployeeController extends CommonController{
      * @return
      */
     @GetMapping("/employee/employees")
-    public JsonResult<List<Employee>> queryAllEmployee(){
-        List<Employee> list = employeeService.findAll();
+    public JsonResult<List<Employee>> queryAllEmployee(HttpServletRequest request){
+        List<Employee> list = employeeService.findAllEmployees(getOrg(request));
         return new JsonResult<>(Result.SUCCESS,list);
     }
     /**
@@ -43,8 +43,8 @@ public class EmployeeController extends CommonController{
      * @return
      */
     @GetMapping("/employee/employeesByPage")
-    public ModelMap queryEmployees(NameDto nameDto){
-        Page page = employeeService.findEmployees(nameDto);
+    public ModelMap queryEmployees(NameDto nameDto,HttpServletRequest request){
+        Page page = employeeService.findEmployees(nameDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

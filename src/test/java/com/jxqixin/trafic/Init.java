@@ -99,7 +99,8 @@ public class Init{
      */
     @Test
     public void addRoleFunctions(){
-        List<Functions> list = functionsService.findAll();
+        List<Functions> list = functionsService.findAdminRoleFunctions();
+       // List<Functions> list = functionsService.findAll();
         Role role = roleService.findByNameAndOrgId("admin",null);
 
         list.forEach(function -> {

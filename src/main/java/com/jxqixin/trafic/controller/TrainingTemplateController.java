@@ -40,7 +40,7 @@ public class TrainingTemplateController extends CommonController{
         return pageModelMap(page);
     }
     /**
-     * 新增会议或培训
+     * 新增培训
      * @param trainingTemplateDto
      * @return
      */
@@ -88,7 +88,7 @@ public class TrainingTemplateController extends CommonController{
         return new JsonResult(Result.SUCCESS);
     }
     /**
-     * 编辑会议或培训
+     * 编辑培训
      * @param trainingTemplateDto
      * @return
      */
@@ -152,6 +152,7 @@ public class TrainingTemplateController extends CommonController{
         savedTrainingTemplate.setTrainingName(trainingTemplateDto.getTrainingName());
         savedTrainingTemplate.setTrainingPlace(trainingTemplateDto.getTrainingPlace());
         savedTrainingTemplate.setAttendance(trainingTemplateDto.getAttendance());
+        savedTrainingTemplate.setRealAttendance(trainingTemplateDto.getRealAttendance());
         savedTrainingTemplate.setAttendants(trainingTemplateDto.getAttendants());
         savedTrainingTemplate.setPresident(trainingTemplateDto.getPresident());
         savedTrainingTemplate.setRecorder(trainingTemplateDto.getRecorder());

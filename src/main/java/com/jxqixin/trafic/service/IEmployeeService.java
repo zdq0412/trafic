@@ -4,6 +4,9 @@ import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Employee;
 import com.jxqixin.trafic.model.Org;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
+
 public interface IEmployeeService extends ICommonService<Employee> {
     /**
      * 根据员工ID删除
@@ -15,7 +18,7 @@ public interface IEmployeeService extends ICommonService<Employee> {
      * @param nameDto
      * @return
      */
-    Page findEmployees(NameDto nameDto);
+    Page findEmployees(NameDto nameDto,Org org);
     /**
      * 添加人员，同时添加对应用户
      * @param employeeDto
@@ -39,4 +42,11 @@ public interface IEmployeeService extends ICommonService<Employee> {
      * @return
      */
     Employee findByUsername(String username);
+
+    /**
+     * 查询企业内所有员工
+     * @param org
+     * @return
+     */
+    List<Employee> findAllEmployees(Org org);
 }

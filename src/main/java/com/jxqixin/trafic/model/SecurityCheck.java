@@ -30,6 +30,8 @@ public class SecurityCheck {
 	private String result;
 	/**检查组处理意见*/
 	private String suggestion ;
+	/**整改结果确认人签字*/
+	private String confirmerSign;
 	/**检查人员签字,以后可能为签字图片路径*/
 	private String supervisorsSign;
 	/**受检查对象签字,以后可能为签字图片路径*/
@@ -54,6 +56,14 @@ public class SecurityCheck {
 	@JoinColumn(name="org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Org org;
+
+	public String getConfirmerSign() {
+		return confirmerSign;
+	}
+
+	public void setConfirmerSign(String confirmerSign) {
+		this.confirmerSign = confirmerSign;
+	}
 
 	public String getSuggestion() {
 		return suggestion;

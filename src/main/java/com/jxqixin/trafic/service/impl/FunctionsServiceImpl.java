@@ -6,6 +6,7 @@ import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.*;
 import com.jxqixin.trafic.service.IFunctionsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +43,10 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	}
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Value("${superRole}")
+	private String superRole;
 	/**
 	 * 根据角色名称查找权限
 	 * @param roleName
@@ -79,9 +84,21 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	}
 	@Override
 	public List<Functions> findFunctions(String currentUsername) {
-		List<Functions> list = functionsRepository.findByUsername(currentUsername);
-		list.forEach(functions -> findChildren(functions,currentUsername));
-		return list;
+		Role role = userRepository.findByUsername(currentUsername).getRole();
+		List<Functions> list = null;
+		if(role!=null){
+			if(superRole.equals(role.getName())){
+				list = functionsRepository.findAll();
+			}else{
+				list = functionsRepository.findByUsername(currentUsername);
+			}
+		}
+		if(!CollectionUtils.isEmpty(list)) {
+			list.forEach(functions -> findChildren(functions, currentUsername));
+			return list;
+		}else{
+			return new ArrayList<>();
+		}
 	}
 	@Override
 	public List<String> findIdsByRoleId(String roleId) {
@@ -154,6 +171,11 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 		}
 		//修改企业类别权限
 		addOrFindOrgCategoryRole(functionIdArray,orgCategoryId);
+	}
+
+	@Override
+	public List<Functions> findAdminRoleFunctions() {
+		return functionsRepository.findAdminRoleFunctions();
 	}
 
 	/**

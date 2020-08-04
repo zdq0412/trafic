@@ -93,4 +93,9 @@ public interface IFunctionsService extends ICommonService<Functions> {
      * @param orgCategoryId
      */
     void assign2OrgCategory(String[] functionIdArray, String orgCategoryId);
+    /**
+     * 查找超级管理员的权限
+     * @return
+     */
+    List<Functions> findAdminRoleFunctions();
 }

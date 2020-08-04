@@ -17,6 +17,8 @@ public class SecurityCheckDto {
 	private String problems;
 	/**整改结果*/
 	private String result;
+	/**整改结果确认人签字*/
+	private String confirmerSign;
 	/**检查人员签字,以后可能为签字图片路径*/
 	private String supervisorsSign;
 	/**受检查对象签字,以后可能为签字图片路径*/
@@ -25,6 +27,14 @@ public class SecurityCheckDto {
 	private String checkDate;
 	/**备注*/
 	private String note;
+
+	public String getConfirmerSign() {
+		return confirmerSign;
+	}
+
+	public void setConfirmerSign(String confirmerSign) {
+		this.confirmerSign = confirmerSign;
+	}
 
 	public String getId() {
 		return id;
