@@ -48,14 +48,14 @@ public class SafetyResponsibilityAgreementController extends CommonController{
         safetyResponsibilityAgreement.setCreateDate(new Date());
         try {
             safetyResponsibilityAgreement.setBeginDate(format.parse(safetyResponsibilityAgreementDto.getBeginDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             safetyResponsibilityAgreement.setBeginDate(null);
         }
 
         try {
             safetyResponsibilityAgreement.setEndDate(format.parse(safetyResponsibilityAgreementDto.getEndDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             safetyResponsibilityAgreement.setEndDate(null);
         }
@@ -80,13 +80,13 @@ public class SafetyResponsibilityAgreementController extends CommonController{
         savedSafetyResponsibilityAgreement.setNote(safetyResponsibilityAgreementDto.getNote());
         try {
             savedSafetyResponsibilityAgreement.setBeginDate(format.parse(safetyResponsibilityAgreementDto.getBeginDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             savedSafetyResponsibilityAgreement.setBeginDate(null);
         }
         try {
             savedSafetyResponsibilityAgreement.setEndDate(format.parse(safetyResponsibilityAgreementDto.getEndDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             savedSafetyResponsibilityAgreement.setEndDate(null);
         }

@@ -44,14 +44,12 @@ public class QualificationDocumentController extends CommonController{
         qualificationDocument.setCreateDate(new Date());
         try {
             qualificationDocument.setBeginDate(format.parse(qualificationDocumentDto.getBeginDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             qualificationDocument.setBeginDate(null);
         }
         try {
             qualificationDocument.setEndDate(format.parse(qualificationDocumentDto.getEndDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             qualificationDocument.setEndDate(null);
         }
         if(!StringUtils.isEmpty(qualificationDocumentDto.getEmpId())){
@@ -75,14 +73,12 @@ public class QualificationDocumentController extends CommonController{
         savedQualificationDocument.setNote(qualificationDocumentDto.getNote());
         try {
             savedQualificationDocument.setBeginDate(format.parse(qualificationDocumentDto.getBeginDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             savedQualificationDocument.setBeginDate(null);
         }
         try {
             savedQualificationDocument.setEndDate(format.parse(qualificationDocumentDto.getEndDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             savedQualificationDocument.setEndDate(null);
         }
         qualificationDocumentService.updateObj(savedQualificationDocument);

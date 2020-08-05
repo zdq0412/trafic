@@ -31,7 +31,7 @@ public class TrainingExamine implements Serializable {
 	/**真实路径，即存储路径*/
 	private String realPath;
 	/**删除标识*/
-	private Boolean deleted;
+	private Boolean deleted=false;
 	@ManyToOne
 	@JoinColumn(name="emp_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)

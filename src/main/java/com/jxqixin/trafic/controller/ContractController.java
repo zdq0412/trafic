@@ -49,13 +49,13 @@ public class ContractController extends CommonController{
         contract.setCreateDate(new Date());
         try {
             contract.setBeginDate(format.parse(contractDto.getBeginDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             contract.setBeginDate(null);
         }
         try {
             contract.setEndDate(format.parse(contractDto.getEndDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             contract.setEndDate(null);
         }
@@ -80,14 +80,14 @@ public class ContractController extends CommonController{
         savedContract.setNote(contractDto.getNote());
         try {
             savedContract.setBeginDate(format.parse(contractDto.getBeginDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             savedContract.setBeginDate(null);
         }
 
         try {
             savedContract.setEndDate(format.parse(contractDto.getEndDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             savedContract.setEndDate(null);
         }

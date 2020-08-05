@@ -50,14 +50,14 @@ public class IDCardController extends CommonController{
         idcard.setCreateDate(new Date());
         try {
             idcard.setBeginDate(format.parse(idcardDto.getBeginDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             idcard.setBeginDate(null);
         }
 
         try {
             idcard.setEndDate(format.parse(idcardDto.getEndDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             idcard.setEndDate(null);
         }
@@ -82,13 +82,13 @@ public class IDCardController extends CommonController{
         savedIDCard.setNote(idcardDto.getNote());
         try {
             savedIDCard.setBeginDate(format.parse(idcardDto.getBeginDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             savedIDCard.setBeginDate(null);
         }
         try {
             savedIDCard.setEndDate(format.parse(idcardDto.getEndDate()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             savedIDCard.setEndDate(null);
         }
