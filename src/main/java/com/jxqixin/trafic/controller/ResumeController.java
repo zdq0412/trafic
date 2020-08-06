@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import java.util.List;
 public class ResumeController extends CommonController{
     @Autowired
     private IResumeService resumeService;
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询
      * @param resumeDto
@@ -44,6 +46,16 @@ public class ResumeController extends CommonController{
         Resume resume = new Resume();
         BeanUtils.copyProperties(resumeDto,resume);
         resume.setCreateDate(new Date());
+        try {
+            resume.setBeginDate(format.parse(resumeDto.getBeginDate()));
+        } catch (Exception e) {
+            resume.setBeginDate(null);
+        }
+        try {
+            resume.setEndDate(format.parse(resumeDto.getEndDate()));
+        } catch (Exception e) {
+            resume.setEndDate(null);
+        }
         if(!StringUtils.isEmpty(resumeDto.getEmpId())){
             Employee employee = new Employee();
             employee.setId(resumeDto.getEmpId());
@@ -61,6 +73,16 @@ public class ResumeController extends CommonController{
     @PutMapping("/resume/resume")
     public JsonResult updateResume(ResumeDto resumeDto){
         Resume savedResume = resumeService.queryObjById(resumeDto.getId());
+        try {
+            savedResume.setBeginDate(format.parse(resumeDto.getBeginDate()));
+        } catch (Exception e) {
+            savedResume.setBeginDate(null);
+        }
+        try {
+            savedResume.setEndDate(format.parse(resumeDto.getEndDate()));
+        } catch (Exception e) {
+            savedResume.setEndDate(null);
+        }
         savedResume.setName(resumeDto.getName());
         savedResume.setNote(resumeDto.getNote());
         resumeService.updateObj(savedResume);

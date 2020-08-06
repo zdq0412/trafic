@@ -19,6 +19,8 @@ public class Position implements Serializable {
 	private String name;
 	/**职位描述*/
 	private String note;
+	/**是否为管理层，管理层人员可参加安全会议*/
+	private Boolean managementLayer = false;
 	/**所在部门*/
 	@ManyToOne
 	@JoinColumn(name = "department_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -29,6 +31,14 @@ public class Position implements Serializable {
 	@JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Org org;
+
+	public Boolean getManagementLayer() {
+		return managementLayer;
+	}
+
+	public void setManagementLayer(Boolean managementLayer) {
+		this.managementLayer = managementLayer;
+	}
 
 	public String getId() {
 		return id;

@@ -44,6 +44,26 @@ public class SafetyProductionCostPlanDetail {
 	@ManyToOne
 	@JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private Org org;
+	/**文件访问路径*/
+	private String url;
+	/**文件存储路径*/
+	private String realPath;
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getRealPath() {
+		return realPath;
+	}
+
+	public void setRealPath(String realPath) {
+		this.realPath = realPath;
+	}
 
 	public Org getOrg() {
 		return org;

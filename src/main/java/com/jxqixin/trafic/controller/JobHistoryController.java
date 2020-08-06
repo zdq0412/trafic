@@ -24,6 +24,7 @@ import java.util.Date;
 public class JobHistoryController extends CommonController{
     @Autowired
     private IJobHistoryService jobHistoryService;
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询
      * @param jobHistoryDto
@@ -44,6 +45,16 @@ public class JobHistoryController extends CommonController{
         JobHistory jobHistory = new JobHistory();
         BeanUtils.copyProperties(jobHistoryDto,jobHistory);
         jobHistory.setCreateDate(new Date());
+        try {
+            jobHistory.setBeginDate(format.parse(jobHistoryDto.getBeginDate()));
+        } catch (Exception e) {
+            jobHistory.setBeginDate(null);
+        }
+        try {
+            jobHistory.setEndDate(format.parse(jobHistoryDto.getEndDate()));
+        } catch (Exception e) {
+            jobHistory.setEndDate(null);
+        }
         if(!StringUtils.isEmpty(jobHistoryDto.getEmpId())){
             Employee employee = new Employee();
             employee.setId(jobHistoryDto.getEmpId());
@@ -61,6 +72,16 @@ public class JobHistoryController extends CommonController{
     @PutMapping("/jobHistory/jobHistory")
     public JsonResult updateJobHistory(JobHistoryDto jobHistoryDto){
         JobHistory savedJobHistory = jobHistoryService.queryObjById(jobHistoryDto.getId());
+        try {
+            savedJobHistory.setBeginDate(format.parse(jobHistoryDto.getBeginDate()));
+        } catch (Exception e) {
+            savedJobHistory.setBeginDate(null);
+        }
+        try {
+            savedJobHistory.setEndDate(format.parse(jobHistoryDto.getEndDate()));
+        } catch (Exception e) {
+            savedJobHistory.setEndDate(null);
+        }
         savedJobHistory.setName(jobHistoryDto.getName());
         savedJobHistory.setNote(jobHistoryDto.getNote());
         jobHistoryService.updateObj(savedJobHistory);

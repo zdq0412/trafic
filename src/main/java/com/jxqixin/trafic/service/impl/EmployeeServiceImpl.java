@@ -91,6 +91,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
 			user.setOrg(org);
 			user.setTel(employee.getTel());
+			user.setRealname(employee.getName());
 			user.setCreateDate(new Date());
 			if(!StringUtils.isEmpty(employeeDto.getRoleId())){
 				Role role = new Role();
@@ -223,8 +224,32 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		return employeeRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> list = new ArrayList<>();
 				Join<Employee,Org> orgJoin = root.join("org");
-				return criteriaBuilder.equal(orgJoin.get("id"),org.getId());
+				list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
+				Predicate[] predicates = new Predicate[list.size()];
+				return criteriaBuilder.and(list.toArray(predicates));
+			}
+		});
+	}
+
+	@Override
+	public List<Employee> findManagementLayers(Org org) {
+		if(org==null){
+			return employeeRepository.findAll();
+		}
+		return employeeRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> list = new ArrayList<>();
+				Join<Employee,Org> orgJoin = root.join("org");
+				list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
+
+				Join<Employee,Position> positionJoin = root.join("position",JoinType.INNER);
+				list.add(criteriaBuilder.equal(positionJoin.get("managementLayer"),true));
+
+				Predicate[] predicates = new Predicate[list.size()];
+				return criteriaBuilder.and(list.toArray(predicates));
 			}
 		});
 	}

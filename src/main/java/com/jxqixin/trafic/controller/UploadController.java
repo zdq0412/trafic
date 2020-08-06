@@ -38,6 +38,8 @@ public class UploadController extends CommonController {
     private ITrainingExamineService trainingExamineService;
     @Autowired
     private IOtherDocumentService otherDocumentService;
+    @Autowired
+    private ISafetyProductionCostPlanDetailService safetyProductionCostPlanDetailService;
     /**
      * 上传人员档案
      * @return
@@ -54,6 +56,37 @@ public class UploadController extends CommonController {
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
            updateUrlAndRealPath(urlMapping,savedFile.getAbsolutePath(),uploadFileDto);
+        } catch (RuntimeException | IOException e) {
+            e.printStackTrace();
+            result = Result.FAIL;
+            result.setMessage(e.getMessage());
+        }
+        return new JsonResult(result,urlMapping);
+    }
+    /**
+     * 上传安全投入台账
+     * @return
+     */
+    @PostMapping("/safetyAccountUpload")
+    public JsonResult safetyAccountUpload(@RequestParam("file") MultipartFile file, UploadFileDto uploadFileDto, HttpServletRequest request){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        String urlMapping = "";
+        Result result = Result.SUCCESS;
+        try {
+            String dir = (user.getOrg()==null?"":(user.getOrg().getName()+"/")) + "safetyAccount";
+            File savedFile = upload(dir, file);
+            if (savedFile != null) {
+                urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
+            }
+
+            SafetyProductionCostPlanDetail  detail = safetyProductionCostPlanDetailService.queryObjById(uploadFileDto.getId());
+            if(!StringUtils.isEmpty(detail.getRealPath())){
+                deleteTemplateFile(detail.getRealPath());
+            }
+            detail.setUrl(urlMapping);
+            detail.setRealPath(savedFile.getAbsolutePath());
+
+            safetyProductionCostPlanDetailService.updateObj(detail);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
             result = Result.FAIL;

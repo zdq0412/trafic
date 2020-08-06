@@ -5,6 +5,15 @@ public class PositionDto extends PageDto {
 	private String name;
 	private String departmentId;
 	private String note;
+    private boolean managementLayer;
+
+	public boolean isManagementLayer() {
+		return managementLayer;
+	}
+
+	public void setManagementLayer(boolean managementLayer) {
+		this.managementLayer = managementLayer;
+	}
 
 	public String getNote() {
 		return note;

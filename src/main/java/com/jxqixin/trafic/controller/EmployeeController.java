@@ -29,6 +29,15 @@ public class EmployeeController extends CommonController{
     @Autowired
     private IUserService userService;
     /**
+     * 查询管理层
+     * @return
+     */
+    @GetMapping("/employee/managementLayers")
+    public JsonResult<List<Employee>> queryManagementLayers(HttpServletRequest request){
+        List<Employee> list = employeeService.findManagementLayers(getOrg(request));
+        return new JsonResult<>(Result.SUCCESS,list);
+    }
+    /**
      * 查询所有企业员工
      * @return
      */

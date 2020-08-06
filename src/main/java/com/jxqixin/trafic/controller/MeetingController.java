@@ -4,7 +4,9 @@ import com.jxqixin.trafic.dto.MeetingDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Meeting;
+import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IMeetingService;
+import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,16 +19,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 /**
- * 会议会议或培训控制器
+ * 会议控制器
  */
 @RestController
 public class MeetingController extends CommonController{
     @Autowired
     private IMeetingService meetingService;
+    @Autowired
+    private IUserService userService;
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
-     * 分页查询会议或培训
+     * 分页查询会议
      * @param nameDto
      * @return
      */
@@ -47,12 +51,13 @@ public class MeetingController extends CommonController{
         return new JsonResult(Result.SUCCESS);
     }
     /**
-     * 新增会议或培训
+     * 新增会议
      * @param meetingDto
      * @return
      */
     @PostMapping("/meeting/meeting")
     public JsonResult addMeeting(MeetingDto meetingDto,HttpServletRequest request){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
         Meeting savedMeeting = new Meeting();
         BeanUtils.copyProperties(meetingDto,savedMeeting);
         if(!StringUtils.isEmpty(meetingDto.getMeetingDate())){
@@ -63,6 +68,7 @@ public class MeetingController extends CommonController{
                 savedMeeting.setMeetingDate(new Date());
             }
         }
+        savedMeeting.setRecorder(user.getRealname());
         savedMeeting.setCreateDate(new Date());
         savedMeeting.setOrg(getOrg(request ));
         savedMeeting.setCreator(getCurrentUsername(request));

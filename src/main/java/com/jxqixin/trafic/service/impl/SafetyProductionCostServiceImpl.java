@@ -109,16 +109,31 @@ public class SafetyProductionCostServiceImpl extends CommonServiceImpl<SafetyPro
 		//查询安全生产费用对象
 		SafetyProductionCost cost = safetyProductionCostRepository.findByOrgIdAndYear(org.getId(),c.get(Calendar.YEAR));
 		SafetyProductionCostVo vo = new SafetyProductionCostVo();
-		if(cost == null)return vo;
-
+		//查询所有类别
+		List<SafetyProductionCostPlan> plans = null;
+		if(cost == null){
+			cost = new SafetyProductionCost();
+			List<SafetyInvestmentCategory> list = safetyInvestmentCategoryRepository.findAll();
+			if(!CollectionUtils.isEmpty(list)){
+				plans = new ArrayList<>();
+				for(SafetyInvestmentCategory category : list){
+					SafetyProductionCostPlan plan = new SafetyProductionCostPlan();
+					BeanUtils.copyProperties(category,plan);
+					plan.setPlanCost(new BigDecimal("0.00"));
+					plans.add(plan);
+				}
+			}
+		}else{
+			plans = safetyProductionCostPlanRepository.findBySafetyProductionCostId(cost.getId());
+		}
 		BeanUtils.copyProperties(cost,vo);
 		Calendar nowCalendar = Calendar.getInstance();
 		nowCalendar.setTime(now);
 		//本年度截止月日已投入使用的各类安全生产费用合计
 		Double total = safetyProductionCostPlanDetailRepository.findSumByOrgIdAndDate(org.getId(),nowCalendar.get(Calendar.YEAR),now);
+		if(total==null)total=0d;
 		vo.setTotal(total);
-		//查询所有类别
-		List<SafetyProductionCostPlan> plans = safetyProductionCostPlanRepository.findBySafetyProductionCostId(cost.getId());
+
 		List<Object[]> details = null;
 		switch (type){
 			case "year":{
@@ -152,16 +167,33 @@ public class SafetyProductionCostServiceImpl extends CommonServiceImpl<SafetyPro
 		//查询安全生产费用对象
 		SafetyProductionCost cost = safetyProductionCostRepository.findByOrgIdAndYear(org.getId(),year);
 		CostTotalVo vo = new CostTotalVo();
-		if(cost == null)return vo;
+		//查询所有类别
+		List<SafetyProductionCostPlan> planList = null;
+		if(cost == null){
+			cost = new SafetyProductionCost();
+			List<SafetyInvestmentCategory> list = safetyInvestmentCategoryRepository.findAll();
+			if(!CollectionUtils.isEmpty(list)){
+				planList = new ArrayList<>();
+				for(SafetyInvestmentCategory category : list){
+					SafetyProductionCostPlan plan = new SafetyProductionCostPlan();
+					BeanUtils.copyProperties(category,plan);
+					plan.setPlanCost(new BigDecimal("0.00"));
+					planList.add(plan);
+				}
+			}
+		}else{
+			planList = safetyProductionCostPlanRepository.findBySafetyProductionCostId(cost.getId());
+		}
 		BeanUtils.copyProperties(cost,vo);
+		//查询所有类别
+		//List<SafetyProductionCostPlan> planList = safetyProductionCostPlanRepository.findBySafetyProductionCostId(cost.getId());
 		//本年度实际使用支出的安全费用
 		Double total = safetyProductionCostPlanDetailRepository.findSumByOrgIdAndYear(org.getId(),year);
+		if(total==null) total = 0d;
 		vo.setCurrentYearActualUsed(new BigDecimal(total));
 		BigDecimal costLeft = vo.getCurrentYearActualCost().subtract(vo.getCurrentYearActualUsed());
 		vo.setCostLeft(costLeft.doubleValue()<0?new BigDecimal("0.00"):costLeft);
 
-		//查询所有类别
-		List<SafetyProductionCostPlan> planList = safetyProductionCostPlanRepository.findBySafetyProductionCostId(cost.getId());
 		List<Object[]> totalUse = safetyProductionCostPlanRepository.findTotalUse(org.getId(),year);
 		List<SafetyProductionCostPlanVo> planVos = new ArrayList<>();
 		if(!CollectionUtils.isEmpty(totalUse)){

@@ -48,4 +48,10 @@ public interface IEmployeeService extends ICommonService<Employee> {
      * @return
      */
     List<Employee> findAllEmployees(Org org);
+    /**
+     * 查找管理层员工
+     * @param org
+     * @return
+     */
+    List<Employee> findManagementLayers(Org org);
 }

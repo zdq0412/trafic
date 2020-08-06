@@ -4,19 +4,19 @@ import com.jxqixin.trafic.dto.TrainingDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Training;
+import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.ITrainingService;
+import com.jxqixin.trafic.service.IUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 /**
  * 培训控制器
  */
@@ -24,7 +24,8 @@ import java.util.Date;
 public class TrainingController extends CommonController{
     @Autowired
     private ITrainingService trainingService;
-
+    @Autowired
+    private IUserService userService;
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * 分页查询培训
@@ -54,6 +55,7 @@ public class TrainingController extends CommonController{
      */
     @PostMapping("/training/training")
     public JsonResult addTraining(TrainingDto trainingDto,HttpServletRequest request){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
         Training savedTraining = new Training();
         BeanUtils.copyProperties(trainingDto,savedTraining);
         if(!StringUtils.isEmpty(trainingDto.getTrainingDate())){
@@ -64,6 +66,7 @@ public class TrainingController extends CommonController{
                 savedTraining.setTrainingDate(new Date());
             }
         }
+        savedTraining.setRecorder(user.getRealname());
         savedTraining.setCreateDate(new Date());
         savedTraining.setOrg(getOrg(request ));
         savedTraining.setCreator(getCurrentUsername(request));
@@ -92,7 +95,7 @@ public class TrainingController extends CommonController{
         return new JsonResult(Result.SUCCESS);
     }
     /**
-     * 修改会议或培训内容
+     * 修改培训内容
      * @param trainingDto
      * @return
      */
@@ -110,7 +113,7 @@ public class TrainingController extends CommonController{
         return new JsonResult(Result.SUCCESS);
     }
     /**
-     * 根据ID删除会议或培训
+     * 根据ID删除培训
      * @param id
      * @return
      */

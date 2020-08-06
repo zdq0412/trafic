@@ -111,7 +111,6 @@ public class Init{
         });
     }
 
-
     @Test
     public void importSafetyInvestmentCategory(){
         ExcelUtil excelUtil = new ImportSafetyInvestmentCategoryUtil();

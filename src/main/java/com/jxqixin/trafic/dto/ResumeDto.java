@@ -5,6 +5,8 @@ public class ResumeDto extends PageDto{
 	private String name;
 	private String note;
 	private String empId;
+	private String beginDate;
+	private String endDate;
 	public String getId() {
 		return id;
 	}
@@ -22,6 +24,22 @@ public class ResumeDto extends PageDto{
 	}
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getBeginDate() {
+		return beginDate;
+	}
+
+	public void setBeginDate(String beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
 	public String getEmpId() {

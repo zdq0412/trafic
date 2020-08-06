@@ -23,6 +23,7 @@ import java.util.Date;
 public class InductionTrainingController extends CommonController{
     @Autowired
     private IInductionTrainingService inductionTrainingService;
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询
      * @param inductionTrainingDto
@@ -43,6 +44,16 @@ public class InductionTrainingController extends CommonController{
         InductionTraining inductionTraining = new InductionTraining();
         BeanUtils.copyProperties(inductionTrainingDto,inductionTraining);
         inductionTraining.setCreateDate(new Date());
+        try {
+            inductionTraining.setBeginDate(format.parse(inductionTrainingDto.getBeginDate()));
+        } catch (Exception e) {
+            inductionTraining.setBeginDate(null);
+        }
+        try {
+            inductionTraining.setEndDate(format.parse(inductionTrainingDto.getEndDate()));
+        } catch (Exception e) {
+            inductionTraining.setEndDate(null);
+        }
         if(!StringUtils.isEmpty(inductionTrainingDto.getEmpId())){
             Employee employee = new Employee();
             employee.setId(inductionTrainingDto.getEmpId());
@@ -60,6 +71,16 @@ public class InductionTrainingController extends CommonController{
     @PutMapping("/inductionTraining/inductionTraining")
     public JsonResult updateInductionTraining(InductionTrainingDto inductionTrainingDto){
         InductionTraining savedInductionTraining = inductionTrainingService.queryObjById(inductionTrainingDto.getId());
+        try {
+            savedInductionTraining.setBeginDate(format.parse(inductionTrainingDto.getBeginDate()));
+        } catch (Exception e) {
+            savedInductionTraining.setBeginDate(null);
+        }
+        try {
+            savedInductionTraining.setEndDate(format.parse(inductionTrainingDto.getEndDate()));
+        } catch (Exception e) {
+            savedInductionTraining.setEndDate(null);
+        }
         savedInductionTraining.setName(inductionTrainingDto.getName());
         savedInductionTraining.setNote(inductionTrainingDto.getNote());
         inductionTrainingService.updateObj(savedInductionTraining);

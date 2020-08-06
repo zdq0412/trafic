@@ -230,6 +230,8 @@ create table m019_safety_production_cost_plan_detail(
  operator varchar(500) comment '经办人',
  note varchar(2000) comment '备注',
  org_id varchar(36) comment '所属企业ID',
+ url varchar(200) comment '文件访问路径',
+ realPath varchar(200) comment '文件存储路径',
  plan_id varchar(36) comment '年度安全生产费用使用计划id',
  constraint fk_m019_safety_production_cost_plan_plan_id foreign key(plan_id) references m019_safety_production_cost_plan(id),
   constraint fk_m019_safety_production_cost_plan_detail_org_org_id foreign  key(org_id) references org(id)
@@ -269,7 +271,8 @@ create table m002_position(
   id varchar(36) primary key comment '主键',
   name varchar(50) not null comment '职位名称',
   note varchar(500) comment '职位描述',
- department_id varchar(36) comment '所在部门',
+  managementLayer bit default  0 comment '是否为管理层，管理层可参加安全会议',
+  department_id varchar(36) comment '所在部门',
   org_id varchar(36) comment '企业id',
   constraint fk_m002_position_m002_department_id foreign key(department_id) REFERENCES m002_department(id),
   constraint fk_m002_department_m002_position_org_id foreign key(org_id) references org(id)
@@ -817,6 +820,8 @@ create table m011_resume(
   name varchar(500) comment '名称',
   note varchar(2000) comment '备注',
   createDate timestamp null comment '创建日期',
+  endDate timestamp null comment '截止日期',
+  beginDate timestamp null comment '起始日期',
   url varchar(2000) comment '文件访问路径',
   realPath varchar(2000) comment '实际存储路径',
   deleted bit default 0 comment '删除标识',
@@ -879,6 +884,8 @@ create table m011_job_history(
   name varchar(500) comment '名称',
   note varchar(2000) comment '备注',
   createDate timestamp null comment '创建日期',
+  endDate timestamp null comment '截止日期',
+  beginDate timestamp null comment '起始日期',
   url varchar(2000) comment '文件访问路径',
   realPath varchar(2000) comment '实际存储路径',
    deleted bit default 0  comment '删除标识',
@@ -893,6 +900,8 @@ create table m011_induction_training(
   name varchar(500) comment '名称',
   note varchar(2000) comment '备注',
   createDate timestamp null comment '创建日期',
+  endDate timestamp null comment '截止日期',
+  beginDate timestamp null comment '起始日期',
   url varchar(2000) comment '文件访问路径',
   realPath varchar(2000) comment '实际存储路径',
    deleted bit default 0  comment '删除标识',
@@ -924,6 +933,8 @@ create table m011_training_examine(
   name varchar(500) comment '名称',
   note varchar(2000) comment '备注',
   createDate timestamp null comment '创建日期',
+  endDate timestamp null comment '截止日期',
+  beginDate timestamp null comment '起始日期',
   url varchar(2000) comment '文件访问路径',
   realPath varchar(2000) comment '实际存储路径',
    deleted bit default 0  comment '删除标识',
@@ -938,9 +949,33 @@ create table m011_other_document(
   name varchar(500) comment '名称',
   note varchar(2000) comment '备注',
   createDate timestamp null comment '创建日期',
+  endDate timestamp null comment '截止日期',
+  beginDate timestamp null comment '起始日期',
   url varchar(2000) comment '文件访问路径',
   realPath varchar(2000) comment '实际存储路径',
    deleted bit default 0  comment '删除标识',
   emp_id varchar(36) comment '所属人员',
   constraint fk_m011_other_document_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
   )comment '人员档案：其他人员档案，打包上传';
+
+#设备管理
+drop table if exists m012_device;
+create table m012_device(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  equipmentCode varchar(50) comment '设备编码',
+  specification varchar(50) comment '规格型号',
+  manufacturer varchar(100) comment '厂商',
+  position varchar(200) comment '放置位置',
+  price decimal default 0.00 comment '单价',
+  buyDate timestamp null comment '购置日期',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  url varchar(2000) comment '文件访问路径',
+  realPath varchar(2000) comment '实际存储路径',
+  deleted bit default 0  comment '删除标识',
+  org_id varchar(36) comment '所属企业',
+  category_id varchar(36) comment '设备类别ID',
+  constraint fk_m012_device_org_org_id foreign key(org_id) references org(id)
+  constraint fk_m012_device_category_category_id foreign key(category_id) references category(id)
+  )comment '设备管理';

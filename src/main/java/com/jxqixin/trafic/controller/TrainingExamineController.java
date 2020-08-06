@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -22,6 +23,7 @@ import java.util.Date;
 public class TrainingExamineController extends CommonController{
     @Autowired
     private ITrainingExamineService trainingExamineService;
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询
      * @param trainingExamineDto
@@ -42,6 +44,16 @@ public class TrainingExamineController extends CommonController{
         TrainingExamine trainingExamine = new TrainingExamine();
         BeanUtils.copyProperties(trainingExamineDto,trainingExamine);
         trainingExamine.setCreateDate(new Date());
+        try {
+            trainingExamine.setBeginDate(format.parse(trainingExamineDto.getBeginDate()));
+        } catch (Exception e) {
+            trainingExamine.setBeginDate(null);
+        }
+        try {
+            trainingExamine.setEndDate(format.parse(trainingExamineDto.getEndDate()));
+        } catch (Exception e) {
+            trainingExamine.setEndDate(null);
+        }
         if(!StringUtils.isEmpty(trainingExamineDto.getEmpId())){
             Employee employee = new Employee();
             employee.setId(trainingExamineDto.getEmpId());
@@ -59,6 +71,16 @@ public class TrainingExamineController extends CommonController{
     @PutMapping("/trainingExamine/trainingExamine")
     public JsonResult updateTrainingExamine(TrainingExamineDto trainingExamineDto){
         TrainingExamine savedTrainingExamine = trainingExamineService.queryObjById(trainingExamineDto.getId());
+        try {
+            savedTrainingExamine.setBeginDate(format.parse(trainingExamineDto.getBeginDate()));
+        } catch (Exception e) {
+            savedTrainingExamine.setBeginDate(null);
+        }
+        try {
+            savedTrainingExamine.setEndDate(format.parse(trainingExamineDto.getEndDate()));
+        } catch (Exception e) {
+            savedTrainingExamine.setEndDate(null);
+        }
         savedTrainingExamine.setName(trainingExamineDto.getName());
         savedTrainingExamine.setNote(trainingExamineDto.getNote());
         trainingExamineService.updateObj(savedTrainingExamine);

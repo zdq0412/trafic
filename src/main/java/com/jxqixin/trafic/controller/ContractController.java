@@ -50,13 +50,11 @@ public class ContractController extends CommonController{
         try {
             contract.setBeginDate(format.parse(contractDto.getBeginDate()));
         } catch (Exception e) {
-            e.printStackTrace();
             contract.setBeginDate(null);
         }
         try {
             contract.setEndDate(format.parse(contractDto.getEndDate()));
         } catch (Exception e) {
-            e.printStackTrace();
             contract.setEndDate(null);
         }
         if(!StringUtils.isEmpty(contractDto.getEmpId())){
@@ -81,14 +79,12 @@ public class ContractController extends CommonController{
         try {
             savedContract.setBeginDate(format.parse(contractDto.getBeginDate()));
         } catch (Exception e) {
-            e.printStackTrace();
             savedContract.setBeginDate(null);
         }
 
         try {
             savedContract.setEndDate(format.parse(contractDto.getEndDate()));
         } catch (Exception e) {
-            e.printStackTrace();
             savedContract.setEndDate(null);
         }
         contractService.updateObj(savedContract);

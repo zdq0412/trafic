@@ -104,7 +104,7 @@ public class OrgController extends CommonController{
      * @param orgDto
      * @return
      */
-    @PutMapping("/org/org")
+    @PostMapping("/org/updateOrg")
     public JsonResult updateOrg(OrgDto orgDto){
         Org s = orgService.findByName(orgDto.getName());
 

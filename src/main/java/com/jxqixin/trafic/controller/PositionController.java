@@ -65,7 +65,7 @@ public class PositionController extends CommonController{
      * @param positionDto
      * @return
      */
-    @PutMapping("/position/position")
+    @PostMapping("/position/updatePosition")
     public JsonResult updatePosition(PositionDto positionDto){
         Position savedPosition = positionService.queryObjById(positionDto.getId());
         if(!StringUtils.isEmpty(positionDto.getDepartmentId())){
@@ -79,6 +79,7 @@ public class PositionController extends CommonController{
         }
         savedPosition.setName(positionDto.getName());
         savedPosition.setNote(positionDto.getNote());
+        savedPosition.setManagementLayer(positionDto.isManagementLayer());
         positionService.updateObj(savedPosition);
         return new JsonResult(Result.SUCCESS);
     }

@@ -36,6 +36,30 @@ public class OtherDocument implements Serializable {
 	@JoinColumn(name="emp_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Employee employee;
+	/**有效期起始日期*/
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date beginDate;
+	/**有效期截止日期*/
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date endDate;
+
+	public Date getBeginDate() {
+		return beginDate;
+	}
+
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 
 	public Date getCreateDate() {
 		return createDate;

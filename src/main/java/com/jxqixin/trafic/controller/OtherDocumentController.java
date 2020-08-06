@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -22,6 +23,7 @@ import java.util.Date;
 public class OtherDocumentController extends CommonController{
     @Autowired
     private IOtherDocumentService otherDocumentService;
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询
      * @param otherDocumentDto
@@ -42,6 +44,16 @@ public class OtherDocumentController extends CommonController{
         OtherDocument otherDocument = new OtherDocument();
         BeanUtils.copyProperties(otherDocumentDto,otherDocument);
         otherDocument.setCreateDate(new Date());
+        try {
+            otherDocument.setBeginDate(format.parse(otherDocumentDto.getBeginDate()));
+        } catch (Exception e) {
+            otherDocument.setBeginDate(null);
+        }
+        try {
+            otherDocument.setEndDate(format.parse(otherDocumentDto.getEndDate()));
+        } catch (Exception e) {
+            otherDocument.setEndDate(null);
+        }
         if(!StringUtils.isEmpty(otherDocumentDto.getEmpId())){
             Employee employee = new Employee();
             employee.setId(otherDocumentDto.getEmpId());
@@ -59,6 +71,16 @@ public class OtherDocumentController extends CommonController{
     @PutMapping("/otherDocument/otherDocument")
     public JsonResult updateOtherDocument(OtherDocumentDto otherDocumentDto){
         OtherDocument savedOtherDocument = otherDocumentService.queryObjById(otherDocumentDto.getId());
+        try {
+            savedOtherDocument.setBeginDate(format.parse(otherDocumentDto.getBeginDate()));
+        } catch (Exception e) {
+            savedOtherDocument.setBeginDate(null);
+        }
+        try {
+            savedOtherDocument.setEndDate(format.parse(otherDocumentDto.getEndDate()));
+        } catch (Exception e) {
+            savedOtherDocument.setEndDate(null);
+        }
         savedOtherDocument.setName(otherDocumentDto.getName());
         savedOtherDocument.setNote(otherDocumentDto.getNote());
         otherDocumentService.updateObj(savedOtherDocument);
