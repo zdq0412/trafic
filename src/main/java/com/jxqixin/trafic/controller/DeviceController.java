@@ -60,9 +60,9 @@ public class DeviceController extends CommonController{
             deviceDto.setRealPath(savedFile.getAbsolutePath());
             Device device = new Device();
             BeanUtils.copyProperties(deviceDto,device);
-            if(!StringUtils.isEmpty(deviceDto.getCategory_id())){
+            if(!StringUtils.isEmpty(deviceDto.getCategoryId())){
                 Category category = new Category();
-                category.setId(deviceDto.getCategory_id());
+                category.setId(deviceDto.getCategoryId());
 
                 device.setCategory(category);
             }
@@ -88,9 +88,9 @@ public class DeviceController extends CommonController{
         try {
             Device device = new Device();
             BeanUtils.copyProperties(deviceDto,device);
-            if(!StringUtils.isEmpty(deviceDto.getCategory_id())){
+            if(!StringUtils.isEmpty(deviceDto.getCategoryId())){
                 Category category = new Category();
-                category.setId(deviceDto.getCategory_id());
+                category.setId(deviceDto.getCategoryId());
 
                 device.setCategory(category);
             }
@@ -121,9 +121,9 @@ public class DeviceController extends CommonController{
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
             Device device = deviceService.queryObjById(deviceDto.getId());
-            if(!StringUtils.isEmpty(deviceDto.getCategory_id())){
+            if(!StringUtils.isEmpty(deviceDto.getCategoryId())){
                 Category category = new Category();
-                category.setId(deviceDto.getCategory_id());
+                category.setId(deviceDto.getCategoryId());
                 device.setCategory(category);
             }
             try {
@@ -158,9 +158,9 @@ public class DeviceController extends CommonController{
         Result result = Result.SUCCESS;
         try {
             Device device = deviceService.queryObjById(deviceDto.getId());
-            if(!StringUtils.isEmpty(deviceDto.getCategory_id())){
+            if(!StringUtils.isEmpty(deviceDto.getCategoryId())){
                 Category category = new Category();
-                category.setId(deviceDto.getCategory_id());
+                category.setId(deviceDto.getCategoryId());
                 device.setCategory(category);
             }
             try {

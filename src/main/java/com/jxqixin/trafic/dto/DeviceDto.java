@@ -1,16 +1,7 @@
 package com.jxqixin.trafic.dto;
 
-import com.jxqixin.trafic.model.Category;
-import com.jxqixin.trafic.model.Org;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 /**
  * 设备信息
  */
@@ -40,9 +31,8 @@ public class DeviceDto extends PageDto implements Serializable {
 	private String realPath;
 	/**删除标识*/
 	private Boolean deleted = false;
-	/**所在企业*/
-	private String org_id;
-	private String category_id;
+	/**设备类别ID*/
+	private String categoryId;
 
 	public String getId() {
 		return id;
@@ -148,19 +138,11 @@ public class DeviceDto extends PageDto implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public String getOrg_id() {
-		return org_id;
+	public String getCategoryId() {
+		return categoryId;
 	}
 
-	public void setOrg_id(String org_id) {
-		this.org_id = org_id;
-	}
-
-	public String getCategory_id() {
-		return category_id;
-	}
-
-	public void setCategory_id(String category_id) {
-		this.category_id = category_id;
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 }

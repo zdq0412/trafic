@@ -976,6 +976,22 @@ create table m012_device(
   deleted bit default 0  comment '删除标识',
   org_id varchar(36) comment '所属企业',
   category_id varchar(36) comment '设备类别ID',
-  constraint fk_m012_device_org_org_id foreign key(org_id) references org(id)
+  constraint fk_m012_device_org_org_id foreign key(org_id) references org(id),
   constraint fk_m012_device_category_category_id foreign key(category_id) references category(id)
   )comment '设备管理';
+
+#设备保养维修记录
+drop table if exists m012_device_maintain;
+create table m012_device_maintain(
+  id varchar(36) primary key comment '主键',
+  createDate timestamp  comment '创建时间',
+  operateDate timestamp  comment '操作时间:维修、保养或检修',
+  content varchar(2000) comment '维修、保养货检修内容',
+   price decimal default 0.00 comment '花费费用',
+  url varchar(2000) comment '文件访问路径',
+   note varchar(2000) comment '备注',
+  realPath varchar(2000) comment '实际存储路径',
+  deleted bit default 0  comment '删除标识',
+  device_id varchar(36) comment '设备ID',
+  constraint fk_m012_device_maintain_m012_device_device_id foreign key(device_id) references m012_device(id)
+  )comment '设备保养维修记录';

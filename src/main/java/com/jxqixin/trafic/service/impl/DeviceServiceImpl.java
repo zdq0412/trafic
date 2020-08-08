@@ -47,9 +47,9 @@ public class DeviceServiceImpl extends CommonServiceImpl<Device> implements IDev
 					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
 
-				if(!StringUtils.isEmpty(deviceDto.getCategory_id())){
+				if(!StringUtils.isEmpty(deviceDto.getCategoryId())){
 					Join<Device, Category> categoryJoin = root.join("category",JoinType.INNER);
-					list.add(criteriaBuilder.equal(categoryJoin.get("id"),deviceDto.getCategory_id()));
+					list.add(criteriaBuilder.equal(categoryJoin.get("id"),deviceDto.getCategoryId()));
 				}
 
 				if(!StringUtils.isEmpty(deviceDto.getName())){

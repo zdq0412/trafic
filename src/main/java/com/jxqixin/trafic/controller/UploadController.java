@@ -40,6 +40,10 @@ public class UploadController extends CommonController {
     private IOtherDocumentService otherDocumentService;
     @Autowired
     private ISafetyProductionCostPlanDetailService safetyProductionCostPlanDetailService;
+    @Autowired
+    private IDeviceService deviceService;
+    @Autowired
+    private IDeviceMaintainService deviceMaintainService;
     /**
      * 上传人员档案
      * @return
@@ -187,6 +191,28 @@ public class UploadController extends CommonController {
                 otherDocument.setUrl(url);
                 otherDocument.setRealPath(realPath);
                 otherDocumentService.updateObj(otherDocument);
+                break;
+            }
+            //上传设备文件
+            case "device":{
+                Device device = deviceService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(device.getRealPath())){
+                    deleteTemplateFile(device.getRealPath());
+                }
+                device.setUrl(url);
+                device.setRealPath(realPath);
+                deviceService.updateObj(device);
+                break;
+            }
+            //上传设备保养维修检修文件
+            case "deviceMaintain":{
+                DeviceMaintain deviceMaintain = deviceMaintainService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(deviceMaintain.getRealPath())){
+                    deleteTemplateFile(deviceMaintain.getRealPath());
+                }
+                deviceMaintain.setUrl(url);
+                deviceMaintain.setRealPath(realPath);
+                deviceMaintainService.updateObj(deviceMaintain);
                 break;
             }
         }
