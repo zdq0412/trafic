@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -27,6 +28,7 @@ public class DeviceMaintain implements Serializable {
 	/**维修保养检修日期*/
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Column(name = "operateDate")
 	private Date operDate;
 	/**维修保养检修内容*/
 	private String content;
@@ -40,6 +42,16 @@ public class DeviceMaintain implements Serializable {
 	@JoinColumn(name="device_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Device device;
+	/**费用*/
+	private BigDecimal price;
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
 
 	public String getContent() {
 		return content;

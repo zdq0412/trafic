@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 设备维修保养检修记录
@@ -13,12 +14,19 @@ public class DeviceMaintainDto extends PageDto implements Serializable {
 	private String createDate;
 	/**维修保养检修日期*/
 	private String operDate;
-	/**删除标识*/
-	private Boolean deleted=false;
 	private String deviceId;
+
+	private BigDecimal price;
 	/**维修保养检修内容 */
 	private String content;
 
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
 	public String getContent() {
 		return content;
 	}
@@ -49,14 +57,6 @@ public class DeviceMaintainDto extends PageDto implements Serializable {
 
 	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
-	}
-
-	public Boolean getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public String getId() {

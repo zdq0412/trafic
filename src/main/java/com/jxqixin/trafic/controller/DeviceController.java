@@ -17,6 +17,7 @@ import org.thymeleaf.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 /**
@@ -45,7 +46,7 @@ public class DeviceController extends CommonController{
      * @param deviceDto
      * @return
      */
-    @PostMapping("/device/addDevice")
+  /*  @PostMapping("/device/addDevice")
     public JsonResult addDevice(DeviceDto deviceDto, @RequestParam("file") MultipartFile file, HttpServletRequest request){
         User user = userService.queryUserByUsername(getCurrentUsername(request));
         String urlMapping = "";
@@ -75,7 +76,7 @@ public class DeviceController extends CommonController{
             result.setMessage(e.getMessage());
         }
         return new JsonResult(result,urlMapping);
-    }
+    }*/
     /**
      * 新增设备，不上传头像
      * @param deviceDto
@@ -93,6 +94,13 @@ public class DeviceController extends CommonController{
                 category.setId(deviceDto.getCategoryId());
 
                 device.setCategory(category);
+            }
+            if(!StringUtils.isEmpty(deviceDto.getBuyDate())){
+                try {
+                    device.setBuyDate(format.parse(deviceDto.getBuyDate()));
+                } catch (ParseException e) {
+                    deviceDto.setBuyDate(null);
+                }
             }
             device.setCreateDate(new Date());
             device.setOrg(getOrg(request));

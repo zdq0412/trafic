@@ -74,6 +74,7 @@ public class DeviceMaintainController extends CommonController{
         } catch (Exception e) {
             savedDeviceMaintain.setOperDate(null);
         }
+        savedDeviceMaintain.setPrice(deviceMaintainDto.getPrice());
         savedDeviceMaintain.setContent(deviceMaintainDto.getContent());
         deviceMaintainService.updateObj(savedDeviceMaintain);
         return new JsonResult(Result.SUCCESS);

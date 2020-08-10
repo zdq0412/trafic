@@ -1,8 +1,8 @@
 package com.jxqixin.trafic.service.impl;
 
 import com.jxqixin.trafic.dto.DeviceMaintainDto;
+import com.jxqixin.trafic.model.Device;
 import com.jxqixin.trafic.model.DeviceMaintain;
-import com.jxqixin.trafic.model.Employee;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.DeviceMaintainRepository;
 import com.jxqixin.trafic.service.IDeviceMaintainService;
@@ -38,7 +38,7 @@ public class DeviceMaintainServiceImpl extends CommonServiceImpl<DeviceMaintain>
 				List<Predicate> list = new ArrayList<>();
 				list.add(criteriaBuilder.equal(root.get("deleted"),false));
 				if(!StringUtils.isEmpty(deviceMaintainDto.getDeviceId())){
-					Join<DeviceMaintain, Employee> employeeJoin = root.join("employee",JoinType.INNER);
+					Join<Device, DeviceMaintain> employeeJoin = root.join("device",JoinType.INNER);
 					list.add(criteriaBuilder.equal(employeeJoin.get("id"),deviceMaintainDto.getDeviceId()));
 				}
 				Predicate[] predicates = new Predicate[list.size()];

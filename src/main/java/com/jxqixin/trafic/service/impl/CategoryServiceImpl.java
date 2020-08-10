@@ -36,7 +36,7 @@ public class CategoryServiceImpl extends CommonServiceImpl<Category> implements 
 		List<Category> list = categoryRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
-				return criteriaBuilder.and(criteriaBuilder.isNull(root.get("parent")),criteriaBuilder.equal(root.get("type"),"区域"));
+				return criteriaBuilder.and(criteriaBuilder.isNull(root.get("parent")),criteriaBuilder.equal(root.get("type"),type));
 			}
 		});
 		//构建树形结构
