@@ -17,6 +17,7 @@ import org.thymeleaf.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 /**
  * 会议控制器
@@ -63,6 +64,7 @@ public class MeetingController extends CommonController{
         if(!StringUtils.isEmpty(meetingDto.getMeetingDate())){
             try {
                 savedMeeting.setMeetingDate(format.parse(meetingDto.getMeetingDate()));
+                //savedMeeting.setEndMeetingDate(savedMeeting.getMeetingDate());
             } catch (ParseException e) {
                 e.printStackTrace();
                 savedMeeting.setMeetingDate(new Date());
@@ -104,6 +106,23 @@ public class MeetingController extends CommonController{
     @PostMapping("/meeting/content")
     public JsonResult updateContent(MeetingDto meetingDto){
         Meeting savedMeeting = meetingService.queryObjById(meetingDto.getId());
+        if(!StringUtils.isEmpty(meetingDto.getEndMeetingDate())){
+            Calendar meetingDateCal = Calendar.getInstance();
+            meetingDateCal.setTime(savedMeeting.getMeetingDate());
+
+            Calendar endMeetingDateCal = Calendar.getInstance();
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                endMeetingDateCal.setTime(sdf.parse(meetingDto.getEndMeetingDate()));
+                meetingDateCal.set(Calendar.HOUR_OF_DAY,endMeetingDateCal.get(Calendar.HOUR_OF_DAY));
+                meetingDateCal.set(Calendar.MINUTE,endMeetingDateCal.get(Calendar.MINUTE));
+
+                savedMeeting.setEndMeetingDate(meetingDateCal.getTime());
+            } catch (ParseException e) {
+                savedMeeting.setEndMeetingDate(savedMeeting.getMeetingDate());
+                e.printStackTrace();
+            }
+        }
         savedMeeting.setContent(meetingDto.getContent());
         savedMeeting.setMeetingName(meetingDto.getMeetingName());
         savedMeeting.setMeetingPlace(meetingDto.getMeetingPlace());
