@@ -563,6 +563,8 @@ create table m048_responsibility_template(
   constraint fk_org_category_m048_responsibility_template foreign key(org_category_id) references org_category(id)
 ) comment '责任书模板表';
 
+
+
 #责任书表
 drop table if exists m025_responsibility;
 create table m025_responsibility(
@@ -995,3 +997,223 @@ create table m012_device_maintain(
   device_id varchar(36) comment '设备ID',
   constraint fk_m012_device_maintain_m012_device_device_id foreign key(device_id) references m012_device(id)
   )comment '设备保养维修记录';
+
+#安全责任考核模板表
+drop table if exists m50_security_examination_template;
+create table m50_security_examination_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m50_security_examination_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m50_security_examination_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m50_security_examination_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m50_security_examination_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m50_security_examination_template foreign key(org_category_id) references org_category(id)
+) comment '安全责任考核模板表';
+
+#安全责任考核表
+drop table if exists m026_security_examination;
+create table m026_security_examination(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m026_security_examination_org_org_id foreign key(org_id) references org(id)
+) comment '安全责任考核表';
+
+#安全目标考核模板表
+drop table if exists m51_goal_examination_template;
+create table m51_goal_examination_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m51_goal_examination_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m51_goal_examination_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m51_goal_examination_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m51_goal_examination_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m51_goal_examination_template foreign key(org_category_id) references org_category(id)
+) comment '安全目标考核模板表';
+
+#安全目标考核表
+drop table if exists m027_goal_examination;
+create table m027_goal_examination(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m027_goal_examination_org_org_id foreign key(org_id) references org(id)
+) comment '安全目标考核表';
+
+#应急预案演练模板表
+drop table if exists m52_emergency_plan_drill_template;
+create table m52_emergency_plan_drill_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m52_emergency_plan_drill_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m52_emergency_plan_drill_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m52_emergency_plan_drill_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m52_emergency_plan_drill_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m52_emergency_plan_drill_template foreign key(org_category_id) references org_category(id)
+) comment '应急预案演练模板表';
+
+#应急预案演练表
+drop table if exists m028_emergency_plan_drill;
+create table m028_emergency_plan_drill(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m028_emergency_plan_drill_org_org_id foreign key(org_id) references org(id)
+) comment '应急预案演练表';
+
+#职业健康记录模板表
+drop table if exists m53_healthy_record_template;
+create table m53_healthy_record_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m53_healthy_record_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m53_healthy_record_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m53_healthy_record_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m53_healthy_record_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m53_healthy_record_template foreign key(org_category_id) references org_category(id)
+) comment '职业健康记录模板表';
+
+#职业健康记录表
+drop table if exists m029_healthy_record;
+create table m029_healthy_record(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m029_healthy_record_org_org_id foreign key(org_id) references org(id)
+) comment '职业健康记录表';
+
+#标准化自评模板表
+drop table if exists m54_standardization_template;
+create table m54_standardization_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m54_standardization_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m54_standardization_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m54_standardization_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m54_standardization_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m54_standardization_template foreign key(org_category_id) references org_category(id)
+) comment '标准化自评模板表';
+
+#标准化自评表
+drop table if exists m030_standardization;
+create table m030_standardization(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  beginDate timestamp null comment '有效期起始时间',
+  endDate timestamp null comment '有效期终止时间',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m030_standardization_org_org_id foreign key(org_id) references org(id)
+) comment '标准化自评表';
