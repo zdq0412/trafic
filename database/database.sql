@@ -960,6 +960,31 @@ create table m011_other_document(
   constraint fk_m011_other_document_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
   )comment '人员档案：其他人员档案，打包上传';
 
+
+#人员档案模板表
+drop table if exists m55_emp_archives_template;
+create table m55_emp_archives_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  type varchar(200) comment '人员档案模板类别:resume,idcard,contract,qualificationDocument,jobHistory,inductionTraining,safetyResponsibilityAgreement,trainingExamine,otherDocument',
+  createDate timestamp null comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '企业ID',
+  constraint fk_m55_emp_archives_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m55_emp_archives_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m55_emp_archives_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m55_emp_archives_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m55_emp_archives_template foreign key(org_category_id) references org_category(id)
+) comment '人员档案模板表';
+
 #设备管理
 drop table if exists m012_device;
 create table m012_device(
