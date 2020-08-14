@@ -1023,6 +1023,29 @@ create table m012_device_maintain(
   constraint fk_m012_device_maintain_m012_device_device_id foreign key(device_id) references m012_device(id)
   )comment '设备保养维修记录';
 
+#设备档案模板表，设备或设备维修保养记录模板
+drop table if exists m56_device_maintain_template;
+create table m56_device_maintain_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '企业ID',
+  constraint fk_m56_device_maintain_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m56_device_maintain_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m56_device_maintain_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m56_device_maintain_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m56_device_maintain_template foreign key(org_category_id) references org_category(id)
+) comment '设备档案模板表';
+
 #安全责任考核模板表
 drop table if exists m50_security_examination_template;
 create table m50_security_examination_template(
