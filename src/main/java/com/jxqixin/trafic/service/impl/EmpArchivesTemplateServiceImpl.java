@@ -43,6 +43,9 @@ public class EmpArchivesTemplateServiceImpl extends CommonServiceImpl<EmpArchive
 						list.add(criteriaBuilder.like(root.get("name"), "%" + empArchivesTemplateDto.getName() + "%"));
 					}
 					list.add(criteriaBuilder.isNull(root.get("org")));
+					if(!StringUtils.isEmpty(empArchivesTemplateDto.getType())){
+						list.add(criteriaBuilder.equal(root.get("type"),empArchivesTemplateDto.getType()));
+					}
 					Predicate[] predicates = new Predicate[list.size()];
 					return criteriaBuilder.and(list.toArray(predicates));
 				}
@@ -76,6 +79,10 @@ public class EmpArchivesTemplateServiceImpl extends CommonServiceImpl<EmpArchive
 					if (org.getRegion() != null) {
 						Join<EmpArchivesTemplate, Category> regionJoin = root.join("region", JoinType.LEFT);
 						list.add(criteriaBuilder.or(criteriaBuilder.isNull(root.get("region")), criteriaBuilder.equal(regionJoin.get("id"), org.getRegion().getId())));
+					}
+
+					if(!StringUtils.isEmpty(empArchivesTemplateDto.getType())){
+						list.add(criteriaBuilder.equal(root.get("type"),empArchivesTemplateDto.getType()));
 					}
 					Predicate[] predicates = new Predicate[list.size()];
 					return criteriaBuilder.and(list.toArray(predicates));
