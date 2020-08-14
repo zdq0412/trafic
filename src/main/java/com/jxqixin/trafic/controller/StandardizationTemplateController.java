@@ -5,6 +5,7 @@ import com.jxqixin.trafic.dto.StandardizationTemplateDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.service.IStandardizationTemplateService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -100,7 +101,7 @@ public class StandardizationTemplateController extends CommonController{
      * @param standardizationTemplateDto
      * @return
      */
-    @PutMapping("/standardizationTemplate/standardizationTemplate")
+    @PostMapping("/standardizationTemplate/updateStandardizationTemplate")
     public JsonResult updateStandardizationTemplate(StandardizationTemplateDto standardizationTemplateDto,HttpServletRequest request, @RequestParam("file") MultipartFile file){
         StandardizationTemplate savedStandardizationTemplate = standardizationTemplateService.queryObjById(standardizationTemplateDto.getId());
         User user = userService.queryUserByUsername(getCurrentUsername(request));
@@ -113,6 +114,9 @@ public class StandardizationTemplateController extends CommonController{
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
             savedStandardizationTemplate.setUrl(urlMapping);
+            if(!StringUtils.isEmpty(savedStandardizationTemplate.getRealPath())){
+                FileUtil.deleteFile(savedStandardizationTemplate.getRealPath());
+            }
             savedStandardizationTemplate.setRealPath(savedFile.getAbsolutePath());
             savedStandardizationTemplate.setFilename(file.getOriginalFilename());
         }catch (RuntimeException | IOException e){
@@ -120,6 +124,53 @@ public class StandardizationTemplateController extends CommonController{
             result = Result.FAIL;
             result.setMessage(e.getMessage());
         }
+        if(!StringUtils.isEmpty(standardizationTemplateDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(standardizationTemplateDto.getProvinceId());
+
+            savedStandardizationTemplate.setProvince(province);
+        }else{
+            savedStandardizationTemplate.setProvince(null);
+        }
+        if(!StringUtils.isEmpty(standardizationTemplateDto.getCityId())){
+            Category city = new Category();
+            city.setId(standardizationTemplateDto.getCityId());
+
+            savedStandardizationTemplate.setCity(city);
+        }else{
+            savedStandardizationTemplate.setCity(null);
+        }
+        if(!StringUtils.isEmpty(standardizationTemplateDto.getRegionId())){
+            Category region = new Category();
+            region.setId(standardizationTemplateDto.getRegionId());
+
+            savedStandardizationTemplate.setRegion(region);
+        }else{
+            savedStandardizationTemplate.setRegion(null);
+        }
+        if(!StringUtils.isEmpty(standardizationTemplateDto.getOrgCategoryId())){
+            OrgCategory orgCategory = new OrgCategory();
+            orgCategory.setId(standardizationTemplateDto.getOrgCategoryId());
+
+            savedStandardizationTemplate.setOrgCategory(orgCategory);
+        }else {
+            savedStandardizationTemplate.setOrgCategory(null);
+        }
+        savedStandardizationTemplate.setName(standardizationTemplateDto.getName());
+        savedStandardizationTemplate.setNote(standardizationTemplateDto.getNote());
+        standardizationTemplateService.updateObj(savedStandardizationTemplate);
+        return new JsonResult(result);
+    }
+    /**
+     * 编辑
+     * @param standardizationTemplateDto
+     * @return
+     */
+    @PostMapping("/standardizationTemplate/updateStandardizationTemplateNoFile")
+    public JsonResult updateStandardizationTemplateNoFile(StandardizationTemplateDto standardizationTemplateDto,HttpServletRequest request){
+        StandardizationTemplate savedStandardizationTemplate = standardizationTemplateService.queryObjById(standardizationTemplateDto.getId());
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        Result result = Result.SUCCESS;
         if(!StringUtils.isEmpty(standardizationTemplateDto.getProvinceId())){
             Category province = new Category();
             province.setId(standardizationTemplateDto.getProvinceId());

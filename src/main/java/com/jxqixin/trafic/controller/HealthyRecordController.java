@@ -7,6 +7,7 @@ import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IHealthyRecordService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public class HealthyRecordController extends CommonController{
     @Autowired
     private IUserService userService;
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询
      * @param healthyRecordDto
@@ -108,6 +109,9 @@ public class HealthyRecordController extends CommonController{
             if (savedFile != null) {
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
+            if(!StringUtils.isEmpty(savedHealthyRecord.getRealPath())){
+                FileUtil.deleteFile(savedHealthyRecord.getRealPath());
+            }
             savedHealthyRecord.setUrl(urlMapping);
             savedHealthyRecord.setRealPath(savedFile.getAbsolutePath());
             savedHealthyRecord.setFilename(file.getOriginalFilename());
@@ -116,6 +120,37 @@ public class HealthyRecordController extends CommonController{
             result = Result.FAIL;
             result.setMessage(e.getMessage());
         }
+        if(!StringUtils.isEmpty(healthyRecordDto.getBeginDate())){
+            try {
+                savedHealthyRecord.setBeginDate(format.parse(healthyRecordDto.getBeginDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                savedHealthyRecord.setBeginDate(null);
+            }
+        }
+        if(!StringUtils.isEmpty(healthyRecordDto.getEndDate())){
+            try {
+                savedHealthyRecord.setEndDate(format.parse(healthyRecordDto.getEndDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                savedHealthyRecord.setEndDate(null);
+            }
+        }
+        savedHealthyRecord.setName(healthyRecordDto.getName());
+        savedHealthyRecord.setNote(healthyRecordDto.getNote());
+        healthyRecordService.updateObj(savedHealthyRecord);
+        return new JsonResult(result);
+    }
+    /**
+     * 编辑
+     * @param healthyRecordDto
+     * @return
+     */
+    @PostMapping("/healthyRecord/updateHealthyRecordNoFile")
+    public JsonResult updateHealthyRecordNoFile(HealthyRecordDto healthyRecordDto, HttpServletRequest request){
+        HealthyRecord savedHealthyRecord = healthyRecordService.queryObjById(healthyRecordDto.getId());
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        Result result = Result.SUCCESS;
         if(!StringUtils.isEmpty(healthyRecordDto.getBeginDate())){
             try {
                 savedHealthyRecord.setBeginDate(format.parse(healthyRecordDto.getBeginDate()));

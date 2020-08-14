@@ -5,6 +5,7 @@ import com.jxqixin.trafic.dto.GoalExaminationTemplateDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.service.IGoalExaminationTemplateService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -100,7 +101,7 @@ public class GoalExaminationTemplateController extends CommonController{
      * @param goalExaminationTemplateDto
      * @return
      */
-    @PutMapping("/goalExaminationTemplate/goalExaminationTemplate")
+    @PostMapping("/goalExaminationTemplate/updateGoalExaminationTemplate")
     public JsonResult updateGoalExaminationTemplate(GoalExaminationTemplateDto goalExaminationTemplateDto,HttpServletRequest request, @RequestParam("file") MultipartFile file){
         GoalExaminationTemplate savedGoalExaminationTemplate = goalExaminationTemplateService.queryObjById(goalExaminationTemplateDto.getId());
         User user = userService.queryUserByUsername(getCurrentUsername(request));
@@ -113,6 +114,9 @@ public class GoalExaminationTemplateController extends CommonController{
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
             savedGoalExaminationTemplate.setUrl(urlMapping);
+            if(!StringUtils.isEmpty(savedGoalExaminationTemplate.getRealPath())){
+                FileUtil.deleteFile(savedGoalExaminationTemplate.getRealPath());
+            }
             savedGoalExaminationTemplate.setRealPath(savedFile.getAbsolutePath());
             savedGoalExaminationTemplate.setFilename(file.getOriginalFilename());
         }catch (RuntimeException | IOException e){
@@ -120,6 +124,54 @@ public class GoalExaminationTemplateController extends CommonController{
             result = Result.FAIL;
             result.setMessage(e.getMessage());
         }
+        if(!StringUtils.isEmpty(goalExaminationTemplateDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(goalExaminationTemplateDto.getProvinceId());
+
+            savedGoalExaminationTemplate.setProvince(province);
+        }else{
+            savedGoalExaminationTemplate.setProvince(null);
+        }
+        if(!StringUtils.isEmpty(goalExaminationTemplateDto.getCityId())){
+            Category city = new Category();
+            city.setId(goalExaminationTemplateDto.getCityId());
+
+            savedGoalExaminationTemplate.setCity(city);
+        }else{
+            savedGoalExaminationTemplate.setCity(null);
+        }
+        if(!StringUtils.isEmpty(goalExaminationTemplateDto.getRegionId())){
+            Category region = new Category();
+            region.setId(goalExaminationTemplateDto.getRegionId());
+
+            savedGoalExaminationTemplate.setRegion(region);
+        }else{
+            savedGoalExaminationTemplate.setRegion(null);
+        }
+        if(!StringUtils.isEmpty(goalExaminationTemplateDto.getOrgCategoryId())){
+            OrgCategory orgCategory = new OrgCategory();
+            orgCategory.setId(goalExaminationTemplateDto.getOrgCategoryId());
+
+            savedGoalExaminationTemplate.setOrgCategory(orgCategory);
+        }else {
+            savedGoalExaminationTemplate.setOrgCategory(null);
+        }
+        savedGoalExaminationTemplate.setName(goalExaminationTemplateDto.getName());
+        savedGoalExaminationTemplate.setNote(goalExaminationTemplateDto.getNote());
+        goalExaminationTemplateService.updateObj(savedGoalExaminationTemplate);
+        return new JsonResult(result);
+    }
+    /**
+     * 编辑
+     * @param goalExaminationTemplateDto
+     * @return
+     */
+    @PostMapping("/goalExaminationTemplate/updateGoalExaminationTemplateNoFile")
+    public JsonResult updateGoalExaminationTemplateNoFile(GoalExaminationTemplateDto goalExaminationTemplateDto,HttpServletRequest request){
+        GoalExaminationTemplate savedGoalExaminationTemplate = goalExaminationTemplateService.queryObjById(goalExaminationTemplateDto.getId());
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        String urlMapping = "";
+        Result result = Result.SUCCESS;
         if(!StringUtils.isEmpty(goalExaminationTemplateDto.getProvinceId())){
             Category province = new Category();
             province.setId(goalExaminationTemplateDto.getProvinceId());

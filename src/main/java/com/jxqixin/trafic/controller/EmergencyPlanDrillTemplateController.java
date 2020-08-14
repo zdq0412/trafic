@@ -4,6 +4,7 @@ import com.jxqixin.trafic.dto.EmergencyPlanDrillTemplateDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.service.IEmergencyPlanDrillTemplateService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -97,7 +98,7 @@ public class EmergencyPlanDrillTemplateController extends CommonController{
      * @param emergencyPlanDrillTemplateDto
      * @return
      */
-    @PutMapping("/emergencyPlanDrillTemplate/emergencyPlanDrillTemplate")
+    @PostMapping("/emergencyPlanDrillTemplate/updateEmergencyPlanDrillTemplate")
     public JsonResult updateEmergencyPlanDrillTemplate(EmergencyPlanDrillTemplateDto emergencyPlanDrillTemplateDto,HttpServletRequest request, @RequestParam("file") MultipartFile file){
         EmergencyPlanDrillTemplate savedEmergencyPlanDrillTemplate = emergencyPlanDrillTemplateService.queryObjById(emergencyPlanDrillTemplateDto.getId());
         User user = userService.queryUserByUsername(getCurrentUsername(request));
@@ -110,6 +111,9 @@ public class EmergencyPlanDrillTemplateController extends CommonController{
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
             savedEmergencyPlanDrillTemplate.setUrl(urlMapping);
+            if(!StringUtils.isEmpty(savedEmergencyPlanDrillTemplate.getRealPath())){
+                FileUtil.deleteFile(savedEmergencyPlanDrillTemplate.getRealPath());
+            }
             savedEmergencyPlanDrillTemplate.setRealPath(savedFile.getAbsolutePath());
             savedEmergencyPlanDrillTemplate.setFilename(file.getOriginalFilename());
         }catch (RuntimeException | IOException e){
@@ -149,26 +153,52 @@ public class EmergencyPlanDrillTemplateController extends CommonController{
         }else {
             savedEmergencyPlanDrillTemplate.setOrgCategory(null);
         }
-        /*if(!StringUtils.isEmpty(emergencyPlanDrillTemplateDto.getBeginDate())){
-            try {
-                savedEmergencyPlanDrillTemplate.setBeginDate(format.parse(emergencyPlanDrillTemplateDto.getBeginDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-                savedEmergencyPlanDrillTemplate.setBeginDate(null);
-            }
+        savedEmergencyPlanDrillTemplate.setName(emergencyPlanDrillTemplateDto.getName());
+        savedEmergencyPlanDrillTemplate.setNote(emergencyPlanDrillTemplateDto.getNote());
+        emergencyPlanDrillTemplateService.updateObj(savedEmergencyPlanDrillTemplate);
+        return new JsonResult(result);
+    }
+    /**
+     * 编辑
+     * @param emergencyPlanDrillTemplateDto
+     * @return
+     */
+    @PostMapping("/emergencyPlanDrillTemplate/updateEmergencyPlanDrillTemplateNoFile")
+    public JsonResult updateEmergencyPlanDrillTemplateNoFile(EmergencyPlanDrillTemplateDto emergencyPlanDrillTemplateDto,HttpServletRequest request){
+        EmergencyPlanDrillTemplate savedEmergencyPlanDrillTemplate = emergencyPlanDrillTemplateService.queryObjById(emergencyPlanDrillTemplateDto.getId());
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        Result result = Result.SUCCESS;
+        if(!StringUtils.isEmpty(emergencyPlanDrillTemplateDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(emergencyPlanDrillTemplateDto.getProvinceId());
+            savedEmergencyPlanDrillTemplate.setProvince(province);
         }else{
-            savedEmergencyPlanDrillTemplate.setBeginDate(null);
+            savedEmergencyPlanDrillTemplate.setProvince(null);
         }
-        if(!StringUtils.isEmpty(emergencyPlanDrillTemplateDto.getEndDate())){
-            try {
-                savedEmergencyPlanDrillTemplate.setEndDate(format.parse(emergencyPlanDrillTemplateDto.getEndDate()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-                savedEmergencyPlanDrillTemplate.setEndDate(null);
-            }
+        if(!StringUtils.isEmpty(emergencyPlanDrillTemplateDto.getCityId())){
+            Category city = new Category();
+            city.setId(emergencyPlanDrillTemplateDto.getCityId());
+
+            savedEmergencyPlanDrillTemplate.setCity(city);
         }else{
-            savedEmergencyPlanDrillTemplate.setEndDate(null);
-        }*/
+            savedEmergencyPlanDrillTemplate.setCity(null);
+        }
+        if(!StringUtils.isEmpty(emergencyPlanDrillTemplateDto.getRegionId())){
+            Category region = new Category();
+            region.setId(emergencyPlanDrillTemplateDto.getRegionId());
+
+            savedEmergencyPlanDrillTemplate.setRegion(region);
+        }else{
+            savedEmergencyPlanDrillTemplate.setRegion(null);
+        }
+        if(!StringUtils.isEmpty(emergencyPlanDrillTemplateDto.getOrgCategoryId())){
+            OrgCategory orgCategory = new OrgCategory();
+            orgCategory.setId(emergencyPlanDrillTemplateDto.getOrgCategoryId());
+
+            savedEmergencyPlanDrillTemplate.setOrgCategory(orgCategory);
+        }else {
+            savedEmergencyPlanDrillTemplate.setOrgCategory(null);
+        }
         savedEmergencyPlanDrillTemplate.setName(emergencyPlanDrillTemplateDto.getName());
         savedEmergencyPlanDrillTemplate.setNote(emergencyPlanDrillTemplateDto.getNote());
         emergencyPlanDrillTemplateService.updateObj(savedEmergencyPlanDrillTemplate);

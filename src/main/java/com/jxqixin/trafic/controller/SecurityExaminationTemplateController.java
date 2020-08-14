@@ -5,6 +5,8 @@ import com.jxqixin.trafic.dto.SecurityExaminationTemplateDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.service.ISecurityExaminationTemplateService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -100,7 +102,7 @@ public class SecurityExaminationTemplateController extends CommonController{
      * @param securityExaminationTemplateDto
      * @return
      */
-    @PutMapping("/securityExaminationTemplate/securityExaminationTemplate")
+    @PostMapping("/securityExaminationTemplate/updateSecurityExaminationTemplate")
     public JsonResult updateSecurityExaminationTemplate(SecurityExaminationTemplateDto securityExaminationTemplateDto,HttpServletRequest request, @RequestParam("file") MultipartFile file){
         SecurityExaminationTemplate savedSecurityExaminationTemplate = securityExaminationTemplateService.queryObjById(securityExaminationTemplateDto.getId());
         User user = userService.queryUserByUsername(getCurrentUsername(request));
@@ -113,6 +115,9 @@ public class SecurityExaminationTemplateController extends CommonController{
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
             savedSecurityExaminationTemplate.setUrl(urlMapping);
+            if(!StringUtils.isEmpty(savedSecurityExaminationTemplate.getRealPath())) {
+                FileUtil.deleteFile(savedSecurityExaminationTemplate.getRealPath());
+            }
             savedSecurityExaminationTemplate.setRealPath(savedFile.getAbsolutePath());
             savedSecurityExaminationTemplate.setFilename(file.getOriginalFilename());
         }catch (RuntimeException | IOException e){
@@ -120,6 +125,53 @@ public class SecurityExaminationTemplateController extends CommonController{
             result = Result.FAIL;
             result.setMessage(e.getMessage());
         }
+        if(!StringUtils.isEmpty(securityExaminationTemplateDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(securityExaminationTemplateDto.getProvinceId());
+
+            savedSecurityExaminationTemplate.setProvince(province);
+        }else{
+            savedSecurityExaminationTemplate.setProvince(null);
+        }
+        if(!StringUtils.isEmpty(securityExaminationTemplateDto.getCityId())){
+            Category city = new Category();
+            city.setId(securityExaminationTemplateDto.getCityId());
+
+            savedSecurityExaminationTemplate.setCity(city);
+        }else{
+            savedSecurityExaminationTemplate.setCity(null);
+        }
+        if(!StringUtils.isEmpty(securityExaminationTemplateDto.getRegionId())){
+            Category region = new Category();
+            region.setId(securityExaminationTemplateDto.getRegionId());
+
+            savedSecurityExaminationTemplate.setRegion(region);
+        }else{
+            savedSecurityExaminationTemplate.setRegion(null);
+        }
+        if(!StringUtils.isEmpty(securityExaminationTemplateDto.getOrgCategoryId())){
+            OrgCategory orgCategory = new OrgCategory();
+            orgCategory.setId(securityExaminationTemplateDto.getOrgCategoryId());
+
+            savedSecurityExaminationTemplate.setOrgCategory(orgCategory);
+        }else {
+            savedSecurityExaminationTemplate.setOrgCategory(null);
+        }
+        savedSecurityExaminationTemplate.setName(securityExaminationTemplateDto.getName());
+        savedSecurityExaminationTemplate.setNote(securityExaminationTemplateDto.getNote());
+        securityExaminationTemplateService.updateObj(savedSecurityExaminationTemplate);
+        return new JsonResult(result);
+    }
+    /**
+     * 编辑
+     * @param securityExaminationTemplateDto
+     * @return
+     */
+    @PostMapping("/securityExaminationTemplate/updateSecurityExaminationTemplateNoFile")
+    public JsonResult updateSecurityExaminationTemplateNoFile(SecurityExaminationTemplateDto securityExaminationTemplateDto,HttpServletRequest request){
+        SecurityExaminationTemplate savedSecurityExaminationTemplate = securityExaminationTemplateService.queryObjById(securityExaminationTemplateDto.getId());
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        Result result = Result.SUCCESS;
         if(!StringUtils.isEmpty(securityExaminationTemplateDto.getProvinceId())){
             Category province = new Category();
             province.setId(securityExaminationTemplateDto.getProvinceId());

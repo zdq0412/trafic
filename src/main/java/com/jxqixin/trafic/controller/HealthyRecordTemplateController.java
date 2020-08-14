@@ -5,6 +5,7 @@ import com.jxqixin.trafic.dto.HealthyRecordTemplateDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.service.IHealthyRecordTemplateService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -100,7 +101,7 @@ public class HealthyRecordTemplateController extends CommonController{
      * @param healthyRecordTemplateDto
      * @return
      */
-    @PutMapping("/healthyRecordTemplate/healthyRecordTemplate")
+    @PostMapping("/healthyRecordTemplate/updateHealthyRecordTemplate")
     public JsonResult updateHealthyRecordTemplate(HealthyRecordTemplateDto healthyRecordTemplateDto,HttpServletRequest request, @RequestParam("file") MultipartFile file){
         HealthyRecordTemplate savedHealthyRecordTemplate = healthyRecordTemplateService.queryObjById(healthyRecordTemplateDto.getId());
         User user = userService.queryUserByUsername(getCurrentUsername(request));
@@ -113,6 +114,9 @@ public class HealthyRecordTemplateController extends CommonController{
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
             savedHealthyRecordTemplate.setUrl(urlMapping);
+            if(!StringUtils.isEmpty(savedHealthyRecordTemplate.getRealPath())){
+                FileUtil.deleteFile(savedHealthyRecordTemplate.getRealPath());
+            }
             savedHealthyRecordTemplate.setRealPath(savedFile.getAbsolutePath());
             savedHealthyRecordTemplate.setFilename(file.getOriginalFilename());
         }catch (RuntimeException | IOException e){
@@ -124,6 +128,52 @@ public class HealthyRecordTemplateController extends CommonController{
             Category province = new Category();
             province.setId(healthyRecordTemplateDto.getProvinceId());
 
+            savedHealthyRecordTemplate.setProvince(province);
+        }else{
+            savedHealthyRecordTemplate.setProvince(null);
+        }
+        if(!StringUtils.isEmpty(healthyRecordTemplateDto.getCityId())){
+            Category city = new Category();
+            city.setId(healthyRecordTemplateDto.getCityId());
+
+            savedHealthyRecordTemplate.setCity(city);
+        }else{
+            savedHealthyRecordTemplate.setCity(null);
+        }
+        if(!StringUtils.isEmpty(healthyRecordTemplateDto.getRegionId())){
+            Category region = new Category();
+            region.setId(healthyRecordTemplateDto.getRegionId());
+
+            savedHealthyRecordTemplate.setRegion(region);
+        }else{
+            savedHealthyRecordTemplate.setRegion(null);
+        }
+        if(!StringUtils.isEmpty(healthyRecordTemplateDto.getOrgCategoryId())){
+            OrgCategory orgCategory = new OrgCategory();
+            orgCategory.setId(healthyRecordTemplateDto.getOrgCategoryId());
+
+            savedHealthyRecordTemplate.setOrgCategory(orgCategory);
+        }else {
+            savedHealthyRecordTemplate.setOrgCategory(null);
+        }
+        savedHealthyRecordTemplate.setName(healthyRecordTemplateDto.getName());
+        savedHealthyRecordTemplate.setNote(healthyRecordTemplateDto.getNote());
+        healthyRecordTemplateService.updateObj(savedHealthyRecordTemplate);
+        return new JsonResult(result);
+    }
+    /**
+     * 编辑
+     * @param healthyRecordTemplateDto
+     * @return
+     */
+    @PostMapping("/healthyRecordTemplate/updateHealthyRecordTemplateNoFile")
+    public JsonResult updateHealthyRecordTemplateNoFile(HealthyRecordTemplateDto healthyRecordTemplateDto,HttpServletRequest request){
+        HealthyRecordTemplate savedHealthyRecordTemplate = healthyRecordTemplateService.queryObjById(healthyRecordTemplateDto.getId());
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        Result result = Result.SUCCESS;
+        if(!StringUtils.isEmpty(healthyRecordTemplateDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(healthyRecordTemplateDto.getProvinceId());
             savedHealthyRecordTemplate.setProvince(province);
         }else{
             savedHealthyRecordTemplate.setProvince(null);

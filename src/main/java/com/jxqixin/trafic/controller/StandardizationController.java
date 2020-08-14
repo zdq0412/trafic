@@ -7,6 +7,7 @@ import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IStandardizationService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public class StandardizationController extends CommonController{
     @Autowired
     private IUserService userService;
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询
      * @param standardizationDto
@@ -108,6 +109,9 @@ public class StandardizationController extends CommonController{
             if (savedFile != null) {
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
+            if(!StringUtils.isEmpty(savedStandardization.getRealPath())){
+                FileUtil.deleteFile(savedStandardization.getRealPath());
+            }
             savedStandardization.setUrl(urlMapping);
             savedStandardization.setRealPath(savedFile.getAbsolutePath());
             savedStandardization.setFilename(file.getOriginalFilename());
@@ -116,6 +120,37 @@ public class StandardizationController extends CommonController{
             result = Result.FAIL;
             result.setMessage(e.getMessage());
         }
+        if(!StringUtils.isEmpty(standardizationDto.getBeginDate())){
+            try {
+                savedStandardization.setBeginDate(format.parse(standardizationDto.getBeginDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                savedStandardization.setBeginDate(null);
+            }
+        }
+        if(!StringUtils.isEmpty(standardizationDto.getEndDate())){
+            try {
+                savedStandardization.setEndDate(format.parse(standardizationDto.getEndDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                savedStandardization.setEndDate(null);
+            }
+        }
+        savedStandardization.setName(standardizationDto.getName());
+        savedStandardization.setNote(standardizationDto.getNote());
+        standardizationService.updateObj(savedStandardization);
+        return new JsonResult(result);
+    }
+    /**
+     * 编辑
+     * @param standardizationDto
+     * @return
+     */
+    @PostMapping("/standardization/updateStandardizationNoFile")
+    public JsonResult updateStandardizationNoFile(StandardizationDto standardizationDto,  HttpServletRequest request){
+        Standardization savedStandardization = standardizationService.queryObjById(standardizationDto.getId());
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        Result result = Result.SUCCESS;
         if(!StringUtils.isEmpty(standardizationDto.getBeginDate())){
             try {
                 savedStandardization.setBeginDate(format.parse(standardizationDto.getBeginDate()));

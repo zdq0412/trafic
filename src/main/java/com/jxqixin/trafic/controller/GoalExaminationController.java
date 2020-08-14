@@ -7,6 +7,7 @@ import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IGoalExaminationService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public class GoalExaminationController extends CommonController{
     @Autowired
     private IUserService userService;
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查询
      * @param goalExaminationDto
@@ -108,6 +109,9 @@ public class GoalExaminationController extends CommonController{
             if (savedFile != null) {
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
+            if(!StringUtils.isEmpty(savedGoalExamination.getRealPath())){
+                FileUtil.deleteFile(savedGoalExamination.getRealPath());
+            }
             savedGoalExamination.setUrl(urlMapping);
             savedGoalExamination.setRealPath(savedFile.getAbsolutePath());
             savedGoalExamination.setFilename(file.getOriginalFilename());
@@ -116,6 +120,37 @@ public class GoalExaminationController extends CommonController{
             result = Result.FAIL;
             result.setMessage(e.getMessage());
         }
+        if(!StringUtils.isEmpty(goalExaminationDto.getBeginDate())){
+            try {
+                savedGoalExamination.setBeginDate(format.parse(goalExaminationDto.getBeginDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                savedGoalExamination.setBeginDate(null);
+            }
+        }
+        if(!StringUtils.isEmpty(goalExaminationDto.getEndDate())){
+            try {
+                savedGoalExamination.setEndDate(format.parse(goalExaminationDto.getEndDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                savedGoalExamination.setEndDate(null);
+            }
+        }
+        savedGoalExamination.setName(goalExaminationDto.getName());
+        savedGoalExamination.setNote(goalExaminationDto.getNote());
+        goalExaminationService.updateObj(savedGoalExamination);
+        return new JsonResult(result);
+    }
+    /**
+     * 编辑
+     * @param goalExaminationDto
+     * @return
+     */
+    @PostMapping("/goalExamination/updateGoalExaminationNoFile")
+    public JsonResult updateGoalExaminationNoFile(GoalExaminationDto goalExaminationDto, HttpServletRequest request){
+        GoalExamination savedGoalExamination = goalExaminationService.queryObjById(goalExaminationDto.getId());
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        Result result = Result.SUCCESS;
         if(!StringUtils.isEmpty(goalExaminationDto.getBeginDate())){
             try {
                 savedGoalExamination.setBeginDate(format.parse(goalExaminationDto.getBeginDate()));
