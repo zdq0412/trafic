@@ -68,7 +68,7 @@ public class DangerGoodsCheckServiceImpl extends CommonServiceImpl<DangerGoodsCh
 				DangerGoodsCheckDetailRecord record = new DangerGoodsCheckDetailRecord();
 				BeanUtils.copyProperties(detail,record);
 
-				record.setDangerGoodsCheck(dangerGoodsCheck);
+				//record.setDangerGoodsCheck(dangerGoodsCheck);
 
 				recordList.add(record);
 			}

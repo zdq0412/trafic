@@ -83,7 +83,7 @@ public class DangerGoodsCheckController extends CommonController{
             if(detailObjs!=null && detailObjs.length>0){
                 for(int i = 0;i<detailObjs.length;i++){
                     DangerGoodsCheckDetailRecord detail = new DangerGoodsCheckDetailRecord();
-                    detail.setDangerGoodsCheck(template);
+                    //detail.setDangerGoodsCheck(template);
                     String[] fields = detailObjs[i].split("\\|");
                     if(fields!=null &&fields.length>0){
                         String checkDate = fields[0];

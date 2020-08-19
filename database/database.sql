@@ -707,8 +707,14 @@ create table m024_danger_goods_check_detial_record(
   person varchar(100) comment '责任人',
   endTime timestamp null  comment '整改到位时间',
   cancelDate timestamp null comment '销号时间',
-  danger_goods_check_id varchar(36) comment '危险货物运输企业安全生产隐患排查整改台账模板id',
-  constraint fk_m024_danger_goods_check_danger_goods_check_id foreign key(danger_goods_check_id) references m024_danger_goods_check(id)
+  rectification bit default 0 comment '是否已整改',
+  rectificationFund decimal(15,3) default 0.00 comment '整改金额',
+  severity_id varchar(36) comment '严重程度:一般事故隐患、重大事故隐患',
+  reason_category_id varchar(36) comment '造成隐患的因素：人的不安全行为、物的不安全状态、管理上的缺失等',
+  org_id varchar(36) comment '企业ID',
+  constraint fk_m024_danger_goods_check_detial_record_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m024_danger_goods_check_detial_record_category_severity_id foreign key(severity_id) references category(id),
+  constraint fk_m024_danger_goods_check_detial_record_category_reason_id foreign key(reason_category_id) references category(id)
 ) comment '危险货物运输企业安全生产隐患排查整改台账详情表';
 
 #危险货物道路运输罐式车辆罐体检查记录模板表
@@ -1265,3 +1271,84 @@ create table m030_standardization(
    org_id varchar(36) comment '企业ID',
    constraint fk_m030_standardization_org_org_id foreign key(org_id) references org(id)
 ) comment '标准化自评表';
+
+#应急预案备案
+drop table if exists m038_emergency_plan_bak;
+create table m038_emergency_plan_bak(
+  id varchar(36) primary key comment '主键',
+  prePlanName varchar(500) comment '预案名称',
+  createDate timestamp null comment '创建日期',
+  writeDate timestamp null comment '编制日期',
+  prePlanUploadDate timestamp null comment '预案上传日期',
+   prePlanUrl varchar(500) comment '预案文件访问路径',
+  prePlanRealPath varchar(500) comment '预案实际存储路径',
+   keepOnRecordName varchar(500) comment '备案名称',
+  keepOnRecordUploadDate timestamp null comment '备案上传日期',
+  keepOnRecordDate timestamp null comment '备案日期',
+   keepOnRecordUrl varchar(500) comment '备案文件访问路径',
+  keepOnRecordRealPath varchar(500) comment '备案实际存储路径',
+  keepOnRecord bit default 0 comment '是否已备案',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m038_emergency_plan_bak_org_org_id foreign key(org_id) references org(id)
+) comment '应急预案备案';
+
+#应急救援预案演练记录表
+drop table if exists m038_preplan_drill_record;
+create table m038_preplan_drill_record(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '项目名称',
+  type varchar(100) comment '应急预案类型：综合、专项、现场处置',
+  createDate timestamp null comment '创建日期',
+  developDate timestamp null comment '开展时间',
+  note varchar(2000) comment '备注',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   emergency_plan_bak_id varchar(36) comment '应急预案备案记录ID',
+   constraint fk_m038_preplan_drill_record_emergency_plan_bak_bak foreign key(emergency_plan_bak_id) references m038_emergency_plan_bak(id)
+) comment '应急救援预案演练记录表';
+
+#风险排查模板
+drop table if exists m45_risk_check_template;
+create table m45_risk_check_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '企业ID',
+  constraint fk_m45_risk_check_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m45_risk_check_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m45_risk_check_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m45_risk_check_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m45_risk_check_template foreign key(org_category_id) references org_category(id)
+) comment '风险排查模板';
+
+#设备点检模板
+drop table if exists m43_device_check_template;
+create table m43_device_check_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '企业ID',
+  constraint fk_m43_device_check_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m43_device_check_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m43_device_check_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m43_device_check_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m43_device_check_template foreign key(org_category_id) references org_category(id)
+) comment '设备点检模板';

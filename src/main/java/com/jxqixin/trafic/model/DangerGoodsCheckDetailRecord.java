@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -36,13 +37,69 @@ public class DangerGoodsCheckDetailRecord {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date checkDate;
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name="danger_goods_check_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private DangerGoodsCheck dangerGoodsCheck;
+	private DangerGoodsCheck dangerGoodsCheck;*/
 	/**销号时间*/
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date cancelDate;
+	/**是否已整改*/
+	private Boolean rectification=false;
+	/**整改金额*/
+	private BigDecimal rectificationFund = new BigDecimal("0.00");
+	/**严重程度*/
+	@ManyToOne
+	@JoinColumn(name="severity_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private Category severity;
+	/**隐患原因类别:人的不安全行为，物的不安全状态，管理上的缺失，环境不良等*/
+	@ManyToOne
+	@JoinColumn(name="reason_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private Category reasonCategory;
+	/**所在企业*/
+	@ManyToOne
+	@JoinColumn(name="org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private Org org;
+
+	public Org getOrg() {
+		return org;
+	}
+
+	public void setOrg(Org org) {
+		this.org = org;
+	}
+
+	public Boolean getRectification() {
+		return rectification;
+	}
+
+	public void setRectification(Boolean rectification) {
+		this.rectification = rectification;
+	}
+
+	public BigDecimal getRectificationFund() {
+		return rectificationFund;
+	}
+
+	public void setRectificationFund(BigDecimal rectificationFund) {
+		this.rectificationFund = rectificationFund;
+	}
+
+	public Category getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(Category severity) {
+		this.severity = severity;
+	}
+
+	public Category getReasonCategory() {
+		return reasonCategory;
+	}
+
+	public void setReasonCategory(Category reasonCategory) {
+		this.reasonCategory = reasonCategory;
+	}
 
 	public String getDetailNote() {
 		return detailNote;
@@ -122,13 +179,5 @@ public class DangerGoodsCheckDetailRecord {
 
 	public void setCancelDate(Date cancelDate) {
 		this.cancelDate = cancelDate;
-	}
-
-	public DangerGoodsCheck getDangerGoodsCheck() {
-		return dangerGoodsCheck;
-	}
-
-	public void setDangerGoodsCheck(DangerGoodsCheck dangerGoodsCheck) {
-		this.dangerGoodsCheck = dangerGoodsCheck;
 	}
 }

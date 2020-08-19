@@ -38,6 +38,20 @@ public class EmployeeController extends CommonController{
         return new JsonResult<>(Result.SUCCESS,list);
     }
     /**
+     * 当前登录用户姓名
+     * @return
+     */
+    @GetMapping("/employee/currentEmployee")
+    public JsonResult currentEmployee(HttpServletRequest request){
+        Employee employee = employeeService.findByUsername(getCurrentUsername(request));
+        if(employee==null){
+            employee = new Employee();
+            User user = userService.queryUserByUsername(getCurrentUsername(request));
+            employee.setName(user.getRealname());
+        }
+        return new JsonResult<>(Result.SUCCESS,employee);
+    }
+    /**
      * 查询所有企业员工
      * @return
      */

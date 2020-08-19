@@ -15,4 +15,11 @@ public interface CategoryRepository<ID extends Serializable> extends CommonRepos
      */
     @Query("select c from Category c where c.parent.id=?1")
     List<Category> findByParentId(String pid);
+    /**
+     * 根据类别查找
+     * @param type
+     * @return
+     */
+    @Query("select c from Category c where c.type=?1")
+    List<Category> findByType(String type);
 }

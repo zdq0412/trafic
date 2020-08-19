@@ -1,5 +1,4 @@
 package com.jxqixin.trafic.model;
-
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -7,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-
 /**
  * 模式：模式下是一级菜单(directory中的记录)
  */

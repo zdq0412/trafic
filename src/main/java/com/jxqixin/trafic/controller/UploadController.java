@@ -13,6 +13,8 @@ import org.thymeleaf.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+
 /**
  * 文件上传控制器
  */
@@ -44,29 +46,49 @@ public class UploadController extends CommonController {
     private IDeviceService deviceService;
     @Autowired
     private IDeviceMaintainService deviceMaintainService;
+    @Autowired
+    private IEmergencyPlanBakService emergencyPlanBakService;
+    @Autowired
+    private IPreplanDrillRecordService preplanDrillRecordService;
     /**
      * 上传人员档案
      * @return
      */
     @PostMapping("/employeeDocumentUpload")
     public JsonResult employeeDocumentUpload(@RequestParam("file") MultipartFile file, UploadFileDto uploadFileDto, HttpServletRequest request){
-        User user = userService.queryUserByUsername(getCurrentUsername(request));
-        String urlMapping = "";
         Result result = Result.SUCCESS;
+        String urlMapping = "";
+        commonUpload(request,uploadFileDto,file,result,urlMapping);
+        return new JsonResult(result,urlMapping);
+    }
+    /**
+     * 上传应急预案备案文件
+     * @return
+     */
+    @PostMapping("/emergencyPlanBakUpload")
+    public JsonResult emergencyPlanBakUpload(@RequestParam("file") MultipartFile file, UploadFileDto uploadFileDto, HttpServletRequest request){
+        Result result = Result.SUCCESS;
+        String urlMapping = "";
+        commonUpload(request,uploadFileDto,file,result,urlMapping);
+        return new JsonResult(result,urlMapping);
+    }
+
+    private void commonUpload(HttpServletRequest request,UploadFileDto uploadFileDto, MultipartFile file ,Result result,String urlMapping){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
         try {
             String dir = (user.getOrg()==null?"":(user.getOrg().getName()+"/")) + uploadFileDto.getType();
             File savedFile = upload(dir, file);
             if (savedFile != null) {
                 urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
             }
-           updateUrlAndRealPath(urlMapping,savedFile.getAbsolutePath(),uploadFileDto);
+            updateUrlAndRealPath(urlMapping,savedFile.getAbsolutePath(),uploadFileDto);
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
             result = Result.FAIL;
             result.setMessage(e.getMessage());
         }
-        return new JsonResult(result,urlMapping);
     }
+
     /**
      * 上传安全投入台账
      * @return
@@ -213,6 +235,41 @@ public class UploadController extends CommonController {
                 deviceMaintain.setUrl(url);
                 deviceMaintain.setRealPath(realPath);
                 deviceMaintainService.updateObj(deviceMaintain);
+                break;
+            }
+            //应急预案文件
+            case "emergencyPlanBak":{
+                EmergencyPlanBak emergencyPlanBak = emergencyPlanBakService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(emergencyPlanBak.getPrePlanRealPath())){
+                    deleteTemplateFile(emergencyPlanBak.getPrePlanRealPath());
+                }
+                emergencyPlanBak.setPrePlanUrl(url);
+                emergencyPlanBak.setPrePlanRealPath(realPath);
+                emergencyPlanBak.setPrePlanUploadDate(new Date());
+                emergencyPlanBakService.updateObj(emergencyPlanBak);
+                break;
+            }
+            //应急备案文件
+            case "planBak":{
+                EmergencyPlanBak emergencyPlanBak = emergencyPlanBakService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(emergencyPlanBak.getKeepOnRecordRealPath())){
+                    deleteTemplateFile(emergencyPlanBak.getKeepOnRecordRealPath());
+                }
+                emergencyPlanBak.setKeepOnRecordUrl(url);
+                emergencyPlanBak.setKeepOnRecordRealPath(realPath);
+                emergencyPlanBak.setKeepOnRecordUploadDate(new Date());
+                emergencyPlanBakService.updateObj(emergencyPlanBak);
+                break;
+            }
+            //应急预案演练文件
+            case "preplanDrillRecord":{
+                PreplanDrillRecord preplanDrillRecord = preplanDrillRecordService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(preplanDrillRecord.getRealPath())){
+                    deleteTemplateFile(preplanDrillRecord.getRealPath());
+                }
+                preplanDrillRecord.setUrl(url);
+                preplanDrillRecord.setRealPath(realPath);
+                preplanDrillRecordService.updateObj(preplanDrillRecord);
                 break;
             }
         }
