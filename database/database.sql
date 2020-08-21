@@ -1352,3 +1352,120 @@ create table m43_device_check_template(
   constraint fk_m43_device_check_template_category_region_id foreign key(region_id) references category(id),
   constraint fk_org_category_m43_device_check_template foreign key(org_category_id) references org_category(id)
 ) comment '设备点检模板';
+
+#GPS使用日志,GPS台账
+drop table if exists m020_gps_account;
+create table m020_gps_account(
+  id varchar(36) primary key comment '主键',
+  carNum varchar(100) comment '车牌号',
+  createDate timestamp null comment '创建日期',
+  driveDate timestamp null comment '行驶时间',
+  driverName varchar(100) comment '驾驶员姓名',
+  driveLines varchar(2000) comment '运营路线',
+  goodsName varchar(200) comment '货物名称',
+  carStatus varchar(2000) comment '车辆运行状况',
+  gpsStatus varchar(2000) comment 'GPS运行状况',
+  illegal bit default 0 comment '车辆有无违法违章行为',
+  note varchar(2000) comment '备注',
+  org_id varchar(36) comment '企业ID',
+  constraint fk_m020_gps_account_org_org_id foreign key(org_id) references org(id)
+) comment 'GPS使用日志';
+
+#设备点检表
+drop table if exists m057_device_check;
+create table m057_device_check(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m057_device_check_org_org_id foreign key(org_id) references org(id)
+) comment '设备点检表';
+
+#安全文化建设
+drop table if exists m033_security_build;
+create table m033_security_build(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m033_security_build_org_org_id foreign key(org_id) references org(id)
+) comment '安全文化建设';
+
+#安全生产月
+drop table if exists m034_security_month;
+create table m034_security_month(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m034_security_month_org_org_id foreign key(org_id) references org(id)
+) comment '安全生产月';
+
+#各种安全活动
+drop table if exists m035_security_activity;
+create table m035_security_activity(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m035_security_activity_org_id foreign key(org_id) references org(id)
+) comment '各种安全活动';
+
+#事故记录及处理
+drop table if exists m039_accident_record;
+create table m039_accident_record(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m039_accident_record_org_id foreign key(org_id) references org(id)
+) comment '事故记录及处理';
+
+
+#四不放过记录
+drop table if exists m040_four_record;
+create table m040_four_record(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m040_four_record_org_id foreign key(org_id) references org(id)
+) comment '四不放过记录';
+
+
