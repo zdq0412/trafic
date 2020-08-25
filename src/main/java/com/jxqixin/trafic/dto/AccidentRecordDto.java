@@ -4,8 +4,6 @@ public class AccidentRecordDto extends PageDto {
 	private String id;
 	/**名称*/
 	private String name;
-	/**创建日期*/
-	private String createDate;
 	/**文件名称*/
 	private String filename;
 	/**上传日期*/
@@ -74,14 +72,6 @@ public class AccidentRecordDto extends PageDto {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
-	}
-
-	public String getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
 	}
 
 	public String getUploadDate() {

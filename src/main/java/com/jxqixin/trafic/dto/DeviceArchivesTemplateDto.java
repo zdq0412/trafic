@@ -6,8 +6,6 @@ public class DeviceArchivesTemplateDto extends PageDto{
 	private String id;
 	/**名称*/
 	private String name;
-	/**创建日期*/
-	private String createDate;
 	/**文件名称*/
 	private String filename;
 	/**备注*/
@@ -36,14 +34,6 @@ public class DeviceArchivesTemplateDto extends PageDto{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
 	}
 
 	public String getFilename() {

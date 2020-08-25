@@ -65,9 +65,9 @@ public interface FunctionsRepository<ID extends Serializable> extends CommonRepo
             "inner join Role r on rf.role_id=r.id " +
             " inner join t_user u on u.role_id=r.id where u.username=?1")
     List<Functions> findByUsername(String currentUsername);
-    @Query(nativeQuery = true,value="select * from functions where type='1'")
+    @Query(nativeQuery = true,value="select * from functions where type='1' order by priority")
     List<Functions> findAllMenus();
-    @Query("select f from Functions f where f.parent.id=?1")
+    @Query("select f from Functions f where f.parent.id=?1 order by priority")
     List<Functions> findByParentId(String id);
     @Query("select f from Functions f where f.id in (150,151,152,153,154,155,156,157,158,100,101,102,103,104,105,106,107,108,159,160,161,162,163,164,165)")
     List<Functions> findAdminRoleFunctions();
