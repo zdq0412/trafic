@@ -62,12 +62,11 @@ public class EmployeeController extends CommonController{
     }
     /**
      * 分页查询企业员工
-     * @param nameDto
      * @return
      */
     @GetMapping("/employee/employeesByPage")
-    public ModelMap queryEmployees(NameDto nameDto,HttpServletRequest request){
-        Page page = employeeService.findEmployees(nameDto,getOrg(request));
+    public ModelMap queryEmployees(EmployeeDto employeeDto,HttpServletRequest request){
+        Page page = employeeService.findEmployees(employeeDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

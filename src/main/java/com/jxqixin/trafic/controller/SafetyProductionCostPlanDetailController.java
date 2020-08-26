@@ -35,8 +35,8 @@ public class SafetyProductionCostPlanDetailController extends CommonController{
      * @return
      */
     @GetMapping("/safetyProductionCostPlanDetail/safetyProductionCostPlanDetailsByPage")
-    public ModelMap querySafetyProductionCostPlanDetails(SafetyProductionCostPlanDetailDto safetyProductionCostPlanDetailDto){
-        Page page = safetyProductionCostPlanDetailService.findSafetyProductionCostPlanDetails(safetyProductionCostPlanDetailDto);
+    public ModelMap querySafetyProductionCostPlanDetails(SafetyProductionCostPlanDetailDto safetyProductionCostPlanDetailDto,HttpServletRequest request){
+        Page page = safetyProductionCostPlanDetailService.findSafetyProductionCostPlanDetails(safetyProductionCostPlanDetailDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

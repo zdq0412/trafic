@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.service.impl;
 
+import com.jxqixin.trafic.dto.DepartmentDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Department;
 import com.jxqixin.trafic.model.Org;
@@ -38,15 +39,15 @@ public class DepartmentServiceImpl extends CommonServiceImpl<Department> impleme
 	}
 
 	@Override
-	public Page findDepartments(NameDto nameDto,Org org) {
-		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
+	public Page findDepartments(DepartmentDto departmentDto, Org org) {
+		Pageable pageable = PageRequest.of(departmentDto.getPage(),departmentDto.getLimit());
 		Page page =  departmentRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> list = new ArrayList<>();
 
-				if(!StringUtils.isEmpty(nameDto.getName())){
-					list.add(criteriaBuilder.like(root.get("name"),"%" + nameDto.getName() +"%"));
+				if(!StringUtils.isEmpty(departmentDto.getName())){
+					list.add(criteriaBuilder.like(root.get("name"),"%" + departmentDto.getName() +"%"));
 				}
 
 				if(org != null){
@@ -87,7 +88,7 @@ public class DepartmentServiceImpl extends CommonServiceImpl<Department> impleme
 
 		//删除部门下的职位
 		positionRepository.deleteByDepartmentId(id);
-
+		departmentRepository.deleteChildrenByParentId(id);
 		departmentRepository.deleteById(id);
 	}
 	@Override
@@ -117,7 +118,10 @@ public class DepartmentServiceImpl extends CommonServiceImpl<Department> impleme
 		Collections.reverse(list);
 		return list;
 	}
-
+	@Override
+	public Long queryCountByParentId(String parentId) {
+		return departmentRepository.queryCountByParentId(parentId);
+	}
 	/**
 	 * 构建子部门
 	 * @param department

@@ -2,7 +2,7 @@ package com.jxqixin.trafic.dto;
 /**
  * 会议或培训模板
  */
-public class MeetingDto {
+public class MeetingDto extends PageDto{
 	private String id;
 	/**名称*/
 	private String name;

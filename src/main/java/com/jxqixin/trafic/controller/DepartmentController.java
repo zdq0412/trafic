@@ -40,13 +40,13 @@ public class DepartmentController extends CommonController{
     }
     /**
      * 分页查询部门
-     * @param nameDto
+     * @param departmentDto
      * @return
      */
     @GetMapping("/department/departmentsByPage")
-    public ModelMap queryDepartments(NameDto nameDto,HttpServletRequest request){
+    public ModelMap queryDepartments(DepartmentDto departmentDto,HttpServletRequest request){
         User user = userService.queryUserByUsername(getCurrentUsername(request));
-        Page page = departmentService.findDepartments(nameDto,user.getOrg());
+        Page page = departmentService.findDepartments(departmentDto,user.getOrg());
         return pageModelMap(page);
     }
     /**
@@ -140,6 +140,19 @@ public class DepartmentController extends CommonController{
             Result result = Result.FAIL;
             result.setMessage(e.getMessage());
             return new JsonResult(result);
+        }
+        return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     * 根据父部门ID查找子部门数
+     * @param parentId
+     * @return
+     */
+    @GetMapping("/department/children")
+    public JsonResult findByParentId(String parentId){
+        Long count = departmentService.queryCountByParentId(parentId);
+        if(count==null || count<=0){
+            return new JsonResult(Result.FAIL);
         }
         return new JsonResult(Result.SUCCESS);
     }

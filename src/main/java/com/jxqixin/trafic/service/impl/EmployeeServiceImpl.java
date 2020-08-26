@@ -47,8 +47,8 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 	}
 
 	@Override
-	public Page findEmployees(NameDto nameDto,Org org) {
-		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
+	public Page findEmployees(EmployeeDto employeeDto,Org org) {
+		Pageable pageable = PageRequest.of(employeeDto.getPage(),employeeDto.getLimit());
 		return employeeRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -58,8 +58,8 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
 
-				if(!StringUtils.isEmpty(nameDto.getName())){
-					list.add(criteriaBuilder.like(root.get("name"),"%" + nameDto.getName() +"%"));
+				if(!StringUtils.isEmpty(employeeDto.getName())){
+					list.add(criteriaBuilder.like(root.get("name"),"%" + employeeDto.getName() +"%"));
 				}
 
 				Predicate[] predicates = new Predicate[list.size()];

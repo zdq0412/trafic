@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.service;
 import com.jxqixin.trafic.dto.SecurityMonthDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.SecurityMonth;
 import org.springframework.data.domain.Page;
 
@@ -9,7 +10,7 @@ public interface ISecurityMonthService extends ICommonService<SecurityMonth> {
      * @param securityMonthDto
      * @return
      */
-    Page findSecurityMonths(SecurityMonthDto securityMonthDto);
+    Page findSecurityMonths(SecurityMonthDto securityMonthDto, Org org);
     /**
      * 根据ID删除
      * @param id

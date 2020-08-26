@@ -2,6 +2,7 @@ package com.jxqixin.trafic.service.impl;
 
 import com.jxqixin.trafic.dto.SecurityMonthDto;
 import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.SafetyProductionCostPlanDetail;
 import com.jxqixin.trafic.model.SecurityMonth;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.SecurityMonthRepository;
@@ -30,16 +31,18 @@ public class SecurityMonthServiceImpl extends CommonServiceImpl<SecurityMonth> i
 		return securityBuildRepository;
 	}
 	@Override
-	public Page findSecurityMonths(SecurityMonthDto securityBuildDto) {
+	public Page findSecurityMonths(SecurityMonthDto securityBuildDto,Org org) {
 		Pageable pageable = PageRequest.of(securityBuildDto.getPage(),securityBuildDto.getLimit(), Sort.Direction.DESC,"createDate");
 		return securityBuildRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(securityBuildDto.getOrgId())){
-					Join<SecurityMonth, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.equal(orgJoin.get("id"),securityBuildDto.getOrgId()));
+
+				if(org!=null){
+					Join<SecurityMonth,Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
+
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}

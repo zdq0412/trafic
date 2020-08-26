@@ -39,8 +39,8 @@ public class SecurityBuildController extends CommonController{
      * @return
      */
     @GetMapping("/securityBuild/securityBuildsByPage")
-    public ModelMap querySecurityBuilds(SecurityBuildDto securityBuildDto){
-        Page page = securityBuildService.findSecurityBuilds(securityBuildDto);
+    public ModelMap querySecurityBuilds(SecurityBuildDto securityBuildDto,HttpServletRequest request){
+        Page page = securityBuildService.findSecurityBuilds(securityBuildDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

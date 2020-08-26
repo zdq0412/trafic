@@ -39,8 +39,8 @@ public class AccidentRecordController extends CommonController{
      * @return
      */
     @GetMapping("/accidentRecord/accidentRecordsByPage")
-    public ModelMap queryAccidentRecords(AccidentRecordDto accidentRecordDto){
-        Page page = accidentRecordService.findAccidentRecords(accidentRecordDto);
+    public ModelMap queryAccidentRecords(AccidentRecordDto accidentRecordDto,HttpServletRequest request){
+        Page page = accidentRecordService.findAccidentRecords(accidentRecordDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

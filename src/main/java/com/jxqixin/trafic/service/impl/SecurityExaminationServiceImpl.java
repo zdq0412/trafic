@@ -2,6 +2,7 @@ package com.jxqixin.trafic.service.impl;
 
 import com.jxqixin.trafic.dto.SecurityExaminationDto;
 import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.SafetyProductionCostPlanDetail;
 import com.jxqixin.trafic.model.SecurityExamination;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.SecurityExaminationRepository;
@@ -30,20 +31,22 @@ public class SecurityExaminationServiceImpl extends CommonServiceImpl<SecurityEx
 		return securityExaminationRepository;
 	}
 	@Override
-	public Page findSecurityExaminations(SecurityExaminationDto securityExaminationDto) {
+	public Page findSecurityExaminations(SecurityExaminationDto securityExaminationDto,Org org) {
 		Pageable pageable = PageRequest.of(securityExaminationDto.getPage(),securityExaminationDto.getLimit(), Sort.Direction.DESC,"createDate");
 		return securityExaminationRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(securityExaminationDto.getOrgId())){
-					Join<SecurityExamination, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.equal(orgJoin.get("id"),securityExaminationDto.getOrgId()));
+
+				if(org!=null){
+					Join<SecurityExamination,Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
+
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}
-		}, pageable);
+		},pageable);
 	}
 
 

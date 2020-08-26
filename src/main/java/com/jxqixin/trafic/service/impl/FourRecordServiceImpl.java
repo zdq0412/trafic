@@ -3,6 +3,7 @@ package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.dto.FourRecordDto;
 import com.jxqixin.trafic.model.FourRecord;
 import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.SafetyProductionCostPlanDetail;
 import com.jxqixin.trafic.repository.FourRecordRepository;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.service.IFourRecordService;
@@ -30,20 +31,22 @@ public class FourRecordServiceImpl extends CommonServiceImpl<FourRecord> impleme
 		return fourRecordRepository;
 	}
 	@Override
-	public Page findFourRecords(FourRecordDto fourRecordDto) {
+	public Page findFourRecords(FourRecordDto fourRecordDto,Org org) {
 		Pageable pageable = PageRequest.of(fourRecordDto.getPage(),fourRecordDto.getLimit(), Sort.Direction.DESC,"createDate");
 		return fourRecordRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(fourRecordDto.getOrgId())){
-					Join<FourRecord, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.equal(orgJoin.get("id"),fourRecordDto.getOrgId()));
+
+				if(org!=null){
+					Join<FourRecord,Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
+
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}
-		}, pageable);
+		},pageable);
 	}
 	@Override
 	public void deleteById(String id) {

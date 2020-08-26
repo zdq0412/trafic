@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.service;
 
 import com.jxqixin.trafic.dto.SafetyProductionCostPlanDetailDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.SafetyProductionCostPlanDetail;
 import org.springframework.data.domain.Page;
 
@@ -15,5 +16,5 @@ public interface ISafetyProductionCostPlanDetailService extends ICommonService<S
      * @param safetyProductionCostPlanDetailDto
      * @return
      */
-    Page findSafetyProductionCostPlanDetails(SafetyProductionCostPlanDetailDto safetyProductionCostPlanDetailDto);
+    Page findSafetyProductionCostPlanDetails(SafetyProductionCostPlanDetailDto safetyProductionCostPlanDetailDto, Org org);
 }

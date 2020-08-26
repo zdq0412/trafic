@@ -3,6 +3,7 @@ package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.dto.HealthyRecordDto;
 import com.jxqixin.trafic.model.HealthyRecord;
 import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.SafetyProductionCostPlanDetail;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.HealthyRecordRepository;
 import com.jxqixin.trafic.service.IHealthyRecordService;
@@ -30,20 +31,22 @@ public class HealthyRecordServiceImpl extends CommonServiceImpl<HealthyRecord> i
 		return healthyRecordRepository;
 	}
 	@Override
-	public Page findHealthyRecords(HealthyRecordDto healthyRecordDto) {
+	public Page findHealthyRecords(HealthyRecordDto healthyRecordDto,Org org) {
 		Pageable pageable = PageRequest.of(healthyRecordDto.getPage(),healthyRecordDto.getLimit(), Sort.Direction.DESC,"createDate");
 		return healthyRecordRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(healthyRecordDto.getOrgId())){
-					Join<HealthyRecord, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.equal(orgJoin.get("id"),healthyRecordDto.getOrgId()));
+
+				if(org!=null){
+					Join<HealthyRecord,Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
+
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}
-		}, pageable);
+		},pageable);
 	}
 
 

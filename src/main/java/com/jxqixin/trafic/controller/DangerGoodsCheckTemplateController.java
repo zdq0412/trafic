@@ -32,12 +32,12 @@ public class DangerGoodsCheckTemplateController extends CommonController{
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * 分页查危险货物隐患排查
-     * @param nameDto
+     * @param dangerGoodsCheckTemplateDto
      * @return
      */
     @GetMapping("/dangerGoodsCheckTemplate/dangerGoodsCheckTemplatesByPage")
-    public ModelMap queryDangerGoodsCheckTemplates(NameDto nameDto,HttpServletRequest request){
-        Page page = dangerGoodsCheckTemplateService.findDangerGoodsCheckTemplates(nameDto,getOrg(request));
+    public ModelMap queryDangerGoodsCheckTemplates(DangerGoodsCheckTemplateDto dangerGoodsCheckTemplateDto,HttpServletRequest request){
+        Page page = dangerGoodsCheckTemplateService.findDangerGoodsCheckTemplates(dangerGoodsCheckTemplateDto,getOrg(request));
         return pageModelMap(page);
     }
 

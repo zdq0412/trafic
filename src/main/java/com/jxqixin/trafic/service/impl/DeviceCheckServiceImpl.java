@@ -27,15 +27,15 @@ public class DeviceCheckServiceImpl extends CommonServiceImpl<DeviceCheck> imple
 		return deviceCheckRepository;
 	}
 	@Override
-	public Page findDeviceChecks(DeviceCheckDto deviceCheckDto) {
+	public Page findDeviceChecks(DeviceCheckDto deviceCheckDto,Org org) {
 		Pageable pageable = PageRequest.of(deviceCheckDto.getPage(),deviceCheckDto.getLimit(), Sort.Direction.DESC,"createDate");
 		return deviceCheckRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(deviceCheckDto.getOrgId())){
-					Join<DeviceCheck, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.equal(orgJoin.get("id"),deviceCheckDto.getOrgId()));
+				if(org!=null){
+					Join<DeviceCheck,Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));

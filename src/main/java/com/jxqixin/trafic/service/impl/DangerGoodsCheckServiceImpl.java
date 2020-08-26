@@ -1,4 +1,5 @@
 package com.jxqixin.trafic.service.impl;
+import com.jxqixin.trafic.dto.DangerGoodsCheckDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.*;
@@ -9,9 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,9 +36,22 @@ public class DangerGoodsCheckServiceImpl extends CommonServiceImpl<DangerGoodsCh
 		return templateRepository;
 	}
 	@Override
-	public Page findDangerGoodsChecks(NameDto nameDto) {
-		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit(), Sort.Direction.DESC,"createDate");
-		return templateRepository.findAll(pageable);
+	public Page findDangerGoodsChecks(DangerGoodsCheckDto dangerGoodsCheckDto,Org org) {
+		Pageable pageable = PageRequest.of(dangerGoodsCheckDto.getPage(),dangerGoodsCheckDto.getLimit(), Sort.Direction.DESC,"createDate");
+		return templateRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> list = new ArrayList<>();
+
+				if(org!=null){
+					Join<DangerGoodsCheck,Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
+				}
+
+				Predicate[] predicates = new Predicate[list.size()];
+				return criteriaBuilder.and(list.toArray(predicates));
+			}
+		},pageable);
 	}
 
 	@Override

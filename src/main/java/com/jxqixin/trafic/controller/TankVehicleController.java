@@ -30,12 +30,11 @@ public class TankVehicleController extends CommonController{
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * 分页查询
-     * @param nameDto
      * @return
      */
     @GetMapping("/tankVehicle/tankVehiclesByPage")
-    public ModelMap queryTankVehicles(NameDto nameDto){
-        Page page = tankVehicleService.findTankVehicles(nameDto);
+    public ModelMap queryTankVehicles(TankVehicleDto tankVehicleDto,HttpServletRequest request){
+        Page page = tankVehicleService.findTankVehicles(tankVehicleDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

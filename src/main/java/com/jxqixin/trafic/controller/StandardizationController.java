@@ -40,8 +40,8 @@ public class StandardizationController extends CommonController{
      * @return
      */
     @GetMapping("/standardization/standardizationsByPage")
-    public ModelMap queryStandardizations(StandardizationDto standardizationDto){
-        Page page = standardizationService.findStandardizations(standardizationDto);
+    public ModelMap queryStandardizations(StandardizationDto standardizationDto,HttpServletRequest request){
+        Page page = standardizationService.findStandardizations(standardizationDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

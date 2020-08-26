@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.service;
 
+import com.jxqixin.trafic.dto.DangerGoodsCheckDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.DangerGoodsCheck;
 import com.jxqixin.trafic.model.DangerGoodsCheckDetail;
@@ -12,10 +13,10 @@ import java.util.List;
 public interface IDangerGoodsCheckService extends ICommonService<DangerGoodsCheck> {
     /**
      * 分页查询模板信息
-     * @param nameDto
+     * @param dangerGoodsCheckDto
      * @return
      */
-    Page findDangerGoodsChecks(NameDto nameDto);
+    Page findDangerGoodsChecks(DangerGoodsCheckDto dangerGoodsCheckDto,Org org);
     /**
      * 根据ID删除模板，同时删除模板下的所有目录
      */

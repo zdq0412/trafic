@@ -5,7 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-public class EmployeeDto implements Serializable {
+public class EmployeeDto extends PageDto implements Serializable {
     private String id;
     /**名称*/
     private String name;

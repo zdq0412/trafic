@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.service;
+
 import com.jxqixin.trafic.dto.SecurityActivityDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.SecurityActivity;
 import org.springframework.data.domain.Page;
 
@@ -9,7 +11,7 @@ public interface ISecurityActivityService extends ICommonService<SecurityActivit
      * @param securityActivityDto
      * @return
      */
-    Page findSecurityActivitys(SecurityActivityDto securityActivityDto);
+    Page findSecurityActivitys(SecurityActivityDto securityActivityDto, Org org);
     /**
      * 根据ID删除
      * @param id

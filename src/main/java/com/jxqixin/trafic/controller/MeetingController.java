@@ -32,12 +32,11 @@ public class MeetingController extends CommonController{
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * 分页查询会议
-     * @param nameDto
      * @return
      */
     @GetMapping("/meeting/meetingsByPage")
-    public ModelMap queryMeetings(NameDto nameDto,String type){
-        Page page = meetingService.findMeetings(nameDto,type);
+    public ModelMap queryMeetings(MeetingDto meetingDto,HttpServletRequest request){
+        Page page = meetingService.findMeetings(meetingDto,getOrg(request));
         return pageModelMap(page);
     }
 

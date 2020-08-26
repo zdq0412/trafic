@@ -22,7 +22,6 @@ public class StandardizationDto extends PageDto {
 	private String url;
 	/**文件真实存储路径*/
 	private String realPath;
-	private String orgId;
 
 	public String getUrl() {
 		return url;
@@ -110,13 +109,5 @@ public class StandardizationDto extends PageDto {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
-	}
-
-	public String getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
 	}
 }

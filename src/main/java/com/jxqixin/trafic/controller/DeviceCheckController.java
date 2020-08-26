@@ -39,8 +39,8 @@ public class DeviceCheckController extends CommonController{
      * @return
      */
     @GetMapping("/deviceCheck/deviceChecksByPage")
-    public ModelMap queryDeviceChecks(DeviceCheckDto deviceCheckDto){
-        Page page = deviceCheckService.findDeviceChecks(deviceCheckDto);
+    public ModelMap queryDeviceChecks(DeviceCheckDto deviceCheckDto,HttpServletRequest request){
+        Page page = deviceCheckService.findDeviceChecks(deviceCheckDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

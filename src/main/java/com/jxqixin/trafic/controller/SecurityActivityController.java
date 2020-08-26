@@ -39,8 +39,8 @@ public class SecurityActivityController extends CommonController{
      * @return
      */
     @GetMapping("/securityActivity/securityActivitysByPage")
-    public ModelMap querySecurityActivitys(SecurityActivityDto securityActivityDto){
-        Page page = securityActivityService.findSecurityActivitys(securityActivityDto);
+    public ModelMap querySecurityActivitys(SecurityActivityDto securityActivityDto,HttpServletRequest request){
+        Page page = securityActivityService.findSecurityActivitys(securityActivityDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

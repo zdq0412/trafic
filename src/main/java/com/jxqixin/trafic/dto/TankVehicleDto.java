@@ -3,7 +3,7 @@ package com.jxqixin.trafic.dto;
 /**
  * 危险货物道路运输罐式车辆罐体检查记录模板表
  */
-public class TankVehicleDto {
+public class TankVehicleDto extends PageDto{
 	private String id;
 	/**名称*/
 	private String name;

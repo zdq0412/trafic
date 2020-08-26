@@ -29,12 +29,11 @@ public class TrainingController extends CommonController{
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * 分页查询培训
-     * @param nameDto
      * @return
      */
     @GetMapping("/training/trainingsByPage")
-    public ModelMap queryTrainings(NameDto nameDto){
-        Page page = trainingService.findTrainings(nameDto);
+    public ModelMap queryTrainings(TrainingDto trainingDto,HttpServletRequest request){
+        Page page = trainingService.findTrainings(trainingDto,getOrg(request));
         return pageModelMap(page);
     }
 

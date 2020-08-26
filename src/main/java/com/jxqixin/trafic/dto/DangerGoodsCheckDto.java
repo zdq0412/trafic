@@ -3,7 +3,7 @@ package com.jxqixin.trafic.dto;
 /**
  * 危险货物运输企业安全生产隐患排查整改台账
  */
-public class DangerGoodsCheckDto {
+public class DangerGoodsCheckDto extends PageDto{
 	private String id;
 	/**名称*/
 	private String name;

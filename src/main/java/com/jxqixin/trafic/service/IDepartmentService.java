@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.service;
 
+import com.jxqixin.trafic.dto.DepartmentDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Department;
 import com.jxqixin.trafic.model.Org;
@@ -10,10 +11,10 @@ import java.util.List;
 public interface IDepartmentService extends ICommonService<Department> {
     /**
      * 分页查询部门
-     * @param nameDto
+     * @param departmentDto
      * @return
      */
-    Page findDepartments(NameDto nameDto,Org org);
+    Page findDepartments(DepartmentDto departmentDto, Org org);
     /**
      * 根据部门名称查找部门
      * @param name
@@ -38,4 +39,10 @@ public interface IDepartmentService extends ICommonService<Department> {
      * @return
      */
     List<String> findParent(String pid);
+    /**
+     * 根据父部门ID查找子部门数
+     * @param parentId
+     * @return
+     */
+    Long queryCountByParentId(String parentId);
 }

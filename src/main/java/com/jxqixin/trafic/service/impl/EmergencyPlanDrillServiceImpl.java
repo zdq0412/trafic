@@ -3,6 +3,7 @@ package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.dto.EmergencyPlanDrillDto;
 import com.jxqixin.trafic.model.EmergencyPlanDrill;
 import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.SafetyProductionCostPlanDetail;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.EmergencyPlanDrillRepository;
 import com.jxqixin.trafic.service.IEmergencyPlanDrillService;
@@ -29,20 +30,22 @@ public class EmergencyPlanDrillServiceImpl extends CommonServiceImpl<EmergencyPl
 		return emergencyPlanDrillRepository;
 	}
 	@Override
-	public Page findEmergencyPlanDrills(EmergencyPlanDrillDto emergencyPlanDrillDto) {
+	public Page findEmergencyPlanDrills(EmergencyPlanDrillDto emergencyPlanDrillDto,Org org) {
 		Pageable pageable = PageRequest.of(emergencyPlanDrillDto.getPage(),emergencyPlanDrillDto.getLimit(), Sort.Direction.DESC,"createDate");
 		return emergencyPlanDrillRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(emergencyPlanDrillDto.getOrgId())){
-					Join<EmergencyPlanDrill, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.equal(orgJoin.get("id"),emergencyPlanDrillDto.getOrgId()));
+
+				if(org!=null){
+					Join<EmergencyPlanDrill,Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
+
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}
-		}, pageable);
+		},pageable);
 	}
 
 	@Override

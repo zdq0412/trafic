@@ -14,27 +14,6 @@ public class SecurityBuildDto extends PageDto {
 	private String note;
 	/**创建人*/
 	private String creator;
-	/**文件访问路径*/
-	private String url;
-	/**文件真实存储路径*/
-	private String realPath;
-	private String orgId;
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getRealPath() {
-		return realPath;
-	}
-
-	public void setRealPath(String realPath) {
-		this.realPath = realPath;
-	}
 
 	public String getId() {
 		return id;
@@ -90,13 +69,5 @@ public class SecurityBuildDto extends PageDto {
 
 	public void setUploadDate(String uploadDate) {
 		this.uploadDate = uploadDate;
-	}
-
-	public String getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
 	}
 }

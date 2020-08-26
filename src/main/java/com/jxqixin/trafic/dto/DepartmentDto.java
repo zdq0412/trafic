@@ -1,6 +1,6 @@
 package com.jxqixin.trafic.dto;
 
-public class DepartmentDto {
+public class DepartmentDto extends PageDto {
     private String id;
     private String name;
     private String pid;

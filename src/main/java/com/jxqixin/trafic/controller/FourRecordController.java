@@ -39,8 +39,8 @@ public class FourRecordController extends CommonController{
      * @return
      */
     @GetMapping("/fourRecord/fourRecordsByPage")
-    public ModelMap queryFourRecords(FourRecordDto fourRecordDto){
-        Page page = fourRecordService.findFourRecords(fourRecordDto);
+    public ModelMap queryFourRecords(FourRecordDto fourRecordDto,HttpServletRequest request){
+        Page page = fourRecordService.findFourRecords(fourRecordDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

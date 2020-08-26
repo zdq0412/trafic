@@ -40,8 +40,8 @@ public class SecurityExaminationController extends CommonController{
      * @return
      */
     @GetMapping("/securityExamination/securityExaminationsByPage")
-    public ModelMap querySecurityExaminations(SecurityExaminationDto securityExaminationDto){
-        Page page = securityExaminationService.findSecurityExaminations(securityExaminationDto);
+    public ModelMap querySecurityExaminations(SecurityExaminationDto securityExaminationDto,HttpServletRequest request){
+        Page page = securityExaminationService.findSecurityExaminations(securityExaminationDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

@@ -40,8 +40,8 @@ public class GoalExaminationController extends CommonController{
      * @return
      */
     @GetMapping("/goalExamination/goalExaminationsByPage")
-    public ModelMap queryGoalExaminations(GoalExaminationDto goalExaminationDto){
-        Page page = goalExaminationService.findGoalExaminations(goalExaminationDto);
+    public ModelMap queryGoalExaminations(GoalExaminationDto goalExaminationDto,HttpServletRequest request){
+        Page page = goalExaminationService.findGoalExaminations(goalExaminationDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

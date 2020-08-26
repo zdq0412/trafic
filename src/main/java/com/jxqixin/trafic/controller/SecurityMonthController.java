@@ -39,8 +39,8 @@ public class SecurityMonthController extends CommonController{
      * @return
      */
     @GetMapping("/securityMonth/securityMonthsByPage")
-    public ModelMap querySecurityMonths(SecurityMonthDto securityMonthDto){
-        Page page = securityMonthService.findSecurityMonths(securityMonthDto);
+    public ModelMap querySecurityMonths(SecurityMonthDto securityMonthDto,HttpServletRequest request){
+        Page page = securityMonthService.findSecurityMonths(securityMonthDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

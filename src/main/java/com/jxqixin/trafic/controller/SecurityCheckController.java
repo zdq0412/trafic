@@ -31,12 +31,11 @@ public class SecurityCheckController extends CommonController{
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * 分页查询安全检查
-     * @param nameDto
      * @return
      */
     @GetMapping("/securityCheck/securityChecksByPage")
-    public ModelMap querySecurityChecks(NameDto nameDto,String type){
-        Page page = securityCheckService.findSecurityChecks(nameDto,type);
+    public ModelMap querySecurityChecks(SecurityCheckDto securityCheckDto,HttpServletRequest request){
+        Page page = securityCheckService.findSecurityChecks(securityCheckDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

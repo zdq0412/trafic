@@ -1,9 +1,9 @@
 package com.jxqixin.trafic.dto;
 
 /**
- * 安全检查模板
+ * 安全检查
  */
-public class SecurityCheckDto {
+public class SecurityCheckDto extends PageDto{
 	private String id;
 	/**名称*/
 	private String name;

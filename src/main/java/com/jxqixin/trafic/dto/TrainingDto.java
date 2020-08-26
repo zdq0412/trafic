@@ -2,7 +2,7 @@ package com.jxqixin.trafic.dto;
 /**
  * 培训模板
  */
-public class TrainingDto {
+public class TrainingDto extends PageDto{
 	private String id;
 	/**名称*/
 	private String name;

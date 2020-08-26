@@ -18,7 +18,6 @@ public class DeviceCheckDto extends PageDto {
 	private String url;
 	/**文件真实存储路径*/
 	private String realPath;
-	private String orgId;
 
 	public String getUrl() {
 		return url;
@@ -90,13 +89,5 @@ public class DeviceCheckDto extends PageDto {
 
 	public void setUploadDate(String uploadDate) {
 		this.uploadDate = uploadDate;
-	}
-
-	public String getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
 	}
 }

@@ -2,6 +2,7 @@ package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.dto.AccidentRecordDto;
 import com.jxqixin.trafic.model.AccidentRecord;
 import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.SafetyProductionCostPlanDetail;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.AccidentRecordRepository;
 import com.jxqixin.trafic.service.IAccidentRecordService;
@@ -27,16 +28,18 @@ public class AccidentRecordServiceImpl extends CommonServiceImpl<AccidentRecord>
 		return accidentRecordRepository;
 	}
 	@Override
-	public Page findAccidentRecords(AccidentRecordDto accidentRecordDto) {
+	public Page findAccidentRecords(AccidentRecordDto accidentRecordDto,Org org) {
 		Pageable pageable = PageRequest.of(accidentRecordDto.getPage(),accidentRecordDto.getLimit(), Sort.Direction.DESC,"createDate");
 		return accidentRecordRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(accidentRecordDto.getOrgId())){
-					Join<AccidentRecord, Org> orgJoin = root.join("org",JoinType.INNER);
-					list.add(criteriaBuilder.equal(orgJoin.get("id"),accidentRecordDto.getOrgId()));
+
+				if(org!=null){
+					Join<AccidentRecord,Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
+
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}

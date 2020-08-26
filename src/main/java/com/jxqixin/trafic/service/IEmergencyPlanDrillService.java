@@ -11,7 +11,7 @@ public interface IEmergencyPlanDrillService extends ICommonService<EmergencyPlan
      * @param emergencyPlanDrillDto
      * @return
      */
-    Page findEmergencyPlanDrills(EmergencyPlanDrillDto emergencyPlanDrillDto);
+    Page findEmergencyPlanDrills(EmergencyPlanDrillDto emergencyPlanDrillDto,Org org);
     /**
      * 根据ID删除
      * @param id

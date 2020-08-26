@@ -1,4 +1,5 @@
 package com.jxqixin.trafic.service.impl;
+import com.jxqixin.trafic.dto.DangerGoodsCheckTemplateDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.CommonRepository;
@@ -32,15 +33,15 @@ public class DangerGoodsCheckTemplateServiceImpl extends CommonServiceImpl<Dange
 		return templateRepository;
 	}
 	@Override
-	public Page findDangerGoodsCheckTemplates(NameDto nameDto,Org org) {
-		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit(), Sort.Direction.DESC,"createDate");
+	public Page findDangerGoodsCheckTemplates(DangerGoodsCheckTemplateDto dangerGoodsCheckTemplateDto, Org org) {
+		Pageable pageable = PageRequest.of(dangerGoodsCheckTemplateDto.getPage(),dangerGoodsCheckTemplateDto.getLimit(), Sort.Direction.DESC,"createDate");
 		if (org == null) {
 			return templateRepository.findAll(new Specification() {
 				@Override
 				public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 					List<Predicate> list = new ArrayList<>();
-					if (!StringUtils.isEmpty(nameDto.getName())) {
-						list.add(criteriaBuilder.like(root.get("name"), "%" + nameDto.getName() + "%"));
+					if (!StringUtils.isEmpty(dangerGoodsCheckTemplateDto.getName())) {
+						list.add(criteriaBuilder.like(root.get("name"), "%" + dangerGoodsCheckTemplateDto.getName() + "%"));
 					}
 					list.add(criteriaBuilder.isNull(root.get("org")));
 					Predicate[] predicates = new Predicate[list.size()];
@@ -54,8 +55,8 @@ public class DangerGoodsCheckTemplateServiceImpl extends CommonServiceImpl<Dange
 
 					List<Predicate> list = new ArrayList<>();
 					//企业字段不为空的
-					if (!StringUtils.isEmpty(nameDto.getName())) {
-						list.add(criteriaBuilder.like(root.get("name"), "%" + nameDto.getName() + "%"));
+					if (!StringUtils.isEmpty(dangerGoodsCheckTemplateDto.getName())) {
+						list.add(criteriaBuilder.like(root.get("name"), "%" + dangerGoodsCheckTemplateDto.getName() + "%"));
 					}
 					Join<DangerGoodsCheckTemplate, Org> orgJoin = root.join("org", JoinType.LEFT);
 					list.add(criteriaBuilder.or(criteriaBuilder.equal(orgJoin.get("id"), org.getId()), criteriaBuilder.isNull(root.get("org"))));

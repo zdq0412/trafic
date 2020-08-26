@@ -1,4 +1,5 @@
 package com.jxqixin.trafic.service.impl;
+import com.jxqixin.trafic.dto.MeetingDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.CommonRepository;
@@ -13,12 +14,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -32,9 +32,22 @@ public class MeetingServiceImpl extends CommonServiceImpl<Meeting> implements IM
 		return meetingRepository;
 	}
 	@Override
-	public Page findMeetings(NameDto nameDto,String type) {
-		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit(), Sort.Direction.DESC,"createDate");
-		return meetingRepository.findAll(pageable);
+	public Page findMeetings(MeetingDto meetingDto, Org org) {
+		Pageable pageable = PageRequest.of(meetingDto.getPage(),meetingDto.getLimit(), Sort.Direction.DESC,"createDate");
+		return meetingRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				List<Predicate> list = new ArrayList<>();
+
+				if(org!=null){
+					Join<Meeting,Org> orgJoin = root.join("org",JoinType.INNER);
+					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
+				}
+
+				Predicate[] predicates = new Predicate[list.size()];
+				return criteriaBuilder.and(list.toArray(predicates));
+			}
+		},pageable);
 	}
 
 	@Override

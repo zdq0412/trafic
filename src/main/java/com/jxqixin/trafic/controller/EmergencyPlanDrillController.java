@@ -40,8 +40,8 @@ public class EmergencyPlanDrillController extends CommonController{
      * @return
      */
     @GetMapping("/emergencyPlanDrill/emergencyPlanDrillsByPage")
-    public ModelMap queryEmergencyPlanDrills(EmergencyPlanDrillDto emergencyPlanDrillDto){
-        Page page = emergencyPlanDrillService.findEmergencyPlanDrills(emergencyPlanDrillDto);
+    public ModelMap queryEmergencyPlanDrills(EmergencyPlanDrillDto emergencyPlanDrillDto,HttpServletRequest request){
+        Page page = emergencyPlanDrillService.findEmergencyPlanDrills(emergencyPlanDrillDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

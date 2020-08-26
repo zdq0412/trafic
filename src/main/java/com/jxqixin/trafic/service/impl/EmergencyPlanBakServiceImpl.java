@@ -3,6 +3,7 @@ package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.dto.EmergencyPlanBakDto;
 import com.jxqixin.trafic.model.EmergencyPlanBak;
 import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.SafetyProductionCostPlanDetail;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.EmergencyPlanBakRepository;
 import com.jxqixin.trafic.repository.PreplanDrillRecordRepository;
@@ -39,10 +40,12 @@ public class EmergencyPlanBakServiceImpl extends CommonServiceImpl<EmergencyPlan
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> list = new ArrayList<>();
-				if(!StringUtils.isEmpty(emergencyPlanBakDto.getOrgId())){
+
+				if(org!=null){
 					Join<EmergencyPlanBak,Org> orgJoin = root.join("org",JoinType.INNER);
 					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
+
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}

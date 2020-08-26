@@ -40,8 +40,8 @@ public class HealthyRecordController extends CommonController{
      * @return
      */
     @GetMapping("/healthyRecord/healthyRecordsByPage")
-    public ModelMap queryHealthyRecords(HealthyRecordDto healthyRecordDto){
-        Page page = healthyRecordService.findHealthyRecords(healthyRecordDto);
+    public ModelMap queryHealthyRecords(HealthyRecordDto healthyRecordDto,HttpServletRequest request){
+        Page page = healthyRecordService.findHealthyRecords(healthyRecordDto,getOrg(request));
         return pageModelMap(page);
     }
     /**
