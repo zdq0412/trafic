@@ -1,5 +1,5 @@
 package com.jxqixin.trafic.dto;
-public class UserDto{
+public class UserDto extends PageDto{
     /**用户名*/
     private String username;
     /**真实姓名*/

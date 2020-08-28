@@ -91,10 +91,8 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	}
 
 	@Override
-	public Page findUsers(NameDto nameDto,String currentUsername) {
-		User user = userRepository.findByUsername(currentUsername);
-		Org org = user.getOrg();
-		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
+	public Page findUsers(UserDto userDto,Org org) {
+		Pageable pageable = PageRequest.of(userDto.getPage(),userDto.getLimit());
 		return userRepository.findAll(new Specification() {
 			@Override
 			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -104,8 +102,8 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
 
-				if(!StringUtils.isEmpty(nameDto.getName())){
-					list.add(criteriaBuilder.like(root.get("username"),"%" + nameDto.getName().trim() + "%"));
+				if(!StringUtils.isEmpty(userDto.getUsername())){
+					list.add(criteriaBuilder.like(root.get("username"),"%" + userDto.getUsername().trim() + "%"));
 				}
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));

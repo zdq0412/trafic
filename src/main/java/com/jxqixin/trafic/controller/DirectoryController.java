@@ -57,7 +57,7 @@ public class DirectoryController extends CommonController{
      */
     @PostMapping("/directory/directory")
     public JsonResult addDirectory(DirectoryDto directoryDto){
-        JsonResult jsonResult = findByName(directoryDto.getName());
+        JsonResult jsonResult = findByName(directoryDto.getName(),directoryDto.getSchemaId());
         Directory directory = new Directory();
         BeanUtils.copyProperties(directoryDto,directory);
         if(jsonResult.getResult().getResultCode()==200){
@@ -69,6 +69,7 @@ public class DirectoryController extends CommonController{
 
                 directory.setSchema(schema);
             }
+            directory.setIndex(UUID.randomUUID().toString());
             directoryService.addObj(directory);
         }
         return jsonResult;
@@ -80,7 +81,7 @@ public class DirectoryController extends CommonController{
      */
     @PutMapping("/directory/directory")
     public JsonResult updateDirectory(DirectoryDto directoryDto){
-        Directory s = directoryService.findByName(directoryDto.getName());
+        Directory s = directoryService.findByName(directoryDto.getName(),directoryDto.getSchemaId());
 
         if(s!=null && !s.getId().equals(directoryDto.getId())){
             return new JsonResult(Result.FAIL);
@@ -104,8 +105,8 @@ public class DirectoryController extends CommonController{
      * @return
      */
     @GetMapping("/directory/directory/{name}")
-    public JsonResult findByName(@PathVariable(name="name") String name){
-        Directory directory = directoryService.findByName(name);
+    public JsonResult findByName(@PathVariable(name="name") String name,String schemaId){
+        Directory directory = directoryService.findByName(name,schemaId);
         if(directory==null){
             return new JsonResult(Result.SUCCESS);
         }else{

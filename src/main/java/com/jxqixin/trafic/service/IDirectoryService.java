@@ -23,7 +23,7 @@ public interface IDirectoryService extends ICommonService<Directory> {
      * @param name 目录名称
      * @return
      */
-    Directory findByName(String name);
+    Directory findByName(String name,String schemaId);
     /**
      * 根据ID删除目录及目录下的菜单
      * @param id

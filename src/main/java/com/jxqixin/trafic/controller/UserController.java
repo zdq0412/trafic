@@ -101,14 +101,12 @@ public class UserController extends CommonController{
     }
     /**
      * 分页查询用户
-     * @param nameDto
+     * @param userDto
      * @return
      */
     @GetMapping("/user/usersByPage")
-    public ModelMap queryUsers(NameDto nameDto, HttpServletRequest request){
-        String token = request.getHeader("token");
-        String currentUsername =(String) redisUtil.get(token);
-        Page page = userService.findUsers(nameDto,currentUsername);
+    public ModelMap queryUsers(UserDto userDto, HttpServletRequest request){
+        Page page = userService.findUsers(userDto,getOrg(request));
         return pageModelMap(page);
     }
     /**

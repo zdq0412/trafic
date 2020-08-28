@@ -26,6 +26,15 @@ public interface SafetyProductionCostPlanDetailRepository<ID extends Serializabl
      */
     @Query("select sum(d.sumOfMoney) from SafetyProductionCostPlanDetail d where d.org.id=?1 and YEAR(d.billingDate)=?2 and d.billingDate<=?3")
     Double findSumByOrgIdAndDate(String orgId,int year, Date date);
+    /**
+     * 根据企业ID和当前时间汇总
+     * @param orgId
+     * @param month
+     * @param date
+     * @return
+     */
+    @Query("select sum(d.sumOfMoney) from SafetyProductionCostPlanDetail d where d.org.id=?1 and MONTH(d.billingDate)=?2 and d.billingDate<=?3")
+    Double findSumByOrgIdAndMonth(String orgId,int month, Date date);
 
     /**
      * 根据企业ID和年份对安全生产费用按计划统计

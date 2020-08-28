@@ -22,5 +22,6 @@ public interface DirectoryRepository<ID extends Serializable> extends CommonRepo
      * @param name
      * @return
      */
-    Directory findByName(String name);
+    @Query(nativeQuery = true,value="select  * from directory d where name=?1 and schema_id=2")
+    Directory findByName(String name,String schemaId);
 }

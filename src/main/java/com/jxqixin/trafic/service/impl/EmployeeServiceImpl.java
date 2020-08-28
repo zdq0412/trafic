@@ -206,9 +206,12 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 	public void deleteEmployee(String id) {
 		Employee employee = (Employee) employeeRepository.findById(id).get();
 		employeeRepository.updateOrg2Null(id);
-		String userId = employee.getUser().getId();
-		employeeRepository.updateUser2NullByUserId(userId);
-		userRepository.deleteById(userId);
+		User user = employee.getUser();
+		if(user!=null){
+			String userId = employee.getUser().getId();
+			employeeRepository.updateUser2NullByUserId(userId);
+			userRepository.deleteById(userId);
+		}
 	}
 
 	@Override

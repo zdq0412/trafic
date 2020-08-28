@@ -44,8 +44,8 @@ public class DirectoryServiceImpl extends CommonServiceImpl<Directory> implement
 	}
 
 	@Override
-	public Directory findByName(String name) {
-		return directoryRepository.findByName(name);
+	public Directory findByName(String name,String schemaId) {
+		return directoryRepository.findByName(name,schemaId);
 	}
 
 	@Override

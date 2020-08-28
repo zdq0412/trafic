@@ -129,18 +129,21 @@ public class SafetyProductionCostServiceImpl extends CommonServiceImpl<SafetyPro
 		BeanUtils.copyProperties(cost,vo);
 		Calendar nowCalendar = Calendar.getInstance();
 		nowCalendar.setTime(now);
-		//本年度截止月日已投入使用的各类安全生产费用合计
-		Double total = safetyProductionCostPlanDetailRepository.findSumByOrgIdAndDate(org.getId(),nowCalendar.get(Calendar.YEAR),now);
-		if(total==null)total=0d;
-		vo.setTotal(total);
 
 		List<Object[]> details = null;
 		switch (type){
 			case "year":{
 				details = safetyProductionCostPlanDetailRepository.findByOrgIdAndYearGroupByPlanId(org.getId(),c.get(Calendar.YEAR));
+				//本年度截止月日已投入使用的各类安全生产费用合计
+				Double total = safetyProductionCostPlanDetailRepository.findSumByOrgIdAndDate(org.getId(),c.get(Calendar.YEAR),now);
+				if(total==null)total=0d;
+				vo.setTotal(total);
 				break;
 			} case "month":{
 				details = safetyProductionCostPlanDetailRepository.findByOrgIdAndDateGroupByPlanId(org.getId(),c.get(Calendar.YEAR),c.get(Calendar.MONTH)+1);
+				Double total = safetyProductionCostPlanDetailRepository.findSumByOrgIdAndMonth(org.getId(),c.get(Calendar.MONTH)+1,now);
+				if(total==null)total=0d;
+				vo.setTotal(total);
 				break;
 			}
 		}

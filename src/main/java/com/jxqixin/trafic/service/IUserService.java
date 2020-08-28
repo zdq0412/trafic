@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.service;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.UserDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.User;
 import org.springframework.data.domain.Page;
 import java.util.List;
@@ -42,10 +43,10 @@ public interface IUserService extends ICommonService<User> {
     Integer findCountByRoleId(String id);
 	/**
 	 * 查找当前组织机构下的用户
-	 * @param nameDto
+	 * @param userDto
 	 * @return
 	 */
-    Page findUsers(NameDto nameDto,String currentUsername);
+    Page findUsers(UserDto userDto, Org org);
 	/**
 	 * 根据用户名和企业id查找用户信息
 	 * @param username
