@@ -37,11 +37,31 @@ public class AreaManager {
 	private String username;
 	/**密码*/
 	private String password;
+	/**用户头像访问路径*/
+	private String photo;
+	/**用户头像实际存储路径*/
+	private String realpath;
 	/**企业所属类别*/
 	@ManyToOne
 	@JoinColumn(name = "org_category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private OrgCategory orgCategory;
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public String getRealpath() {
+		return realpath;
+	}
+
+	public void setRealpath(String realpath) {
+		this.realpath = realpath;
+	}
 
 	public String getId() {
 		return id;

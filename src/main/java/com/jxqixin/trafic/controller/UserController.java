@@ -1,12 +1,12 @@
 package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
+import com.jxqixin.trafic.dto.EmployeeDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.UserDto;
-import com.jxqixin.trafic.model.JsonResult;
-import com.jxqixin.trafic.model.Org;
-import com.jxqixin.trafic.model.Role;
-import com.jxqixin.trafic.model.User;
+import com.jxqixin.trafic.model.*;
+import com.jxqixin.trafic.service.IAreaManagerService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
 import com.jxqixin.trafic.util.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 /**
@@ -30,7 +33,7 @@ public class UserController extends CommonController{
     /*@Value("${defaultPassword}")
     private String defaultPassword;*/
     @Autowired
-    private RedisUtil redisUtil;
+    private IAreaManagerService areaManagerService;
     /**
      * 修改密码
      * @param oldPassword
@@ -182,6 +185,65 @@ public class UserController extends CommonController{
         }else{
             return new JsonResult(Result.FAIL);
         }
+    }
+    /**
+     * 根据用户名称查找,用户登录成功后查找用户信息
+     * @param username
+     * @return
+     */
+    @GetMapping("/user/userOrAreaManager/{username}")
+    public JsonResult findByUsername(@PathVariable(name="username") String username,HttpServletRequest request){
+        Org org = getOrg(request);
+        User user = userService.queryUserByUsernameAndOrgId(username,org==null?null:org.getId());
+        if(user!=null){
+            user.setPassword(null);
+            return new JsonResult(Result.SUCCESS,user);
+        }else{
+            AreaManager areaManager = areaManagerService.findByUsername(username);
+            areaManager.setPassword(null);
+            return new JsonResult(Result.SUCCESS,areaManager);
+        }
+    }
+    /**
+     * 上传头像
+     * @return
+     */
+    @PostMapping("/user/photo")
+    public JsonResult addEmployee(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+        User user = userService.queryUserByUsername(getCurrentUsername(request));
+        AreaManager areaManager = null;
+        if(user==null){
+            areaManager = areaManagerService.findByUsername(getCurrentUsername(request));
+        }
+        String urlMapping = "";
+        Result result = Result.SUCCESS;
+        try {
+            String dir = "photo/" + user!=null?user.getUsername():areaManager.getUsername();
+            File savedFile = upload(dir,file);
+            if(savedFile!=null) {
+                urlMapping = getUrlMapping().substring(1).replace("*", "") + dir + "/" + savedFile.getName();
+            }
+            if(user!=null){
+                if(!StringUtils.isEmpty(user.getRealpath())){
+                    FileUtil.deleteFile(user.getRealpath());
+                }
+                user.setRealpath(savedFile.getAbsolutePath());
+                user.setPhoto(urlMapping);
+                userService.updateObj(user);
+            }else{
+                if(!StringUtils.isEmpty(areaManager.getRealpath())){
+                    FileUtil.deleteFile(areaManager.getRealpath());
+                }
+                areaManager.setRealpath(savedFile.getAbsolutePath());
+                areaManager.setPhoto(urlMapping);
+                areaManagerService.updateObj(areaManager);
+            }
+        } catch (RuntimeException | IOException e) {
+            e.printStackTrace();
+            result = Result.FAIL;
+            result.setMessage(e.getMessage());
+        }
+        return new JsonResult(result,urlMapping);
     }
     /**
      * 根据ID删除用户

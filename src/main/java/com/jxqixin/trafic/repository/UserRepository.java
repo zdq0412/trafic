@@ -30,6 +30,8 @@ public interface UserRepository<ID extends Serializable> extends CommonRepositor
     public List<Object[]> queryFunctionsByUsername(String username);
     //@Query(value="select u.* from T_User u where username=?1 and u.org_id is null",nativeQuery = true)
     public User findByUsername(String username);
+    @Query(value="select u.* from T_User u where username=?1 and u.org_id is null",nativeQuery = true)
+    public User findByUsernameWhereOrgIsNull(String username);
     /**
      * 根据用户名查找激活用户
      * @param username

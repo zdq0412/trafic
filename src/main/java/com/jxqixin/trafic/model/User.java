@@ -19,7 +19,7 @@ public class User implements Serializable{
 	/**禁用状态*/
 	public static final String DISABLED="1";
 	/**删除状态*/
-	public static final String DELETED="1";
+	public static final String DELETED="2";
 	/**对象标识*/
 	@Id
 	@GeneratedValue(generator = "id_gen")
@@ -43,6 +43,10 @@ public class User implements Serializable{
 	private boolean allowedDelete=true;
 	/**创建人*/
 	private String creator;
+	/**用户头像访问路径*/
+	private String photo;
+	/**用户头像实际存储路径*/
+	private String realpath;
 	/**创建日期*/
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -54,6 +58,22 @@ public class User implements Serializable{
 	@JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Org org;
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public String getRealpath() {
+		return realpath;
+	}
+
+	public void setRealpath(String realpath) {
+		this.realpath = realpath;
+	}
 
 	public static long getSerialVersionUID() {
 		return serialVersionUID;

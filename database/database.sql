@@ -329,6 +329,8 @@ create table t_user(
   createDate timestamp null default current_timestamp null comment '创建日期',
   note varchar(200) comment '备注',
   org_id varchar(36) comment '所属企业',
+  photo varchar(200) comment '头像访问路径',
+  realpath varchar(200) comment '头像实际存储路径',
   constraint fk_user_org foreign key(org_id) references org(id),
   constraint fk_user_role foreign key(role_id) references role(id)
 ) comment '用户表';
@@ -340,6 +342,8 @@ create table area_manager(
   id varchar(36) primary key comment '主键',
   username varchar(50) not null comment '用户名称',
   password varchar(100) unique default '123456' comment '密码',
+  photo varchar(200) comment '头像访问路径',
+  realpath varchar(200) comment '头像实际存储路径',
   province_id varchar(36) comment '所属省',
   city_id varchar(36) comment '所属市',
   region_id  varchar(36) comment '所属地区',
@@ -1450,8 +1454,6 @@ create table m039_accident_record(
    org_id varchar(36) comment '企业ID',
    constraint fk_m039_accident_record_org_id foreign key(org_id) references org(id)
 ) comment '事故记录及处理';
-
-
 #四不放过记录
 drop table if exists m040_four_record;
 create table m040_four_record(
@@ -1467,5 +1469,47 @@ create table m040_four_record(
    org_id varchar(36) comment '企业ID',
    constraint fk_m040_four_record_org_id foreign key(org_id) references org(id)
 ) comment '四不放过记录';
+
+
+#作业管理台账模板
+drop table if exists m059_job_management_account_template;
+create table m059_job_management_account_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  type_id varchar(36) comment '类别:相关方管理台账、相关方检查、相关方安全协议模板、出租场地安全检查、值班表模板、动火作业许可证、临时用电作业许可证、高处作业许可证、有限空间作业许可证',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  constraint fk_m059_job_management_account_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m059_job_management_account_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m059_job_management_account_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_m059_job_management_account_template_category_type_id foreign key(type_id) references category(id),
+  constraint fk_org_category_m059_job_management_account_template foreign key(org_category_id) references org_category(id)
+) comment '作业管理台账模板';
+
+#作业管理台账
+drop table if exists m058_job_management_account;
+create table m058_job_management_account(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  type_id varchar(36) comment '类别:相关方管理台账、相关方检查、相关方安全协议模板、出租场地安全检查、值班表模板、动火作业许可证、临时用电作业许可证、高处作业许可证、有限空间作业许可证',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate timestamp null comment '创建日期',
+  uploadDate timestamp null comment '上传日期',
+   creator varchar(100) comment '创建人',
+   url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+   org_id varchar(36) comment '企业ID',
+   constraint fk_m058_job_management_account_category_type_id foreign key(type_id) references category(id),
+   constraint fk_m058_job_management_account_org_id foreign key(org_id) references org(id)
+) comment '作业管理台账';
 
 

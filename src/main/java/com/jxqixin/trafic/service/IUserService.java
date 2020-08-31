@@ -61,4 +61,6 @@ public interface IUserService extends ICommonService<User> {
 	 * @return
 	 */
     User queryActiveUserByUsername(String username);
+
+    User findByUsernameWhereOrgIsNull(String currentUsername);
 }

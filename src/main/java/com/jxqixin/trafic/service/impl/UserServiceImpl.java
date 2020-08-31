@@ -9,6 +9,7 @@ import com.jxqixin.trafic.repository.EmployeeRepository;
 import com.jxqixin.trafic.repository.OrgRepository;
 import com.jxqixin.trafic.repository.UserRepository;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -77,6 +78,9 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 		if(!user.isAllowedDelete()){
 			throw new RuntimeException("该用户不允许删除:" + user.getUsername());
 		}
+		if(user.getRealpath()!=null){
+			FileUtil.deleteFile(user.getRealpath());
+		}
 		employeeRepository.updateUser2NullByUserId(id);
 		userRepository.deleteById(id);
 	}
@@ -122,5 +126,10 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	@Override
 	public User queryActiveUserByUsername(String username) {
 		return userRepository.findActiveUserByUsername(username);
+	}
+
+	@Override
+	public User findByUsernameWhereOrgIsNull(String currentUsername) {
+		return userRepository.findByUsernameWhereOrgIsNull(currentUsername);
 	}
 }

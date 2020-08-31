@@ -85,14 +85,15 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			if(employee1!=null){
 				throw new RuntimeException("手机号已被使用!");
 			}
-
-			 user = new User();
+			user = new User();
 			user.setUsername(employee.getTel());
 			user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
 			user.setOrg(org);
 			user.setTel(employee.getTel());
 			user.setRealname(employee.getName());
 			user.setCreateDate(new Date());
+			user.setPhoto(employee.getPhoto());
+			user.setRealpath(employee.getRealPath());
 			if(!StringUtils.isEmpty(employeeDto.getRoleId())){
 				Role role = new Role();
 				role.setId(employeeDto.getRoleId());

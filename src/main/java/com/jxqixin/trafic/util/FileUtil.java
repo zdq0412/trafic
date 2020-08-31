@@ -12,8 +12,10 @@ public class FileUtil {
      */
     public static void deleteFile(String path){
         File file  = new File(path);
-        if(file.exists()){
-            file.delete();
-        }
+        try {
+            if (file.exists()) {
+                file.delete();
+            }
+        }catch (Exception e){}
     }
 }

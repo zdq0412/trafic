@@ -5,8 +5,10 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.jxqixin.trafic.constant.EnumAsJaveBeanConfig;
 import com.jxqixin.trafic.constant.RedisConstant;
 import com.jxqixin.trafic.constant.Result;
+import com.jxqixin.trafic.model.AreaManager;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.User;
+import com.jxqixin.trafic.service.IAreaManagerService;
 import com.jxqixin.trafic.service.IUserService;
 import com.jxqixin.trafic.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class CustomizeAuthenticationSuccessHandler implements AuthenticationSucc
     private RedisUtil redisUtil;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IAreaManagerService areaManagerService;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException,
             ServletException {
