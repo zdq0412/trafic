@@ -43,3 +43,11 @@ mybatis:
 #超级管理员角色名称
 superRole: admin
 
+
+logging:
+  level:
+    root: info
+  file:
+    path: d:\\log
+    max-size: 10MB
+    max-history: 30

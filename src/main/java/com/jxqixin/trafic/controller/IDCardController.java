@@ -73,7 +73,7 @@ public class IDCardController extends CommonController{
      * @param idcardDto
      * @return
      */
-    @PutMapping("/idcard/idcard")
+    @PostMapping("/idcard/updateIDCard")
     public JsonResult updateIDCard(IDCardDto idcardDto){
         IDCard savedIDCard = idcardService.queryObjById(idcardDto.getId());
         savedIDCard.setName(idcardDto.getName());

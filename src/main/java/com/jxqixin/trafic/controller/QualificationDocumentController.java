@@ -66,7 +66,7 @@ public class QualificationDocumentController extends CommonController{
      * @param qualificationDocumentDto
      * @return
      */
-    @PutMapping("/qualificationDocument/qualificationDocument")
+    @PostMapping("/qualificationDocument/updateQualificationDocument")
     public JsonResult updateQualificationDocument(QualificationDocumentDto qualificationDocumentDto){
         QualificationDocument savedQualificationDocument = qualificationDocumentService.queryObjById(qualificationDocumentDto.getId());
         savedQualificationDocument.setName(qualificationDocumentDto.getName());

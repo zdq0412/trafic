@@ -69,7 +69,7 @@ public class JobHistoryController extends CommonController{
      * @param jobHistoryDto
      * @return
      */
-    @PutMapping("/jobHistory/jobHistory")
+    @PostMapping("/jobHistory/updateJobHistory")
     public JsonResult updateJobHistory(JobHistoryDto jobHistoryDto){
         JobHistory savedJobHistory = jobHistoryService.queryObjById(jobHistoryDto.getId());
         try {

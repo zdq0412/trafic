@@ -71,4 +71,6 @@ public interface FunctionsRepository<ID extends Serializable> extends CommonRepo
     List<Functions> findByParentId(String id);
     @Query("select f from Functions f where f.id in (113,150,151,152,153,154,155,156,157,158,100,101,102,103,104,105,106,107,108,159,160,161,162,163,164,165,166)")
     List<Functions> findAdminRoleFunctions();
+    @Query("select f from Functions f  order by priority")
+    List<Functions> findAllFunctions();
 }

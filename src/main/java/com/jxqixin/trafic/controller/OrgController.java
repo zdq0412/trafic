@@ -113,11 +113,6 @@ public class OrgController extends CommonController{
             fail.setMessage("企业名称已被使用!");
             return new JsonResult(fail);
         }
-        s = orgService.findByCode(orgDto.getCode());
-        if(s!=null && !s.getId().equals(orgDto.getId())){
-            fail.setMessage("企业代码已被使用!");
-            return new JsonResult(fail);
-        }
         Org savedOrg = orgService.queryObjById(orgDto.getId());
         savedOrg.setCode(orgDto.getCode());
         savedOrg.setName(orgDto.getName());

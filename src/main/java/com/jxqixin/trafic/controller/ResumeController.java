@@ -70,7 +70,7 @@ public class ResumeController extends CommonController{
      * @param resumeDto
      * @return
      */
-    @PutMapping("/resume/resume")
+    @PostMapping("/resume/updateResume")
     public JsonResult updateResume(ResumeDto resumeDto){
         Resume savedResume = resumeService.queryObjById(resumeDto.getId());
         try {

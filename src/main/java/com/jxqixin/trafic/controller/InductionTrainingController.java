@@ -68,7 +68,7 @@ public class InductionTrainingController extends CommonController{
      * @param inductionTrainingDto
      * @return
      */
-    @PutMapping("/inductionTraining/inductionTraining")
+    @PostMapping("/inductionTraining/updateInductionTraining")
     public JsonResult updateInductionTraining(InductionTrainingDto inductionTrainingDto){
         InductionTraining savedInductionTraining = inductionTrainingService.queryObjById(inductionTrainingDto.getId());
         try {

@@ -88,7 +88,7 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 		List<Functions> list = null;
 		if(role!=null){
 			if(superRole.equals(role.getName())){
-				list = functionsRepository.findAll();
+				list = functionsRepository.findAllFunctions();
 			}else{
 				list = functionsRepository.findByUsername(currentUsername);
 			}

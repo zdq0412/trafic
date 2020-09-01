@@ -71,7 +71,7 @@ public class ContractController extends CommonController{
      * @param contractDto
      * @return
      */
-    @PutMapping("/contract/contract")
+    @PostMapping("/contract/updateContract")
     public JsonResult updateContract(ContractDto contractDto){
         Contract savedContract = contractService.queryObjById(contractDto.getId());
         savedContract.setName(contractDto.getName());

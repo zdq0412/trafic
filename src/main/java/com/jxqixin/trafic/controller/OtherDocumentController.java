@@ -68,7 +68,7 @@ public class OtherDocumentController extends CommonController{
      * @param otherDocumentDto
      * @return
      */
-    @PutMapping("/otherDocument/otherDocument")
+    @PostMapping("/otherDocument/updateOtherDocument")
     public JsonResult updateOtherDocument(OtherDocumentDto otherDocumentDto){
         OtherDocument savedOtherDocument = otherDocumentService.queryObjById(otherDocumentDto.getId());
         try {

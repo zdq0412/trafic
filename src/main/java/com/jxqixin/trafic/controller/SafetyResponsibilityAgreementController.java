@@ -73,7 +73,7 @@ public class SafetyResponsibilityAgreementController extends CommonController{
      * @param safetyResponsibilityAgreementDto
      * @return
      */
-    @PutMapping("/safetyResponsibilityAgreement/safetyResponsibilityAgreement")
+    @PostMapping("/safetyResponsibilityAgreement/updateSafetyResponsibilityAgreement")
     public JsonResult updateSafetyResponsibilityAgreement(SafetyResponsibilityAgreementDto safetyResponsibilityAgreementDto){
         SafetyResponsibilityAgreement savedSafetyResponsibilityAgreement = safetyResponsibilityAgreementService.queryObjById(safetyResponsibilityAgreementDto.getId());
         savedSafetyResponsibilityAgreement.setName(safetyResponsibilityAgreementDto.getName());

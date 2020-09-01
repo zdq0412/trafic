@@ -68,7 +68,7 @@ public class TrainingExamineController extends CommonController{
      * @param trainingExamineDto
      * @return
      */
-    @PutMapping("/trainingExamine/trainingExamine")
+    @PostMapping("/trainingExamine/updateTrainingExamine")
     public JsonResult updateTrainingExamine(TrainingExamineDto trainingExamineDto){
         TrainingExamine savedTrainingExamine = trainingExamineService.queryObjById(trainingExamineDto.getId());
         try {
