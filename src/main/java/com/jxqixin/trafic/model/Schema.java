@@ -5,6 +5,7 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 /**
  * 模式：模式下是一级菜单(directory中的记录)
@@ -12,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "T_SCHEMA")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class Schema {
+public class Schema  implements Serializable {
 	@Id
 	//@GeneratedValue(generator = "id_gen")
 	private String id;

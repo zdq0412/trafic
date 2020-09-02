@@ -6,6 +6,7 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Date;
 @Entity
 @Table(name = "m022_training")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class Training {
+public class Training  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

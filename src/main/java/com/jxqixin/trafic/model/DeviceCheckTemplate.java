@@ -4,6 +4,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 /**
  * 设备点检模板表
@@ -11,7 +12,7 @@ import java.util.Date;
 @Entity
 @Table(name = "m43_device_check_template")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class DeviceCheckTemplate {
+public class DeviceCheckTemplate  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

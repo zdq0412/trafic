@@ -5,6 +5,7 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 /**
  * 安全检查记录
@@ -12,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "m023_security_check")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class SecurityCheck {
+public class SecurityCheck  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

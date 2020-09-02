@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.model;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 目录菜单关联表
@@ -8,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="DIRECTORY_FUNCTIONS")
 @GenericGenerator(name = "id_gen",strategy = "uuid")
-public class DirectoryFunctions {
+public class DirectoryFunctions  implements Serializable {
 	private String id;
 	private Functions functions;
 	private Directory directory;

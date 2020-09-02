@@ -1,10 +1,12 @@
 package com.jxqixin.trafic.model;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
+import java.io.Serializable;
+
 @Entity
 @Table(name="ORG_CATEGORY_FUNCTIONS")
 @GenericGenerator(name = "id_gen",strategy = "uuid")
-public class OrgCategoryFunctions {
+public class OrgCategoryFunctions  implements Serializable {
 	private String id;
 	private Functions functions;
 	private OrgCategory orgCategory;

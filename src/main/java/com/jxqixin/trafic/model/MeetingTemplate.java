@@ -4,6 +4,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 /**
  * 安全会议模板表
@@ -11,7 +12,7 @@ import java.util.Date;
 @Entity
 @Table(name = "m046_meeting_template")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class MeetingTemplate {
+public class MeetingTemplate  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

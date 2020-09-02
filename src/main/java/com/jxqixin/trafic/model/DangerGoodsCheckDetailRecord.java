@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
 @Entity
 @Table(name = "m024_danger_goods_check_detial_record")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class DangerGoodsCheckDetailRecord {
+public class DangerGoodsCheckDetailRecord  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

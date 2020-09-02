@@ -2,6 +2,7 @@ package com.jxqixin.trafic.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 /**
  *年度安全生产费用使用计划
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "m019_safety_production_cost_plan")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class SafetyProductionCostPlan {
+public class SafetyProductionCostPlan  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

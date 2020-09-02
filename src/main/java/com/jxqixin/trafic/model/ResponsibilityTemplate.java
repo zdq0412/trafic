@@ -4,6 +4,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 /**
  * 责任书模板
@@ -11,7 +12,7 @@ import java.util.Date;
 @Entity
 @Table(name = "m048_responsibility_template")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class ResponsibilityTemplate {
+public class ResponsibilityTemplate  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

@@ -4,6 +4,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 /**
  * 人员档案模板表
@@ -11,7 +12,7 @@ import java.util.Date;
 @Entity
 @Table(name = "m55_emp_archives_template")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class EmpArchivesTemplate {
+public class EmpArchivesTemplate  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

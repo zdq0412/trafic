@@ -6,6 +6,7 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 /**
  * 安全规章制度模板
@@ -13,7 +14,7 @@ import java.util.Date;
 @Entity
 @Table(name = "m041_ruleTemplate")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class RuleTemplate {
+public class RuleTemplate  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

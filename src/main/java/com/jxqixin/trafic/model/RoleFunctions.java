@@ -3,10 +3,12 @@ package com.jxqixin.trafic.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
+
 @Entity
 @Table(name="ROLE_FUNCTIONS")
 @GenericGenerator(name = "id_gen",strategy = "uuid")
-public class RoleFunctions {
+public class RoleFunctions  implements Serializable {
 	private String id;
 	private Functions functions;
 	private Role role;

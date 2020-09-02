@@ -6,13 +6,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
+
 /**
  * 安全生产费用支出类别
  */
 @Entity
 @Table(name = "m019_safety_investment_category")
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class SafetyInvestmentCategory {
+public class SafetyInvestmentCategory  implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;
