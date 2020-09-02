@@ -6,7 +6,7 @@ create table org_category(
   name varchar(20) comment '企业类别名称',
   note varchar(2000) comment '类别描述',
   safetyCostRatio  float  comment '安全生产费用提取百分比',
-  createDate datetime default current_datetime comment '创建日期'
+  createDate datetime  comment '创建日期'
 ) comment '企业类别表';
 
 #区域信息表
@@ -15,7 +15,7 @@ create table category(
   id varchar(36) primary key comment '主键',
   name varchar(50) not null comment '区域名称',
   pid varchar(36) comment '父类ID',
-  createDate datetime default current_datetime comment '创建日期',
+  createDate datetime  comment '创建日期',
   note varchar(2000) comment '区域描述',
   type varchar(50) comment '类型',
   constraint fk_category foreign key(pid) references category(id)
@@ -34,7 +34,7 @@ create table org(
   province_id varchar(36) comment '所属省',
   city_id varchar(36) comment '所属市',
   region_id  varchar(36) comment '所属地区',
-  createDate datetime default current_datetime comment '创建日期',
+  createDate datetime  comment '创建日期',
   status char(1) default '0' comment '状态，0：正常，1：禁用，2：删除',
   note varchar(2000) comment '企业描述',
   org_category_id varchar(36) comment '企业类别ID',
@@ -291,7 +291,7 @@ create table functions(
   pid varchar(36)   comment '父权限ID',
   status varchar(10) default 0 comment '状态，0：正常，1：禁用，2：删除',
   creator varchar(50) comment '创建人',
-  createDate datetime default current_datetime comment '创建日期',
+  createDate datetime  comment '创建日期',
   note varchar(2000) comment '备注',
   icon varchar(50) comment '图标',
   c_index varchar(50)  comment '唯一标识，要和前端路由的地址相同',
@@ -305,7 +305,7 @@ create table role(
   name varchar(50) not null comment '角色名称',
   status varchar(10) default 0 comment '状态，0：正常，1：禁用，2：删除',
   creator varchar(50) comment '创建人',
-  createDate datetime default current_datetime comment '创建日期',
+  createDate datetime  comment '创建日期',
   note varchar(2000) comment '备注',
   org_id varchar(36) comment '所属企业',
   org_category_id varchar(36) comment '企业类别ID,企业管理员只能使用企业所在类别下的角色',
@@ -326,7 +326,7 @@ create table t_user(
   status char(1) default '0' comment '状态，0：正常，1：禁用，2：删除',
   allowedDelete bit default 1 comment '是否允许删除,0:不允许删除，1：允许删除',
   creator varchar(50) comment '创建人',
-  createDate datetime default current_datetime comment '创建日期',
+  createDate datetime  comment '创建日期',
   note varchar(2000) comment '备注',
   org_id varchar(36) comment '所属企业',
   photo varchar(200) comment '头像访问路径',
@@ -347,7 +347,7 @@ create table area_manager(
   province_id varchar(36) comment '所属省',
   city_id varchar(36) comment '所属市',
   region_id  varchar(36) comment '所属地区',
-  createDate datetime default current_datetime comment '创建日期',
+  createDate datetime  comment '创建日期',
   org_category_id varchar(36) comment '企业类别id',
    constraint fk_area_manager_category_province_id foreign key(province_id) references category(id),
   constraint fk_area_manager_category_city_id foreign key(city_id) references category(id),
@@ -405,7 +405,7 @@ create table t_schema(
   id varchar(36) primary key comment '主键',
   name varchar(36) not null comment '模式名称',
   priority int comment '优先级',
-  createDate datetime default current_datetime comment '创建日期',
+  createDate datetime  comment '创建日期',
   note varchar(2000) comment '说明',
   selected bit(1) default 1 comment '是否选中，页面上显示选中的模式的菜单'
 ) comment '模式表';
@@ -419,7 +419,7 @@ create table directory(
   schema_id varchar(36)   comment '所属模式ID',
   status varchar(10) default '0' comment '状态，0：正常，1：禁用，2：删除',
   creator varchar(50) comment '创建人',
-  createDate datetime default current_datetime comment '创建日期',
+  createDate datetime  comment '创建日期',
   note varchar(2000) comment '备注',
   icon varchar(50) comment '图标',
   c_index varchar(50)  comment '唯一标识，要和前端路由的地址相同',
