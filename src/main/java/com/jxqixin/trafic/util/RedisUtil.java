@@ -2,16 +2,18 @@ package com.jxqixin.trafic.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class RedisUtil {
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
     /**
      * 设置值
      * @param key
@@ -55,5 +57,10 @@ public class RedisUtil {
      */
     public String generateToken(){
         return UUID.randomUUID().toString();
+    }
+
+    public void clearCache() {
+        Set keys = redisTemplate.keys("*");
+        redisTemplate.delete(keys);
     }
 }

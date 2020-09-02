@@ -4,7 +4,7 @@ drop table if exists org_category;
 create table org_category(
   id varchar(36) primary  key comment '主键',
   name varchar(20) comment '企业类别名称',
-  note varchar(200) comment '类别描述',
+  note varchar(2000) comment '类别描述',
   safetyCostRatio  float  comment '安全生产费用提取百分比',
   createDate datetime default current_datetime comment '创建日期'
 ) comment '企业类别表';
@@ -80,7 +80,7 @@ create table m004_law(
   publishDate datetime comment '发布日期',
   implementDate datetime comment '实施日期',
   publishDepartment varchar(100) comment '发文部门',
-  note varchar(1000) comment '备注',
+  note varchar(2000) comment '备注',
   province_id varchar(36) comment '所属省',
   city_id varchar(36) comment '所属市',
   region_id  varchar(36) comment '所属地区',
@@ -95,7 +95,7 @@ create table m004_law(
   constraint fk_m004_law_orgCategory_id foreign key(orgCategory_id) references org_category(id)
 ) comment '法律法规文件';
 
-#安全规章制度
+#企业制度
 drop table if exists m005_rules;
 create table m005_rules(
  id varchar(36) primary key comment 'ID主键',
@@ -103,7 +103,7 @@ create table m005_rules(
   content text comment '安全规章制度内容',
   publishDate datetime comment '发布日期',
   publishDepartment varchar(100) comment '发文部门',
-  note varchar(1000) comment '备注',
+  note varchar(2000) comment '备注',
   province_id varchar(36) comment '所属省',
   city_id varchar(36) comment '所属市',
   region_id  varchar(36) comment '所属地区',
@@ -128,7 +128,7 @@ create table m006_notice(
   content text comment '企业发文通知内容',
   publishDate datetime comment '发布日期',
   publishDepartment varchar(100) comment '发文部门',
-  note varchar(1000) comment '备注',
+  note varchar(2000) comment '备注',
   province_id varchar(36) comment '所属省',
   city_id varchar(36) comment '所属市',
   region_id  varchar(36) comment '所属地区',
@@ -168,7 +168,7 @@ create table m041_ruleTemplate(
   content text comment '模板内容',
   createDate datetime  comment '创建时间',
   creator varchar(50) comment '创建人用户名',
-  note varchar(500) comment '备注',
+  note varchar(2000) comment '备注',
    url varchar(500) comment '签名文件访问路径',
   realPath varchar(500) comment '实际存储路径',
   province_id varchar(36) comment '所属省',
@@ -270,7 +270,7 @@ drop table if exists m002_position;
 create table m002_position(
   id varchar(36) primary key comment '主键',
   name varchar(50) not null comment '职位名称',
-  note varchar(500) comment '职位描述',
+  note varchar(2000) comment '职位描述',
   managementLayer bit default  0 comment '是否为管理层，管理层可参加安全会议',
   department_id varchar(36) comment '所在部门',
   org_id varchar(36) comment '企业id',
@@ -292,7 +292,7 @@ create table functions(
   status varchar(10) default 0 comment '状态，0：正常，1：禁用，2：删除',
   creator varchar(50) comment '创建人',
   createDate datetime default current_datetime comment '创建日期',
-  note varchar(200) comment '备注',
+  note varchar(2000) comment '备注',
   icon varchar(50) comment '图标',
   c_index varchar(50)  comment '唯一标识，要和前端路由的地址相同',
 	constraint fk_pid foreign key(pid) REFERENCES functions(id)
@@ -306,7 +306,7 @@ create table role(
   status varchar(10) default 0 comment '状态，0：正常，1：禁用，2：删除',
   creator varchar(50) comment '创建人',
   createDate datetime default current_datetime comment '创建日期',
-  note varchar(200) comment '备注',
+  note varchar(2000) comment '备注',
   org_id varchar(36) comment '所属企业',
   org_category_id varchar(36) comment '企业类别ID,企业管理员只能使用企业所在类别下的角色',
   allowedDelete bit default 1 comment '是否允许删除,0:不允许删除，1：允许删除',
@@ -327,7 +327,7 @@ create table t_user(
   allowedDelete bit default 1 comment '是否允许删除,0:不允许删除，1：允许删除',
   creator varchar(50) comment '创建人',
   createDate datetime default current_datetime comment '创建日期',
-  note varchar(200) comment '备注',
+  note varchar(2000) comment '备注',
   org_id varchar(36) comment '所属企业',
   photo varchar(200) comment '头像访问路径',
   realpath varchar(200) comment '头像实际存储路径',
@@ -366,7 +366,7 @@ create table m003_employee(
   tel varchar(20) comment '联系电话',
   idnum varchar(20) comment '身份证号',
   org_id varchar(36) comment '所属企业ID',
-  note varchar(200) comment '备注',
+  note varchar(2000) comment '备注',
   photo varchar(200) comment '头像',
   realPath varchar(200) comment '真实路径',
   user_id varchar(36) comment '人员对应用户ID',
@@ -406,7 +406,7 @@ create table t_schema(
   name varchar(36) not null comment '模式名称',
   priority int comment '优先级',
   createDate datetime default current_datetime comment '创建日期',
-  note varchar(200) comment '说明',
+  note varchar(2000) comment '说明',
   selected bit(1) default 1 comment '是否选中，页面上显示选中的模式的菜单'
 ) comment '模式表';
 
@@ -420,7 +420,7 @@ create table directory(
   status varchar(10) default '0' comment '状态，0：正常，1：禁用，2：删除',
   creator varchar(50) comment '创建人',
   createDate datetime default current_datetime comment '创建日期',
-  note varchar(200) comment '备注',
+  note varchar(2000) comment '备注',
   icon varchar(50) comment '图标',
   c_index varchar(50)  comment '唯一标识，要和前端路由的地址相同',
 	constraint fk_schema_id foreign key(schema_id) REFERENCES t_schema(id)
@@ -841,7 +841,7 @@ create table m011_resume(
   constraint fk_m011_resume_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
   )comment '人员档案：简历';
 
-#人员档案：身份证
+#人员档案:身份证
 drop table if exists m011_idcard;
 create table m011_idcard(
   id varchar(36) primary key comment '主键',
@@ -857,7 +857,7 @@ create table m011_idcard(
   constraint fk_m011_idcard_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
   )comment '人员档案：身份证';
 
-#人员档案：劳动合同
+#人员档案:劳动合同
 drop table if exists m011_contract;
 create table m011_contract(
   id varchar(36) primary key comment '主键',
@@ -873,7 +873,7 @@ create table m011_contract(
   constraint fk_m011_contract_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
   )comment '人员档案：劳动合同';
 
-#人员档案：资质文件
+#人员档案:资质文件
 drop table if exists m011_qualification_document;
 create table m011_qualification_document(
   id varchar(36) primary key comment '主键',
@@ -889,7 +889,7 @@ create table m011_qualification_document(
   constraint fk_m011_qualification_document_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
   )comment '人员档案：资质文件';
 
-#人员档案：从业情况历史
+#人员档案:从业情况历史
 drop table if exists m011_job_history;
 create table m011_job_history(
   id varchar(36) primary key comment '主键',
@@ -905,7 +905,7 @@ create table m011_job_history(
   constraint fk_m011_job_history_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
   )comment '人员档案：从业情况历史';
 
-#人员档案：三级教育(入职培训)
+#人员档案:三级教育(入职培训)
 drop table if exists m011_induction_training;
 create table m011_induction_training(
   id varchar(36) primary key comment '主键',
@@ -922,7 +922,7 @@ create table m011_induction_training(
   )comment '人员档案：三级教育(入职培训)';
 
 
-#人员档案：安全责任书
+#人员档案:安全责任书
 drop table if exists m011_safety_responsibility_agreement;
 create table m011_safety_responsibility_agreement(
   id varchar(36) primary key comment '主键',
@@ -938,7 +938,7 @@ create table m011_safety_responsibility_agreement(
   constraint fk_m011_safety_responsibility_agreement_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
   )comment '人员档案：安全责任书';
 
-#人员档案：培训考核情况
+#人员档案:培训考核情况
 drop table if exists m011_training_examine;
 create table m011_training_examine(
   id varchar(36) primary key comment '主键',
@@ -954,7 +954,7 @@ create table m011_training_examine(
   constraint fk_m011_training_examine_m003_employee_emp_id foreign key(emp_id) references m003_employee(id)
   )comment '人员档案：培训考核情况';
 
-#人员档案：其他人员档案，打包上传
+#人员档案:其他人员档案,打包上传
 drop table if exists m011_other_document;
 create table m011_other_document(
   id varchar(36) primary key comment '主键',

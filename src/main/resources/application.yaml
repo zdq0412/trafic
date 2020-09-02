@@ -26,6 +26,9 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 30MB
+  cache:
+    redis:
+      key-prefix: key-
 server:
   port: 8088
 

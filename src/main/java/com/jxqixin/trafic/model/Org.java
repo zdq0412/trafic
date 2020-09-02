@@ -6,11 +6,12 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @GenericGenerator(name="id_gen",strategy = "uuid")
-public class Org {
+public class Org implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;

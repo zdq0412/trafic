@@ -1,6 +1,5 @@
 package com.jxqixin.trafic.service.impl;
 
-import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.UserDto;
 import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.User;
@@ -11,14 +10,14 @@ import com.jxqixin.trafic.repository.UserRepository;
 import com.jxqixin.trafic.service.IUserService;
 import com.jxqixin.trafic.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
-
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -26,11 +25,10 @@ import java.util.List;
 
 @Service("userService")
 @Transactional
+@CacheConfig(cacheNames = "userCache")
 public class UserServiceImpl extends CommonServiceImpl<User> implements IUserService {
 	@Autowired
 	private UserRepository userRepository;
-	@Autowired
-	private OrgRepository orgRepository;
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	@Override
@@ -42,6 +40,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 		return userRepository.findByUsernameAndPassword(username,password);
 	}
 	@Override
+	@Cacheable(key = "#username")
 	public User queryUserByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
