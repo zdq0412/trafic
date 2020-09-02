@@ -2,6 +2,7 @@ package com.jxqixin.trafic.service.impl;
 
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.service.ICommonService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

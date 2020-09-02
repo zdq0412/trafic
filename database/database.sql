@@ -5,7 +5,7 @@ create table org_category(
   id varchar(36) primary  key comment '主键',
   name varchar(20) comment '企业类别名称',
   note varchar(2000) comment '类别描述',
-  safetyCostRatio  float  comment '安全生产费用提取百分比',
+  safetyCostRatio  float  comment '安全生产费用  提取百分比',
   createDate datetime  comment '创建日期'
 ) comment '企业类别表';
 

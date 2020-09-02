@@ -46,5 +46,4 @@ public interface UserRepository<ID extends Serializable> extends CommonRepositor
     Integer findCountByRoleId(String id);
     @Query(value="select u.* from T_User u where username=?1 and u.org_id=?2",nativeQuery = true)
     User findByUsernameAndOrgId(String username, String orgId);
-
 }

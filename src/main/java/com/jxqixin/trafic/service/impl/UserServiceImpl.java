@@ -26,7 +26,7 @@ import java.util.List;
 
 @Service("userService")
 @Transactional
-@CacheConfig(cacheNames = "userCache")
+@CacheConfig(cacheNames = "UserCache")
 public class UserServiceImpl extends CommonServiceImpl<User> implements IUserService {
 	@Autowired
 	private UserRepository userRepository;
@@ -41,13 +41,13 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 		return userRepository.findByUsernameAndPassword(username,password);
 	}
 	@Override
-	@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #username")
+	//@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #username")
 	public User queryUserByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
 
 	@Override
-	@Cacheable(unless = "#result.size()==0",key = "#root.methodName + '-' + #username")
+	//@Cacheable(unless = "#result.size()==0",key = "#root.methodName + '-' + #username")
 	public List<Object[]> queryFunctionsByUsername(String username) {
 		return userRepository.queryFunctionsByUsername(username);
 	}
@@ -56,7 +56,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	 * @param ids
 	 */
 	@Override
-	@CacheEvict(value = "userCache")
+	//@CacheEvict(value = "userCache")
 	public void deleteBatch(String[] ids) {
 		if(ids==null || ids.length<=0){
 			throw new RuntimeException("没有要删除的用户!");
@@ -75,7 +75,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	 * @param id
 	 */
 	@Override
-	@CacheEvict(value = "userCache")
+	//@CacheEvict(value = "userCache")
 	public void deleteById(String id) {
 		User user = (User) userRepository.findById(id).get();
 		if(!user.isAllowedDelete()){
@@ -98,7 +98,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	}
 
 	@Override
-	@Cacheable
+	//@Cacheable
 	public Page findUsers(UserDto userDto,Org org) {
 		Pageable pageable = PageRequest.of(userDto.getPage(),userDto.getLimit());
 		return userRepository.findAll(new Specification() {
@@ -120,7 +120,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	}
 
 	@Override
-	@Cacheable(unless = "#result eq null")
+	//@Cacheable(unless = "#result eq null")
 	public User queryUserByUsernameAndOrgId(String username, String orgId) {
 		if(!StringUtils.isEmpty(orgId)){
 			return userRepository.findByUsernameAndOrgId(username,orgId);
@@ -134,7 +134,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	}
 
 	@Override
-	@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #p0")
+	//@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #p0")
 	public User findByUsernameWhereOrgIsNull(String currentUsername) {
 		return userRepository.findByUsernameWhereOrgIsNull(currentUsername);
 	}
