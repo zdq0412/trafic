@@ -1,17 +1,18 @@
 package com.jxqixin.trafic.service.impl;
+
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.service.ICommonService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 @Service
 @Transactional
 public abstract  class CommonServiceImpl<T> implements ICommonService<T> {
-    private CommonRepository commonRepository;
     public abstract CommonRepository getCommonRepository();
     @Override
     public void updateObj(T obj) {
