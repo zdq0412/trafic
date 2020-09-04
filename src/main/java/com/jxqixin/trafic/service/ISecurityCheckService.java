@@ -22,5 +22,5 @@ public interface ISecurityCheckService extends ICommonService<SecurityCheck> {
      * @param org
      * @param currentUsername
      */
-    void importTemplate(String templateId, Org org, String currentUsername);
+    SecurityCheck importTemplate(String templateId, Org org, String currentUsername);
 }

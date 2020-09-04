@@ -67,6 +67,7 @@ create table m037_hazard_sources_list(
   fourColor varchar(50) comment '四色标识',
   measures varchar(2000) comment '应采取的行动/控制措施',
   timeLimit varchar(200) comment '实施期限',
+  createDate datetime comment '创建日期',
   org_id varchar(36) not null comment '所属企业ID',
   constraint fkm037_hazard_sources_list_org_id foreign key(org_id) references org(id)
 ) comment '危险源清单';
@@ -1512,4 +1513,132 @@ create table m058_job_management_account(
    constraint fk_m058_job_management_account_org_id foreign key(org_id) references org(id)
 ) comment '作业管理台账';
 
+#风险等级
+drop table if exists m060_risk_level;
+create table m060_risk_level(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  color varchar(20) comment '颜色',
+  upperLimit int comment '风险值范围上限值',
+  lowerLimit int comment '风险值范围下限值',
+  timeLimit varchar(2000) comment '实施期限',
+  measure varchar(2000) comment '控制措施',
+  createDate datetime comment '创建日期',
+  note varchar(2000) comment '备注'
+) comment '风险等级';
 
+
+#安全文化建设模板表
+drop table if exists m061_security_build_template;
+create table m061_security_build_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate datetime comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '所属企业',
+  constraint fk_m061_security_build_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m061_security_build_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m061_security_build_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m061_security_build_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m061_security_build_template foreign key(org_category_id) references org_category(id)
+) comment '安全文化建设模板表';
+
+#安全生产月模板表
+drop table if exists m062_security_month_template;
+create table m062_security_month_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate datetime comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '所属企业',
+  constraint fk_m061_security_month_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m062_security_month_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m062_security_month_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m062_security_month_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m062_security_month_template foreign key(org_category_id) references org_category(id)
+) comment '安全生产月模板表';
+
+#其他安全活动模板表
+drop table if exists m063_security_activity_template;
+create table m063_security_activity_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate datetime comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '所属企业',
+  constraint fk_m061_security_activity_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m063_security_activity_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m063_security_activity_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m063_security_activity_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m063_security_activity_template foreign key(org_category_id) references org_category(id)
+) comment '其他安全活动模板表';
+
+#事故记录处理模板表
+drop table if exists m064_accident_record_template;
+create table m064_accident_record_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate datetime comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '所属企业',
+  constraint fk_m061_accident_record_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m064_accident_record_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m064_accident_record_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m064_accident_record_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m064_accident_record_template foreign key(org_category_id) references org_category(id)
+) comment '事故记录处理模板表';
+
+#四不放过记录模板表
+drop table if exists m065_four_record_template;
+create table m065_four_record_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate datetime comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '所属企业',
+  constraint fk_m061_four_record_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m065_four_record_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m065_four_record_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m065_four_record_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m065_four_record_template foreign key(org_category_id) references org_category(id)
+) comment '四不放过记录模板表';

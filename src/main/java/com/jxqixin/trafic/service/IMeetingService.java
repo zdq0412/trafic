@@ -22,5 +22,5 @@ public interface IMeetingService extends ICommonService<Meeting> {
      * @param templateId
      * @param org
      */
-    void importTemplate(String templateId, Org org, String username);
+    Meeting importTemplate(String templateId, Org org, String username);
 }

@@ -117,7 +117,7 @@ public class SecurityCheckController extends CommonController{
      */
     @PostMapping("/securityCheck/template")
     public JsonResult importTemplate(String templateId, HttpServletRequest request){
-        securityCheckService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
-        return new JsonResult(Result.SUCCESS);
+        SecurityCheck securityCheck = securityCheckService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
+        return new JsonResult(Result.SUCCESS,securityCheck);
     }
 }

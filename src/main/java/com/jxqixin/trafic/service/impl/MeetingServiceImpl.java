@@ -56,7 +56,7 @@ public class MeetingServiceImpl extends CommonServiceImpl<Meeting> implements IM
 	}
 
 	@Override
-	public void importTemplate(String templateId, Org org,String username) {
+	public Meeting importTemplate(String templateId, Org org,String username) {
 		MeetingTemplate template = (MeetingTemplate) meetingTemplateRepository.findById(templateId).get();
 		Meeting meeting = new Meeting();
 		if(org!=null){
@@ -72,6 +72,7 @@ public class MeetingServiceImpl extends CommonServiceImpl<Meeting> implements IM
 		meeting.setFinalDecision(template.getFinalDecision());
 		meeting.setCreateDate(new Date());
 		meeting.setCreator(username);
-		meetingRepository.save(meeting);
+		meeting = (Meeting) meetingRepository.save(meeting);
+		return meeting;
 	}
 }

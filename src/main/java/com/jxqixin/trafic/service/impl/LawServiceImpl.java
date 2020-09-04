@@ -6,6 +6,7 @@ import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.LawRepository;
 import com.jxqixin.trafic.repository.NoticeRepository;
 import com.jxqixin.trafic.service.ILawService;
+import com.jxqixin.trafic.util.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -106,7 +107,7 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 			law.setOrgCategory(org.getOrgCategory());
 			law.setOrg(org);
 		}
-		String newNum = generateNewNum(org==null?null:org.getShortName(),maxNum);
+		String newNum = StringUtil.generateNewNum(org==null?null:org.getShortName(),maxNum);
 		law.setNum(newNum);
 		lawRepository.save(law);
 	}
@@ -123,10 +124,6 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 	}
 
 	/**
-	 * 根据企业简称生成新的发文字号
-	 * @param num 企业简称
-	 * @return
-	 */
 	private String generateNewNum(String num,String maxNum) {
 		Date now = new Date();
 		String currentYear = format.format(now);
@@ -139,7 +136,7 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 		}else{
 			//截取后倒数第八位到倒数第四位
 			String year = maxNum.substring(maxNum.length()-8,maxNum.length()-4);
-			if(currentYear.compareTo(year)>0){
+			if(currentYear.compareTo(year)==0){
 				//截取后四位加一
 				String last4 = maxNum.substring(maxNum.length()-4);
 				int intNum = Integer.parseInt(last4) + 1;
@@ -166,10 +163,5 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 				return num==null?currentYear+"0001":num+currentYear+"0001";
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		String year = "20200001";
-		System.out.println(year.substring(year.length()-4));
-	}
+	}*/
 }

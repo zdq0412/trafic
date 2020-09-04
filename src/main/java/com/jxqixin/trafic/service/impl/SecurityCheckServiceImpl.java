@@ -57,7 +57,7 @@ public class SecurityCheckServiceImpl extends CommonServiceImpl<SecurityCheck> i
 	}
 
 	@Override
-	public void importTemplate(String templateId, Org org, String currentUsername) {
+	public SecurityCheck importTemplate(String templateId, Org org, String currentUsername) {
 		SecurityCheckTemplate template = (SecurityCheckTemplate) securityCheckTemplateRepository.findById(templateId).get();
 		SecurityCheck securityCheck = new SecurityCheck();
 		BeanUtils.copyProperties(template,securityCheck);
@@ -68,6 +68,7 @@ public class SecurityCheckServiceImpl extends CommonServiceImpl<SecurityCheck> i
 		securityCheck.setRealPath(null);
 		securityCheck.setCreateDate(new Date());
 		securityCheck.setCreator(currentUsername);
-		templateRepository.save(securityCheck);
+		securityCheck = (SecurityCheck) templateRepository.save(securityCheck);
+		return securityCheck;
 	}
 }

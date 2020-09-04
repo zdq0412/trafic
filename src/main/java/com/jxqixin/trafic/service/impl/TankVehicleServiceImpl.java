@@ -56,7 +56,7 @@ public class TankVehicleServiceImpl extends CommonServiceImpl<TankVehicle> imple
 	}
 
 	@Override
-	public void importTemplate(String templateId, Org org, String currentUsername) {
+	public TankVehicle importTemplate(String templateId, Org org, String currentUsername) {
 		TankVehicleTemplate template = (TankVehicleTemplate) tankVehicleTemplateRepository.findById(templateId).get();
 		TankVehicle tankVehicle = new TankVehicle();
 		BeanUtils.copyProperties(template,tankVehicle);
@@ -67,6 +67,7 @@ public class TankVehicleServiceImpl extends CommonServiceImpl<TankVehicle> imple
 		tankVehicle.setRealPath(null);
 		tankVehicle.setCreateDate(new Date());
 		tankVehicle.setCreator(currentUsername);
-		templateRepository.save(tankVehicle);
+		tankVehicle = (TankVehicle) templateRepository.save(tankVehicle);
+		return tankVehicle;
 	}
 }

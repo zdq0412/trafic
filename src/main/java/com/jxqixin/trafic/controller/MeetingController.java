@@ -47,8 +47,8 @@ public class MeetingController extends CommonController{
      */
     @PostMapping("/meeting/template")
     public JsonResult importTemplate(String templateId, HttpServletRequest request){
-        meetingService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
-        return new JsonResult(Result.SUCCESS);
+        Meeting meeting = meetingService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
+        return new JsonResult(Result.SUCCESS,meeting);
     }
     /**
      * 新增会议

@@ -21,5 +21,5 @@ public interface ITrainingService extends ICommonService<Training> {
      * @param templateId
      * @param org
      */
-    void importTemplate(String templateId, Org org, String username);
+    Training importTemplate(String templateId, Org org, String username);
 }

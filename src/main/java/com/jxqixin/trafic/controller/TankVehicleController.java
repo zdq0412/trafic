@@ -135,7 +135,7 @@ public class TankVehicleController extends CommonController{
      */
     @PostMapping("/tankVehicle/template")
     public JsonResult importTemplate(String templateId, HttpServletRequest request){
-        tankVehicleService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
-        return new JsonResult(Result.SUCCESS);
+       TankVehicle tankVehicle = tankVehicleService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
+        return new JsonResult(Result.SUCCESS,tankVehicle);
     }
 }

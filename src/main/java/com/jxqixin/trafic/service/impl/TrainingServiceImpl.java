@@ -60,7 +60,7 @@ public class TrainingServiceImpl extends CommonServiceImpl<Training> implements 
 	}
 
 	@Override
-	public void importTemplate(String templateId, Org org,String username) {
+	public Training importTemplate(String templateId, Org org,String username) {
 		TrainingTemplate template = (TrainingTemplate) trainingTemplateRepository.findById(templateId).get();
 		Training training = new Training();
 		if(org!=null){
@@ -76,6 +76,7 @@ public class TrainingServiceImpl extends CommonServiceImpl<Training> implements 
 		training.setName(template.getName());
 		training.setCreateDate(new Date());
 		training.setCreator(username);
-		trainingRepository.save(training);
+		training = (Training) trainingRepository.save(training);
+		return training;
 	}
 }

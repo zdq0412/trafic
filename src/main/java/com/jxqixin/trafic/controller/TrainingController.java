@@ -44,8 +44,8 @@ public class TrainingController extends CommonController{
      */
     @PostMapping("/training/template")
     public JsonResult importTemplate(String templateId, HttpServletRequest request){
-        trainingService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
-        return new JsonResult(Result.SUCCESS);
+        Training training = trainingService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
+        return new JsonResult(Result.SUCCESS,training);
     }
     /**
      * 新增培训

@@ -1,6 +1,5 @@
 package com.jxqixin.trafic.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -9,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 危险源清单
@@ -27,7 +25,7 @@ public class HazardSourcesList implements Serializable {
 	private int happen;
 	/**后果严重性*/
 	private int consequence;
-	/**判定准则*/
+	/**判定准则:风险度值*/
 	private int criterion;
 	/**安全风险等级*/
 	private String riskLevel;
@@ -37,11 +35,22 @@ public class HazardSourcesList implements Serializable {
 	private String measures;
 	/**实施期限*/
 	private String timeLimit;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createDate;
 	/**所属企业*/
 	@ManyToOne
 	@JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Org org;
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
 	public String getId() {
 		return id;

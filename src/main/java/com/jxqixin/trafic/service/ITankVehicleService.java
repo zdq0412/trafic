@@ -23,5 +23,5 @@ public interface ITankVehicleService extends ICommonService<TankVehicle> {
      * @param org
      * @param currentUsername
      */
-    void importTemplate(String templateId, Org org, String currentUsername);
+    TankVehicle importTemplate(String templateId, Org org, String currentUsername);
 }

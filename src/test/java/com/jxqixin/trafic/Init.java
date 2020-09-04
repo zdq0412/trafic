@@ -39,6 +39,8 @@ public class Init{
     private IRoleFunctionsService roleFunctionsService;
     @Autowired
     private ISafetyInvestmentCategoryService safetyInvestmentCategoryService;
+    @Autowired
+    private IRiskLevelService riskLevelService;
     @Test
     public void initAdminRoleAndUser(){
         Role adminRole = new Role();
@@ -115,5 +117,47 @@ public class Init{
         list.forEach(safetyInvestmentCategory -> {
             safetyInvestmentCategoryService.addObj(safetyInvestmentCategory);
         });
+    }
+
+    /**
+     * 初始化风险等级
+     */
+    @Test
+    public void initRiskLevel(){
+        RiskLevel rl0 = new RiskLevel();
+        rl0.setColor("#FF0000");
+        rl0.setUpperLimit(25);
+        rl0.setLowerLimit(20);
+        rl0.setName("重大风险");
+        rl0.setTimeLimit("立刻");
+        rl0.setMeasure("在采取措施降低风险前,不能继续作业,对改进措施进行评估");
+        riskLevelService.addObj(rl0);
+
+        RiskLevel rl1 = new RiskLevel();
+        rl1.setColor("#E6A23C");
+        rl1.setUpperLimit(16);
+        rl1.setLowerLimit(15);
+        rl1.setName("较大风险");
+        rl1.setTimeLimit("立刻或近期整改");
+        rl1.setMeasure("采取紧急措施降低风险,建立运行控制程序,定期检查、测量及评估");
+        riskLevelService.addObj(rl1);
+
+        RiskLevel rl2 = new RiskLevel();
+        rl2.setColor("#ffff00");
+        rl2.setUpperLimit(12);
+        rl2.setLowerLimit(9);
+        rl2.setName("一般风险");
+        rl2.setTimeLimit("2年内治理");
+        rl2.setMeasure("可考虑建立目标、建立操作规程,加强培训及沟通");
+        riskLevelService.addObj(rl2);
+
+        RiskLevel rl3 = new RiskLevel();
+        rl3.setColor("#6699CC");
+        rl3.setUpperLimit(8);
+        rl3.setLowerLimit(1);
+        rl3.setName("低风险");
+        rl3.setTimeLimit("有条件、有经费时治理或只需保存记录");
+        rl3.setMeasure("可考虑建立操作规程、作业指导书但需定期检查或无需采用控制措施");
+        riskLevelService.addObj(rl3);
     }
 }

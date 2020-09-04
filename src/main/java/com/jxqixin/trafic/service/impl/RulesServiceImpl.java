@@ -1,5 +1,4 @@
 package com.jxqixin.trafic.service.impl;
-
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Notice;
 import com.jxqixin.trafic.model.Org;
@@ -10,6 +9,7 @@ import com.jxqixin.trafic.repository.NoticeRepository;
 import com.jxqixin.trafic.repository.RuleTemplateRepository;
 import com.jxqixin.trafic.repository.RulesRepository;
 import com.jxqixin.trafic.service.IRulesService;
+import com.jxqixin.trafic.util.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,14 +19,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
-
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 @Service
 @Transactional
 public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRulesService {
@@ -95,7 +93,7 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 			rules.setOrgCategory(org.getOrgCategory());
 			rules.setOrg(org);
 		}
-		String newNum = generateNewNum(org==null?null:org.getShortName(),maxNum);
+		String newNum = StringUtil.generateNewNum(org==null?null:org.getShortName(),maxNum);
 		rules.setNum(newNum);
 		rulesRepository.save(rules);
 	}
@@ -129,7 +127,7 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 		rules.setContent(template.getContent());
 		rules.setPublishDate(new Date());
 		rules.setTimeliness("有效");
-		rules.setNum(generateNewNum(org==null?"":org.getShortName(),rulesRepository.findMaxNumByOrgId(org==null?null:org.getId())));
+		rules.setNum(StringUtil.generateNewNum(org==null?"":org.getShortName(),rulesRepository.findMaxNumByOrgId(org==null?null:org.getId())));
 		if(org!=null){
 			rules.setOrg(org);
 			rules.setProvince(org.getProvince());
@@ -142,10 +140,6 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 	}
 
 	/**
-	 * 根据企业简称生成新的发文字号
-	 * @param num 企业简称
-	 * @return
-	 */
 	private String generateNewNum(String num,String maxNum) {
 		Date now = new Date();
 		String currentYear = format.format(now);
@@ -158,7 +152,7 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 		}else{
 			//截取后倒数第八位到倒数第四位
 			String year = maxNum.substring(maxNum.length()-8,maxNum.length()-4);
-			if(currentYear.compareTo(year)>0){
+			if(currentYear.compareTo(year)==0){
 				//截取后四位加一
 				String last4 = maxNum.substring(maxNum.length()-4);
 				int intNum = Integer.parseInt(last4) + 1;
@@ -185,10 +179,5 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 				return num==null?currentYear+"0001":num+currentYear+"0001";
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		String year = "20200001";
-		System.out.println(year.substring(year.length()-4));
-	}
+	}*/
 }

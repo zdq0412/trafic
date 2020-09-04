@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 危险源清单
  */
-public class HazardSourcesListDto implements Serializable {
+public class HazardSourcesListDto extends PageDto implements Serializable {
 	private String id;
 	/**危险源名称*/
 	private String name;
