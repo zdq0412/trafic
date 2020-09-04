@@ -97,7 +97,6 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 		rules.setNum(newNum);
 		rulesRepository.save(rules);
 	}
-
 	@Override
 	public void publishRules(String id) {
 		Rules rules = (Rules) rulesRepository.findById(id).get();
@@ -106,7 +105,6 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 		notice.setRules(rules);
 		noticeRepository.save(notice);
 	}
-
 	@Override
 	public Page findTemplates(NameDto nameDto) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit(), Sort.Direction.DESC,"publishDate");
@@ -117,7 +115,6 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 			}
 		}, pageable);
 	}
-
 	@Override
 	public void importTemplate(String templateId, Org org) {
 		RuleTemplate template = (RuleTemplate) templateRepository.findById(templateId).get();
@@ -135,49 +132,6 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 			rules.setRegion(org.getRegion());
 			rules.setOrgCategory(org.getOrgCategory());
 		}
-
 		rulesRepository.save(rules);
 	}
-
-	/**
-	private String generateNewNum(String num,String maxNum) {
-		Date now = new Date();
-		String currentYear = format.format(now);
-		if(StringUtils.isEmpty(maxNum)){
-			if(StringUtils.isEmpty(num)){
-				return currentYear + "0001";
-			}else{
-				return num + currentYear + "0001";
-			}
-		}else{
-			//截取后倒数第八位到倒数第四位
-			String year = maxNum.substring(maxNum.length()-8,maxNum.length()-4);
-			if(currentYear.compareTo(year)==0){
-				//截取后四位加一
-				String last4 = maxNum.substring(maxNum.length()-4);
-				int intNum = Integer.parseInt(last4) + 1;
-				String strNum = String.valueOf(intNum);
-				switch (strNum.length()){
-					case 1:{
-						last4 = "000" + strNum;
-						break;
-					}
-					case 2:{
-						last4 = "00" + strNum;
-						break;
-					}
-					case 3:{
-						last4 = "0" + strNum;
-						break;
-					}case 4:{
-						last4 = strNum;
-						break;
-					}
-				}
-				return num==null?currentYear+last4:num+currentYear+last4;
-			}else{
-				return num==null?currentYear+"0001":num+currentYear+"0001";
-			}
-		}
-	}*/
 }

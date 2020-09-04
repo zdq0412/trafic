@@ -1527,7 +1527,6 @@ create table m060_risk_level(
   note varchar(2000) comment '备注'
 ) comment '风险等级';
 
-
 #安全文化建设模板表
 drop table if exists m061_security_build_template;
 create table m061_security_build_template(

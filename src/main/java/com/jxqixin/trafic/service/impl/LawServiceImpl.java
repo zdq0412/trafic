@@ -111,7 +111,6 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 		law.setNum(newNum);
 		lawRepository.save(law);
 	}
-
 	@Override
 	public void publishLaw(String id) {
 		Law law = (Law) lawRepository.findById(id).get();
@@ -122,46 +121,4 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 
 		noticeRepository.save(notice);
 	}
-
-	/**
-	private String generateNewNum(String num,String maxNum) {
-		Date now = new Date();
-		String currentYear = format.format(now);
-		if(StringUtils.isEmpty(maxNum)){
-			if(StringUtils.isEmpty(num)){
-				return currentYear + "0001";
-			}else{
-				return num + currentYear + "0001";
-			}
-		}else{
-			//截取后倒数第八位到倒数第四位
-			String year = maxNum.substring(maxNum.length()-8,maxNum.length()-4);
-			if(currentYear.compareTo(year)==0){
-				//截取后四位加一
-				String last4 = maxNum.substring(maxNum.length()-4);
-				int intNum = Integer.parseInt(last4) + 1;
-				String strNum = String.valueOf(intNum);
-				switch (strNum.length()){
-					case 1:{
-						last4 = "000" + strNum;
-						break;
-					}
-					case 2:{
-						last4 = "00" + strNum;
-						break;
-					}
-					case 3:{
-						last4 = "0" + strNum;
-						break;
-					}case 4:{
-						last4 = strNum;
-						break;
-					}
-				}
-				return num==null?currentYear+last4:num+currentYear+last4;
-			}else{
-				return num==null?currentYear+"0001":num+currentYear+"0001";
-			}
-		}
-	}*/
 }

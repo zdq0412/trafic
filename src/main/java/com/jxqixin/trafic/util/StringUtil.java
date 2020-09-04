@@ -33,38 +33,31 @@ public class StringUtil {
         String currentYear = format.format(now);
         if(StringUtils.isEmpty(maxNum)){
             if(StringUtils.isEmpty(num)){
-                return currentYear + "0001";
+                return currentYear + "01";
             }else{
-                return num + currentYear + "0001";
+                return num + currentYear + "01";
             }
         }else{
-            //截取后倒数第八位到倒数第四位
-            String year = maxNum.substring(maxNum.length()-8,maxNum.length()-4);
+            //截取后倒数第六位到倒数第二位
+            String year = maxNum.substring(maxNum.length()-6,maxNum.length()-2);
             if(currentYear.compareTo(year)==0){
-                //截取后四位加一
-                String last4 = maxNum.substring(maxNum.length()-4);
+                //截取后两位加一
+                String last4 = maxNum.substring(maxNum.length()-2);
                 int intNum = Integer.parseInt(last4) + 1;
                 String strNum = String.valueOf(intNum);
                 switch (strNum.length()){
                     case 1:{
-                        last4 = "000" + strNum;
+                        last4 = "0" + strNum;
                         break;
                     }
                     case 2:{
-                        last4 = "00" + strNum;
-                        break;
-                    }
-                    case 3:{
-                        last4 = "0" + strNum;
-                        break;
-                    }case 4:{
                         last4 = strNum;
                         break;
                     }
                 }
                 return num==null?currentYear+last4:num+currentYear+last4;
             }else{
-                return num==null?currentYear+"0001":num+currentYear+"0001";
+                return num==null?currentYear+"01":num+currentYear+"01";
             }
         }
     }
