@@ -209,7 +209,7 @@ public class UserController extends CommonController{
      * @return
      */
     @PostMapping("/user/photo")
-    public JsonResult addEmployee(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+    public JsonResult uploadPhoto(@RequestParam("file") MultipartFile file, HttpServletRequest request){
         User user = userService.queryUserByUsername(getCurrentUsername(request));
         AreaManager areaManager = null;
         if(user==null){

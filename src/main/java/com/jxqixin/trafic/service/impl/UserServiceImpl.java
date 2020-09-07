@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,33 +22,34 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service("userService")
 @Transactional
-@CacheConfig(cacheNames = "UserCache")
-public class UserServiceImpl extends CommonServiceImpl<User> implements IUserService {
+@CacheConfig(cacheNames = "userCache")
+public class UserServiceImpl /*extends CommonServiceImpl<User>*/ implements IUserService {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	@Override
+	/*@Override
 	public CommonRepository getCommonRepository() {
 		return userRepository;
-	}
+	}*/
 	@Override
 	public User login(String username, String password) {
 		return userRepository.findByUsernameAndPassword(username,password);
 	}
 	@Override
-	//@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #username")
+	@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #username")
 	public User queryUserByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
 
 	@Override
-	//@Cacheable(unless = "#result.size()==0",key = "#root.methodName + '-' + #username")
+	@Cacheable(unless = "#result.size()==0",key = "#root.methodName + '-' + #username")
 	public List<Object[]> queryFunctionsByUsername(String username) {
 		return userRepository.queryFunctionsByUsername(username);
 	}
@@ -56,7 +58,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	 * @param ids
 	 */
 	@Override
-	//@CacheEvict(value = "userCache")
+	@CacheEvict(value = "userCache",allEntries = true)
 	public void deleteBatch(String[] ids) {
 		if(ids==null || ids.length<=0){
 			throw new RuntimeException("没有要删除的用户!");
@@ -75,7 +77,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	 * @param id
 	 */
 	@Override
-	//@CacheEvict(value = "userCache")
+	@CacheEvict(value = "userCache",allEntries = true)
 	public void deleteById(String id) {
 		User user = (User) userRepository.findById(id).get();
 		if(!user.isAllowedDelete()){
@@ -93,12 +95,13 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	 * @return
 	 */
 	@Override
+	@Cacheable(key = "#id")
 	public Integer findCountByRoleId(String id) {
 		return userRepository.findCountByRoleId(id);
 	}
 
 	@Override
-	//@Cacheable
+	@Cacheable(unless = "#result eq null")
 	public Page findUsers(UserDto userDto,Org org) {
 		Pageable pageable = PageRequest.of(userDto.getPage(),userDto.getLimit());
 		return userRepository.findAll(new Specification() {
@@ -120,7 +123,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	}
 
 	@Override
-	//@Cacheable(unless = "#result eq null")
+	@Cacheable(unless = "#result eq null")
 	public User queryUserByUsernameAndOrgId(String username, String orgId) {
 		if(!StringUtils.isEmpty(orgId)){
 			return userRepository.findByUsernameAndOrgId(username,orgId);
@@ -134,8 +137,44 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements IUserSer
 	}
 
 	@Override
-	//@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #p0")
+	@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #p0")
 	public User findByUsernameWhereOrgIsNull(String currentUsername) {
 		return userRepository.findByUsernameWhereOrgIsNull(currentUsername);
+	}
+
+	@Override
+	@CacheEvict(value = "userCache",allEntries = true)
+	public void updateObj(User obj) {
+		userRepository.save(obj);
+	}
+
+	@Override
+	@CacheEvict(value = "userCache",allEntries = true)
+	public User addObj(User obj) {
+		return (User) userRepository.save(obj);
+	}
+
+	@Override
+	@Cacheable(unless = "#result eq null")
+	public User queryObjById(Serializable id) {
+		return (User) userRepository.findById(id).get();
+	}
+
+	@Override
+	@CacheEvict(value = "userCache",allEntries = true)
+	public void deleteObj(Serializable id) {
+		userRepository.deleteById(id);
+	}
+
+	@Override
+	@Cacheable
+	public Page<User> findAll(Pageable pageable) {
+		return userRepository.findAll(pageable);
+	}
+
+	@Override
+	@Cacheable
+	public List<User> findAll() {
+		return userRepository.findAll();
 	}
 }

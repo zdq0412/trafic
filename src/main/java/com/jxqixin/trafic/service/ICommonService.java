@@ -46,7 +46,7 @@ public interface ICommonService<T> {
 	 * @param example
 	 * @return
 	 */
-	public Page<T> findAll(Pageable pageable, Example example);
+	//public Page<T> findAll(Pageable pageable, Example example);
 	/**
 	 * 查询所有
 	 * @return

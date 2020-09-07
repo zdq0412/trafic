@@ -40,10 +40,10 @@ public abstract  class CommonServiceImpl<T> implements ICommonService<T> {
         return getCommonRepository().findAll(pageable);
     }
 
-    @Override
+   /* @Override
     public Page<T> findAll(Pageable pageable, Example example) {
         return getCommonRepository().findAll(example,pageable);
-    }
+    }*/
     @Override
     public List<T> findAll() {
         return getCommonRepository().findAll();
