@@ -1,14 +1,11 @@
 package com.jxqixin.trafic.controller;
-
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.model.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import javax.servlet.http.HttpServletRequest;
-
 /**
  * 全局异常处理器
  */
@@ -21,7 +18,6 @@ public class GlobalExceptionHandler {
         LOG.error("url {}, msg {}",request.getRequestURL(), e.getMessage());
         Result result = Result.FAIL;
         result.setMessage("系统异常，请联系管理员!");
-        e.printStackTrace();
         return new JsonResult(result);
     }
 }

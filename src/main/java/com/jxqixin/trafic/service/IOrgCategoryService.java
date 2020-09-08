@@ -1,8 +1,11 @@
 package com.jxqixin.trafic.service;
 
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.dto.OrgCategoryDto;
 import com.jxqixin.trafic.model.OrgCategory;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface IOrgCategoryService extends ICommonService<OrgCategory> {
     /**
@@ -22,4 +25,16 @@ public interface IOrgCategoryService extends ICommonService<OrgCategory> {
      * @return
      */
     Page findOrgCategorys(NameDto nameDto);
+
+    /**
+     * 修改状态
+     * @param orgCategoryDto
+     */
+    void orgCategoryStatus(OrgCategoryDto orgCategoryDto);
+
+    /**
+     * 查找所有可用企业类别
+     * @return
+     */
+    List<OrgCategory> queryAllOrgCategory();
 }

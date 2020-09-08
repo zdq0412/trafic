@@ -6,6 +6,7 @@ create table org_category(
   name varchar(20) comment '企业类别名称',
   note varchar(2000) comment '类别描述',
   safetyCostRatio  float  comment '安全生产费用  提取百分比',
+  deleted bit default 0 comment '删除标识',
   createDate datetime  comment '创建日期'
 ) comment '企业类别表';
 
@@ -18,6 +19,7 @@ create table category(
   createDate datetime  comment '创建日期',
   note varchar(2000) comment '区域描述',
   type varchar(50) comment '类型',
+  deleted bit default 0 comment '删除标识',
   constraint fk_category foreign key(pid) references category(id)
 ) comment '区域信息表';
 

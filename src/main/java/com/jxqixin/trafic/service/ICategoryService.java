@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.service;
 
+import com.jxqixin.trafic.dto.CategoryDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Category;
 import org.springframework.data.domain.Page;
@@ -36,4 +37,10 @@ public interface ICategoryService extends ICommonService<Category> {
      * @param list
      */
     void importCategory(List<Category> list);
+
+    /**
+     * 修改类别状态：pause 停用  play 启用
+     * @param categoryDto
+     */
+    void categoryStatus(CategoryDto categoryDto);
 }

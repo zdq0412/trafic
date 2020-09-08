@@ -22,6 +22,8 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+    properties:
+      dialect: org.hibernate.dialect.MySQLInnoDBDialect
   servlet:
     multipart:
       max-file-size: 5MB

@@ -101,7 +101,7 @@ public class UserServiceImpl /*extends CommonServiceImpl<User>*/ implements IUse
 	}
 
 	@Override
-	@Cacheable(unless = "#result eq null")
+	@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #p0.username")
 	public Page findUsers(UserDto userDto,Org org) {
 		Pageable pageable = PageRequest.of(userDto.getPage(),userDto.getLimit());
 		return userRepository.findAll(new Specification() {
@@ -155,13 +155,13 @@ public class UserServiceImpl /*extends CommonServiceImpl<User>*/ implements IUse
 	}
 
 	@Override
-	@Cacheable(unless = "#result eq null")
+	@Cacheable(unless = "#result eq null",key = "#root.methodName + #p0")
 	public User queryObjById(Serializable id) {
 		return (User) userRepository.findById(id).get();
 	}
 
 	@Override
-	@CacheEvict(value = "userCache",allEntries = true)
+	@CacheEvict(value = {"userCache","functionCache"},allEntries = true)
 	public void deleteObj(Serializable id) {
 		userRepository.deleteById(id);
 	}

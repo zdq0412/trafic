@@ -5,6 +5,7 @@ import com.jxqixin.trafic.dto.CategoryDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Category;
 import com.jxqixin.trafic.model.JsonResult;
+import com.jxqixin.trafic.model.Resume;
 import com.jxqixin.trafic.service.ICategoryService;
 import com.jxqixin.trafic.util.ExcelUtil;
 import com.jxqixin.trafic.util.ImportCategoryUtil;
@@ -103,13 +104,19 @@ public class CategoryController extends CommonController{
         }
     }
     /**
-     * 根据ID删除类别
-     * @param id
+     * 修改类别的状态，删除或正常
+     * @param categoryDto
      * @return
      */
-    @DeleteMapping("/category/category/{id}")
-    public JsonResult deleteById(@PathVariable(name="id") String id){
-        categoryService.deleteById(id);
+    @PostMapping("/category/categoryStatus")
+    public JsonResult categoryStatus(CategoryDto categoryDto){
+        try {
+            categoryService.categoryStatus(categoryDto);
+        }catch (RuntimeException ex){
+            Result result = Result.FAIL;
+            result.setMessage(ex.getMessage());
+            return new JsonResult(result);
+        }
         return new JsonResult(Result.SUCCESS);
     }
     /**

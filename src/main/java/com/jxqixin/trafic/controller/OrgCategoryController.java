@@ -27,7 +27,7 @@ public class OrgCategoryController extends CommonController{
      */
     @GetMapping("/orgCategory/orgCategorys")
     public JsonResult<List<OrgCategory>> queryAllOrgCategory(){
-        List<OrgCategory> list = orgCategoryService.findAll();
+        List<OrgCategory> list = orgCategoryService.queryAllOrgCategory();
         return new JsonResult<>(Result.SUCCESS,list);
     }
     /**
@@ -88,12 +88,29 @@ public class OrgCategoryController extends CommonController{
         }
     }
     /**
-     * 根据ID删除企业类别
+     * 设置企业类别状态
+     * @param orgCategoryDto
+     * @return
+     */
+    @PostMapping("/orgCategory/orgCategoryStatus")
+    public JsonResult orgCategoryStatus(OrgCategoryDto orgCategoryDto){
+        try {
+            orgCategoryService.orgCategoryStatus(orgCategoryDto);
+        }catch(RuntimeException re){
+            Result result = Result.FAIL;
+            result.setMessage(re.getMessage());
+            JsonResult jsonResult = new JsonResult(result);
+            return jsonResult;
+        }
+        return new JsonResult(Result.SUCCESS);
+    }
+    /**
+     * 根据ID删除
      * @param id
      * @return
      */
-    @DeleteMapping("/orgCategory/orgCategory/{id}")
-    public JsonResult deleteById(@PathVariable(name="id") String id){
+    @DeleteMapping("/orgCategory/orgCategory")
+    public JsonResult deleteById(@PathVariable String id){
         try {
             orgCategoryService.deleteById(id);
         }catch(RuntimeException re){

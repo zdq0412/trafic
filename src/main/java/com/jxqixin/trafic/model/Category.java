@@ -32,12 +32,22 @@ public class Category implements Serializable {
 	private Category parent;
 	/**类别：如区域，性别，等级等*/
 	private String type;
+	/**删除标识*/
+	private boolean deleted=false;
 	/**
 	 * 子类别
 	 */
 	@Transient
 	@JsonIgnoreProperties(value={"parent"})
 	private List<Category> children;
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	public List<Category> getChildren() {
 		return children;

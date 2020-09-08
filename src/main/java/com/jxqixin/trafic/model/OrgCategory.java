@@ -22,9 +22,21 @@ public class OrgCategory implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
+    /**删除标识*/
+    private boolean deleted = false;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     /**
      * 安全生产费用提取百分比
      */
+
     private Float safetyCostRatio;
     public Float getSafetyCostRatio() {
         return safetyCostRatio;

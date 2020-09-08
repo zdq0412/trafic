@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.service.impl;
+import com.jxqixin.trafic.constant.Status;
 import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.dto.OrgCategoryDto;
 import com.jxqixin.trafic.model.OrgCategory;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.OrgCategoryFunctionsRepository;
@@ -36,12 +38,10 @@ public class OrgCategoryServiceImpl extends CommonServiceImpl<OrgCategory> imple
 	public CommonRepository getCommonRepository() {
 		return orgCategoryRepository;
 	}
-
 	@Override
 	public OrgCategory findByName(String name) {
 		return orgCategoryRepository.findByName(name);
 	}
-
 	@Override
 	public void deleteById(String id) {
 		//根据企业类别ID查找企业数量
@@ -52,7 +52,26 @@ public class OrgCategoryServiceImpl extends CommonServiceImpl<OrgCategory> imple
 		orgCategoryFunctionsRepository.deleteByOrgCategoryId(id);
 		orgCategoryRepository.deleteById(id);
 	}
-
+	@Override
+	public void orgCategoryStatus(OrgCategoryDto orgCategoryDto) {
+		OrgCategory orgCategory = (OrgCategory) orgCategoryRepository.findById(orgCategoryDto.getId()).get();
+		if(Status.PLAY.equals(orgCategoryDto.getOperType())){
+			orgCategory.setDeleted(false);
+		}
+		if(Status.PAUSE.equals(orgCategoryDto.getOperType())){
+			orgCategory.setDeleted(true);
+		}
+		orgCategoryRepository.save(orgCategory);
+	}
+	@Override
+	public List<OrgCategory> queryAllOrgCategory() {
+		return orgCategoryRepository.findAll(new Specification() {
+			@Override
+			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+				return criteriaBuilder.equal(root.get("deleted"),false);
+			}
+		});
+	}
 	@Override
 	public Page findOrgCategorys(NameDto nameDto) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
@@ -64,7 +83,6 @@ public class OrgCategoryServiceImpl extends CommonServiceImpl<OrgCategory> imple
 				if(!StringUtils.isEmpty(nameDto.getName())){
 					list.add(criteriaBuilder.like(root.get("name"),"%"+nameDto.getName()+"%"));
 				}
-
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 			}

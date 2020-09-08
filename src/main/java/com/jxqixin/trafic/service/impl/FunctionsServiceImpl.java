@@ -1,5 +1,4 @@
 package com.jxqixin.trafic.service.impl;
-
 import com.jxqixin.trafic.dto.Menus;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.*;
@@ -7,6 +6,9 @@ import com.jxqixin.trafic.repository.*;
 import com.jxqixin.trafic.service.IFunctionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,17 +16,17 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.StringUtils;
-
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 @Service
 @Transactional
-public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implements IFunctionsService{
+@CacheConfig(cacheNames = {"functionCache"})
+public class FunctionsServiceImpl /*extends CommonServiceImpl<Functions>*/ implements IFunctionsService{
 	@Autowired
 	private FunctionsRepository functionsRepository;
 	@Autowired
@@ -37,10 +39,10 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	private RoleFunctionsRepository roleFunctionsRepository;
 	@Autowired
 	private OrgCategoryFunctionsRepository orgCategoryFunctionsRepository;
-	@Override
+	/*@Override
 	public CommonRepository getCommonRepository() {
 		return functionsRepository;
-	}
+	}*/
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired
@@ -53,11 +55,13 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	 * @return
 	 */
 	@Override
+	@Cacheable(key = "#root.methodName + #p0",unless = "#result eq null")
 	public List<Functions> queryByRoleName(String roleName) {
 		return functionsRepository.queryByRoleName(roleName);
 	}
 
 	@Override
+	@Cacheable(key = "#root.methodName + #p0",unless = "#result eq null")
 	public List<Menus> findMenus(String username) {
 		List<Menus> list = new ArrayList<>();
 		//查看当前模式下的目录
@@ -83,6 +87,7 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 		return list;
 	}
 	@Override
+	@Cacheable(key = "#root.methodName + #p0",unless = "#result eq null")
 	public List<Functions> findFunctions(String currentUsername) {
 		Role role = userRepository.findByUsername(currentUsername).getRole();
 		List<Functions> list = null;
@@ -101,11 +106,13 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 		}
 	}
 	@Override
+	@Cacheable(key = "#root.methodName + #p0",unless = "#result eq null")
 	public List<String> findIdsByRoleId(String roleId) {
 		return roleFunctionsRepository.findFunctionsIdsByRoleId(roleId);
 	}
 
 	@Override
+	@CacheEvict(value = "functionCache",allEntries = true)
 	public void assign2Role(String[] functionIdArray, String roleId) {
 		//根据角色ID删除角色和权限的关联
 		roleFunctionsRepository.deleteByRoleId(roleId);
@@ -118,29 +125,29 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 			for (int i = 0; i < functionIdArray.length; i++) {
 				Functions functions = new Functions();
 				functions.setId(functionIdArray[i]);
-
 				RoleFunctions roleFunctions = new RoleFunctions();
 				roleFunctions.setRole(role);
 				roleFunctions.setFunctions(functions);
-
 				list.add(roleFunctions);
 			}
-
 			roleFunctionsRepository.saveAll(list);
 		}
 	}
 
 	@Override
+	@Cacheable(unless = "#result eq null" ,key="#root.methodName + #p0")
 	public List<String> findIdsByDirectoryId(String dirId) {
 		return directoryFunctionsRepository.findIdsByDirectoryId(dirId);
 	}
 
 	@Override
+	@Cacheable(unless = "#result eq null" ,key="#root.methodName")
 	public List<Functions> findAllMenus() {
 		return functionsRepository.findAllMenus();
 	}
 
 	@Override
+	@Cacheable(unless = "#result eq null" ,key="#root.methodName")
 	public List<Functions> findAllFunctions() {
 		List<Functions> menus = findAllMenus();
 		menus.forEach(functions -> findChildren(functions));
@@ -148,11 +155,13 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	}
 
 	@Override
+	@Cacheable(key = "#root.methodName + #p0",unless = "#result eq null")
 	public List<String> findIdsByOrgCategoryId(String orgCategoryId) {
 		return orgCategoryFunctionsRepository.findFunctionIdsByOrgCategoryId(orgCategoryId);
 	}
 
 	@Override
+	@CacheEvict(value = "functionCache",allEntries = true)
 	public void assign2OrgCategory(String[] functionIdArray, String orgCategoryId) {
 		orgCategoryFunctionsRepository.deleteByOrgCategoryId(orgCategoryId);
 		if(functionIdArray!=null && functionIdArray.length>0) {
@@ -174,6 +183,7 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	}
 
 	@Override
+	@Cacheable(key = "#root.methodName",unless = "#result eq null")
 	public List<Functions> findAdminRoleFunctions() {
 		return functionsRepository.findAdminRoleFunctions();
 	}
@@ -259,6 +269,7 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	}
 
 	@Override
+	@Cacheable(key = "#root.methodName + #p0.name + #p0.limit + #p0.page")
 	public Page findMenusByPage(NameDto nameDto) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
 		//目录名称或权限名称
@@ -292,6 +303,7 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	}
 
 	@Override
+	@CacheEvict(value = "functionCache",allEntries = true)
 	public void addFunction(Functions functions) {
 		Functions parent = functions.getParent();
 		functions.setParent(null);
@@ -316,6 +328,7 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	}
 
 	@Override
+	@CacheEvict(value = "functionCache",allEntries = true)
 	public void deleteById(String id) {
 		directoryFunctionsRepository.deleteByFunctionId(id);
 		functionsRepository.deleteByParentId(id);
@@ -323,6 +336,7 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 	}
 
 	@Override
+	@Cacheable(key = "#p0.name + '-' + #p0.limit + '-' + p0.page")
 	public Page findFunctionsByPage(NameDto nameDto) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
 		return functionsRepository.findAll(new Specification() {
@@ -354,5 +368,38 @@ public class FunctionsServiceImpl extends CommonServiceImpl<Functions> implement
 			parent.setSubs(subs);
 		}
 		return parent;
+	}
+
+	@Override
+	@CacheEvict(value = "functionCache",allEntries = true)
+	public void updateObj(Functions obj) {
+		functionsRepository.save(obj);
+	}
+
+	@Override
+	@CacheEvict(value = "functionCache",allEntries = true)
+	public Functions addObj(Functions obj) {
+		return (Functions) functionsRepository.save(obj);
+	}
+
+	@Override
+	public Functions queryObjById(Serializable id) {
+		return (Functions) functionsRepository.findById(id).get();
+	}
+
+	@Override
+	@CacheEvict(value = "functionCache",allEntries = true)
+	public void deleteObj(Serializable id) {
+		functionsRepository.deleteById(id);
+	}
+
+	@Override
+	public Page<Functions> findAll(Pageable pageable) {
+		return functionsRepository.findAll(pageable);
+	}
+
+	@Override
+	public List<Functions> findAll() {
+		return functionsRepository.findAll();
 	}
 }

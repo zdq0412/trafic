@@ -12,8 +12,18 @@ public class CategoryDto {
     private String note;
 
     private String type;
+    /**操作类别：pause,play  停用和启用*/
+    private String operType;
 
     private String parentId;
+
+    public String getOperType() {
+        return operType;
+    }
+
+    public void setOperType(String operType) {
+        this.operType = operType;
+    }
 
     public String getType() {
         return type;

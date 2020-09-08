@@ -1,11 +1,12 @@
 package com.jxqixin.trafic.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 页面可 显示的菜单结构
  */
-public class Menus {
+public class Menus implements Serializable {
     /**图标*/
     private String icon;
     /**唯一标识*/
