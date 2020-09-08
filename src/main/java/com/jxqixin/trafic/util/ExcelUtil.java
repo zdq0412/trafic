@@ -1,9 +1,6 @@
 package com.jxqixin.trafic.util;
 
-import com.jxqixin.trafic.model.Directory;
-import com.jxqixin.trafic.model.Functions;
-import com.jxqixin.trafic.model.SafetyInvestmentCategory;
-import com.jxqixin.trafic.model.Schema;
+import com.jxqixin.trafic.model.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -167,6 +164,28 @@ public abstract class ExcelUtil {
 		}
 		try {
 			list = (List<Directory>) createExcel(new FileInputStream(file), isExcel2003);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	/**
+	 * 导入类别
+	 * @param file
+	 * @return
+	 */
+	public  List<Category> getCategoryData(File file){
+		List<Category> list = null;
+		String fileName = file.getName();
+		if (!validateExcel(fileName)) {// 验证文件名是否合格
+			return null;
+		}
+		boolean isExcel2003 = true;// 根据文件名判断文件是2003版本还是2007版本
+		if (isExcel2007(fileName)) {
+			isExcel2003 = false;
+		}
+		try {
+			list = (List<Category>) createExcel(new FileInputStream(file), isExcel2003);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

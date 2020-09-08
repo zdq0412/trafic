@@ -1,5 +1,4 @@
 package com.jxqixin.trafic;
-
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.service.*;
 import com.jxqixin.trafic.util.*;
@@ -10,12 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-
 /**
  * 初始化数据测试类
  */
@@ -23,6 +20,8 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 public class Init{
+    @Autowired
+    private ICategoryService categoryService;
     @Autowired
     private IUserService userService;
     @Autowired
@@ -108,7 +107,6 @@ public class Init{
            roleFunctionsService.addObj(roleFunctions);
         });
     }
-
     @Test
     public void importSafetyInvestmentCategory(){
         ExcelUtil excelUtil = new ImportSafetyInvestmentCategoryUtil();
@@ -118,7 +116,6 @@ public class Init{
             safetyInvestmentCategoryService.addObj(safetyInvestmentCategory);
         });
     }
-
     /**
      * 初始化风险等级
      */
@@ -159,5 +156,15 @@ public class Init{
         rl3.setTimeLimit("有条件、有经费时治理或只需保存记录");
         rl3.setMeasure("可考虑建立操作规程、作业指导书但需定期检查或无需采用控制措施");
         riskLevelService.addObj(rl3);
+    }
+    /**
+     * 导入省市区
+     */
+    @Test
+    public void importCategory(){
+        ExcelUtil excelUtil = new ImportCategoryUtil();
+        File file = new File("d:/category.xlsx");
+        List<Category> list = excelUtil.getCategoryData(file);
+        categoryService.importCategory(list);
     }
 }

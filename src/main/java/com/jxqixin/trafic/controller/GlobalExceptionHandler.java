@@ -18,6 +18,7 @@ public class GlobalExceptionHandler {
         LOG.error("url {}, msg {}",request.getRequestURL(), e.getMessage());
         Result result = Result.FAIL;
         result.setMessage("系统异常，请联系管理员!");
+        e.printStackTrace();
         return new JsonResult(result);
     }
 }

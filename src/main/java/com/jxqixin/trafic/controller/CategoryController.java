@@ -54,11 +54,11 @@ public class CategoryController extends CommonController{
      */
     @PostMapping("/category/category")
     public JsonResult addCategory(CategoryDto categoryDto){
-        JsonResult jsonResult = findByName(categoryDto.getName());
+        //JsonResult jsonResult = findByName(categoryDto.getName());
         Category category = new Category();
         BeanUtils.copyProperties(categoryDto,category);
-        if(jsonResult.getResult().getResultCode()==200){
-            category.setId(UUID.randomUUID().toString());
+       // if(jsonResult.getResult().getResultCode()==200){
+            //category.setId(UUID.randomUUID().toString());
             category.setCreateDate(new Date());
             if(!StringUtils.isEmpty(categoryDto.getParentId())){
                 Category parent = new Category();
@@ -67,8 +67,8 @@ public class CategoryController extends CommonController{
                 category.setParent(parent);
             }
             categoryService.addObj(category);
-        }
-        return jsonResult;
+       // }
+        return new JsonResult(Result.SUCCESS);
     }
     /**
      * 编辑类别
@@ -77,11 +77,11 @@ public class CategoryController extends CommonController{
      */
     @PutMapping("/category/category")
     public JsonResult updateCategory(CategoryDto categoryDto){
-        Category s = categoryService.findByName(categoryDto.getName());
+       /* Category s = categoryService.findByName(categoryDto.getName());
 
         if(s!=null && !s.getId().equals(categoryDto.getId())){
             return new JsonResult(Result.FAIL);
-        }
+        }*/
         Category savedCategory = categoryService.queryObjById(categoryDto.getId());
         savedCategory.setName(categoryDto.getName());
         savedCategory.setType(categoryDto.getType());
@@ -94,7 +94,7 @@ public class CategoryController extends CommonController{
      * @param name
      * @return
      */
-    @GetMapping("/category/category/{name}")
+   /* @GetMapping("/category/category/{name}")
     public JsonResult findByName(@PathVariable(name="name") String name){
         Category category = categoryService.findByName(name);
         if(category==null){
@@ -102,7 +102,7 @@ public class CategoryController extends CommonController{
         }else{
             return new JsonResult(Result.FAIL);
         }
-    }
+    }*/
     /**
      * 修改类别的状态，删除或正常
      * @param categoryDto

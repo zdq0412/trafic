@@ -1,6 +1,5 @@
 package com.jxqixin.trafic.service.impl;
 
-import com.jxqixin.trafic.common.NameSpecification;
 import com.jxqixin.trafic.constant.Status;
 import com.jxqixin.trafic.dto.CategoryDto;
 import com.jxqixin.trafic.dto.NameDto;
@@ -29,7 +28,6 @@ import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -66,17 +64,17 @@ public class CategoryServiceImpl /*extends CommonServiceImpl<Category>*/ impleme
 			throw new RuntimeException("没有数据!");
 		}
 		list.forEach(category -> {
-			Category c = categoryRepository.findByName(category.getName());
+			/*Category c = categoryRepository.findByName(category.getName());
 			if(c!=null){
 				throw new RuntimeException("类别名称已经存在:" + category.getName());
-			}
+			}*/
 			Category parent = category.getParent();
-			if(parent!=null){
-				parent = categoryRepository.findByName(parent.getName());
-				if(parent==null){
-					parent = (Category) categoryRepository.save(parent);
+			if (parent != null) {
+				Category p = categoryRepository.findByName(parent.getName());
+				if (p == null) {
+					p = (Category) categoryRepository.save(parent);
 				}
-				category.setParent(parent);
+				category.setParent(p);
 			}
 			categoryRepository.save(category);
 		});
@@ -148,12 +146,10 @@ public class CategoryServiceImpl /*extends CommonServiceImpl<Category>*/ impleme
 			return ;
 		}
 	}
-
 	@Override
 	public Category findByName(String name) {
 		return categoryRepository.findByName(name);
 	}
-
 	@Override
 	@CacheEvict(value = "categoryCache",allEntries = true)
 	public void deleteById(String id) {
@@ -167,12 +163,15 @@ public class CategoryServiceImpl /*extends CommonServiceImpl<Category>*/ impleme
 	@Override
 	@CacheEvict(value = "categoryCache",allEntries = true)
 	public void categoryStatus(CategoryDto categoryDto) {
-		try {
-			setStatus(categoryDto);
-		}catch (DataIntegrityViolationException | ConstraintViolationException e){
-			throw new RuntimeException("该记录已被其他数据引用,无法删除!");
+		setStatus(categoryDto);
+		Category category = (Category) categoryRepository.findById(categoryDto.getId()).get();
+		if(Status.PLAY.equals(categoryDto.getOperType())){
+			category.setDeleted(false);
 		}
-		//categoryRepository.deleteById(id);
+		if(Status.PAUSE.equals(categoryDto.getOperType())){
+			category.setDeleted(true);
+		}
+		categoryRepository.save(category);
 	}
 	/**
 	 * 循环删除
@@ -203,16 +202,15 @@ public class CategoryServiceImpl /*extends CommonServiceImpl<Category>*/ impleme
 				dto.setOperType(categoryDto.getOperType());
 				setStatus(dto);
 			});
-		}else{
-			Category category = (Category) categoryRepository.findById(categoryDto.getId()).get();
-			if(Status.PLAY.equals(categoryDto.getOperType())){
-				category.setDeleted(false);
-			}
-			if(Status.PAUSE.equals(categoryDto.getOperType())){
-				category.setDeleted(true);
-			}
-			categoryRepository.save(category);
 		}
+		Category category = (Category) categoryRepository.findById(categoryDto.getId()).get();
+		if(Status.PLAY.equals(categoryDto.getOperType())){
+			category.setDeleted(false);
+		}
+		if(Status.PAUSE.equals(categoryDto.getOperType())){
+			category.setDeleted(true);
+		}
+		categoryRepository.save(category);
 	}
 
 	@Override
