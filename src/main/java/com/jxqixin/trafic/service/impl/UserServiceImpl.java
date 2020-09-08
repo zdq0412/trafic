@@ -101,7 +101,7 @@ public class UserServiceImpl /*extends CommonServiceImpl<User>*/ implements IUse
 	}
 
 	@Override
-	@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #p0.username")
+	@Cacheable(unless = "#result eq null",key = "#root.methodName + '-' + #p0.username + '' + #p0.page + '' + #p0.limit")
 	public Page findUsers(UserDto userDto,Org org) {
 		Pageable pageable = PageRequest.of(userDto.getPage(),userDto.getLimit());
 		return userRepository.findAll(new Specification() {

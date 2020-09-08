@@ -269,7 +269,7 @@ public class FunctionsServiceImpl /*extends CommonServiceImpl<Functions>*/ imple
 	}
 
 	@Override
-	@Cacheable(key = "#root.methodName + #p0.name + #p0.limit + #p0.page")
+	@Cacheable(key = "#root.methodName + #p0.name + '' +#p0.limit + '' + #p0.page")
 	public Page findMenusByPage(NameDto nameDto) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
 		//目录名称或权限名称
