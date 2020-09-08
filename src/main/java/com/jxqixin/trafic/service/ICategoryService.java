@@ -21,7 +21,7 @@ public interface ICategoryService extends ICommonService<Category> {
      * @param name
      * @return
      */
-    Category findByName(String name);
+    List<Category> findByName(String name);
     /**
      * 根据ID删除类别，同时删除类别下的所有目录
      */

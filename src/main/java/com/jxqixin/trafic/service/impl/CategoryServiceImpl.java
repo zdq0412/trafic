@@ -64,17 +64,19 @@ public class CategoryServiceImpl /*extends CommonServiceImpl<Category>*/ impleme
 			throw new RuntimeException("没有数据!");
 		}
 		list.forEach(category -> {
-			/*Category c = categoryRepository.findByName(category.getName());
-			if(c!=null){
-				throw new RuntimeException("类别名称已经存在:" + category.getName());
-			}*/
 			Category parent = category.getParent();
 			if (parent != null) {
-				Category p = categoryRepository.findByName(parent.getName());
-				if (p == null) {
-					p = (Category) categoryRepository.save(parent);
+				List<Category> pList = categoryRepository.findByName(parent.getName());
+
+				if (CollectionUtils.isEmpty(pList)) {
+					parent = (Category) categoryRepository.save(parent);
+				}else{
+					if(pList.size()>1){
+						throw new RuntimeException(parent.getName() + " 已存在!");
+					}
+					parent = pList.get(0);
 				}
-				category.setParent(p);
+				category.setParent(parent);
 			}
 			categoryRepository.save(category);
 		});
@@ -147,7 +149,7 @@ public class CategoryServiceImpl /*extends CommonServiceImpl<Category>*/ impleme
 		}
 	}
 	@Override
-	public Category findByName(String name) {
+	public List<Category> findByName(String name) {
 		return categoryRepository.findByName(name);
 	}
 	@Override
