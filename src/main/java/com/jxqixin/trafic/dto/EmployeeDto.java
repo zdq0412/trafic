@@ -18,7 +18,7 @@ public class EmployeeDto extends PageDto implements Serializable {
     /**手机号*/
     private String tel;
     /**备注*/
-    private String note;
+    private String note="";
     /**角色ID*/
     private String roleId;
     /**部门ID*/

@@ -128,6 +128,13 @@ public class UserController extends CommonController{
                 Org org = new Org();
                 org.setId(userDto.getOrgId());
                 user.setOrg(org);
+            }else{
+                Org org = getOrg(request);
+                if(org!=null){
+                    user.setOrg(getOrg(request));
+                }else{
+                    user.setOrg(null);
+                }
             }
             if(!StringUtils.isEmpty(userDto.getRoleId())){
                 Role role = new Role();
@@ -149,7 +156,7 @@ public class UserController extends CommonController{
      * @return
      */
     @PutMapping("/user/user")
-    public JsonResult updateUser(UserDto userDto){
+    public JsonResult updateUser(UserDto userDto,HttpServletRequest request){
         User s = userService.queryUserByUsername(userDto.getUsername());
         if(s!=null && !s.getId().equals(userDto.getId())){
             return new JsonResult(Result.FAIL);
@@ -159,6 +166,13 @@ public class UserController extends CommonController{
             Org org = new Org();
             org.setId(userDto.getOrgId());
             savedUser.setOrg(org);
+        }else{
+            Org org = getOrg(request);
+            if(org!=null){
+                savedUser.setOrg(getOrg(request));
+            }else{
+                savedUser.setOrg(null);
+            }
         }
         if(!StringUtils.isEmpty(userDto.getRoleId())){
             Role role = new Role();

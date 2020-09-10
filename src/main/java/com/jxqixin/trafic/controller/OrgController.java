@@ -204,8 +204,7 @@ public class OrgController extends CommonController{
      */
     @GetMapping("/org/orgInfo")
     public ModelMap findOrgInfo(HttpServletRequest httpServletRequest){
-        User user = userService.queryUserByUsername(getCurrentUsername(httpServletRequest));
-        Org org = user.getOrg();
+        Org org = getOrg(httpServletRequest);
         List<OrgImg> orgImgList = orgImgService.findAll(org);
         List<OrgDoc> orgDocList = orgDocService.findAll(org);
 

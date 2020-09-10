@@ -83,11 +83,20 @@ public class DepartmentController extends CommonController{
         return departmentService.findParent(id);
     }
     /**
+     * 根据id查找至根ID
+     * @param id
+     * @return
+     */
+    @GetMapping("/department/findParentDepartments")
+    public List<String> findParentDepartments(String id){
+        return departmentService.findParentDepartments(id);
+    }
+    /**
      * 编辑部门
      * @param departmentDto
      * @return
      */
-    @PutMapping("/department/department")
+    @PostMapping("/department/updateDepartment")
     public JsonResult updateDepartment(DepartmentDto departmentDto,HttpServletRequest request){
         User user = userService.queryUserByUsername(getCurrentUsername(request));
         Department s = departmentService.findByName(departmentDto.getName(),user.getOrg());
@@ -99,16 +108,23 @@ public class DepartmentController extends CommonController{
         savedDepartment.setName(departmentDto.getName());
         savedDepartment.setTel(departmentDto.getTel());
         savedDepartment.setBusiness(departmentDto.getBusiness());
+        Result result = Result.SUCCESS;
         if(!StringUtils.isEmpty(departmentDto.getPid())){
-            if(savedDepartment.getParent()!=null && !departmentDto.getPid().equals(savedDepartment.getParent().getId())){
+            if(departmentDto.getPid().equals(savedDepartment.getId())){
+                result = Result.FAIL;
+                result.setMessage("父部门不能与当前部门相同!");
+                return new JsonResult(result);
+            }
+            if((savedDepartment.getParent()!=null && !departmentDto.getPid().equals(savedDepartment.getParent().getId()))||savedDepartment.getParent()==null){
                 Department parent = new Department();
                 parent.setId(departmentDto.getPid());
-
                 savedDepartment.setParent(parent);
             }
+        }else{
+            savedDepartment.setParent(null);
         }
         departmentService.updateObj(savedDepartment);
-        return new JsonResult(Result.SUCCESS);
+        return new JsonResult(result);
     }
     /**
      * 根据部门名称查找

@@ -85,10 +85,14 @@ public class DepartmentServiceImpl extends CommonServiceImpl<Department> impleme
 		if(employeeCount!=null && employeeCount>0){
 			throw new RuntimeException("部门下存在员工，不允许删除!");
 		}
-
+		//查询子部门数
+		Long childrenCount = departmentRepository.queryCountByParentId(id);
+		if(childrenCount!=null && childrenCount>0){
+			throw new RuntimeException("部门下存在子部门，请先删除子部门!");
+		}
 		//删除部门下的职位
 		positionRepository.deleteByDepartmentId(id);
-		departmentRepository.deleteChildrenByParentId(id);
+		//departmentRepository.deleteChildrenByParentId(id);
 		departmentRepository.deleteById(id);
 	}
 	@Override
@@ -106,9 +110,20 @@ public class DepartmentServiceImpl extends CommonServiceImpl<Department> impleme
 		}
 		return roots;
 	}
-
 	@Override
 	public List<String> findParent(String id) {
+		List<String> list = new ArrayList<>();
+		Department department = (Department) departmentRepository.findById(id).get();
+		while(department!=null){
+			department = department.getParent();
+			if(department!=null)
+			list.add(department.getId());
+		}
+		Collections.reverse(list);
+		return list;
+	}
+	@Override
+	public List<String> findParentDepartments(String id) {
 		List<String> list = new ArrayList<>();
 		Department department = (Department) departmentRepository.findById(id).get();
 		while(department!=null){

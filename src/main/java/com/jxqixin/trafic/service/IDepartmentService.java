@@ -15,6 +15,13 @@ public interface IDepartmentService extends ICommonService<Department> {
      * @return
      */
     Page findDepartments(DepartmentDto departmentDto, Org org);
+
+    /**
+     * 查找当前部门的父部门
+     * @param id
+     * @return
+     */
+    public List<String> findParentDepartments(String id);
     /**
      * 根据部门名称查找部门
      * @param name

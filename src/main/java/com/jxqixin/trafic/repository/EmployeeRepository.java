@@ -8,10 +8,11 @@ import java.io.Serializable;
 
 public interface EmployeeRepository<ID extends Serializable> extends CommonRepository<Employee,ID> {
     /***
-     * 根据手机号查找人员信息
+     * 根据手机号和企业id查找人员信息
      * @return
      */
-    Employee findByTel(String tel);
+    @Query("select e from Employee e where e.tel=?1 and e.org.id=?2")
+    Employee findByTelAndOrgId(String tel,String orgId);
     /**
      * 根据身份证号查找人员信息
      * @param idnum
@@ -47,4 +48,7 @@ public interface EmployeeRepository<ID extends Serializable> extends CommonRepos
     void updateUser2NullByUserId(String id);
     @Query(nativeQuery = true,value = "select e.* from m003_employee e inner join t_user u on u.id=e.user_id where u.username=?1")
     Employee findByUsername(String username);
+    @Modifying
+    @Query(nativeQuery = true,value = "delete from m003_employee where idnum=?1 and org_id is null")
+    void deleteByIdnumAndOrgIdIsNull(String idnum);
 }

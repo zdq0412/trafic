@@ -12,6 +12,8 @@ import com.jxqixin.trafic.repository.UserRepository;
 import com.jxqixin.trafic.service.IOrgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,13 +28,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
 @Transactional
-public class OrgServiceImpl extends CommonServiceImpl<Org> implements IOrgService {
+@CacheConfig(cacheNames = "orgCache")
+public class OrgServiceImpl /*extends CommonServiceImpl<Org>*/ implements IOrgService {
 	/*@Value("${defaultPassword}")
 	private String defaultPassword;*/
 	@Autowired
@@ -41,10 +45,6 @@ public class OrgServiceImpl extends CommonServiceImpl<Org> implements IOrgServic
 	private RoleRepository roleRepository;
 	@Autowired
 	private UserRepository userRepository;
-	@Override
-	public CommonRepository getCommonRepository() {
-		return orgRepository;
-	}
 	@Override
 	public Page findOrgs(NameDto nameDto) {
 		Pageable pageable = PageRequest.of(nameDto.getPage(),nameDto.getLimit());
@@ -93,5 +93,37 @@ public class OrgServiceImpl extends CommonServiceImpl<Org> implements IOrgServic
 	@Override
 	public String findFourColorPic(String id) {
 		return orgRepository.findFourColorPic(id);
+	}
+
+	@Override
+	@CacheEvict(value = {"userCache"},allEntries = true)
+	public void updateObj(Org obj) {
+		orgRepository.save(obj);
+	}
+
+	@Override
+	public Org addObj(Org obj) {
+		return (Org) orgRepository.save(obj);
+	}
+
+	@Override
+	public Org queryObjById(Serializable id) {
+		return (Org) orgRepository.findById(id).get();
+	}
+
+	@Override
+	@CacheEvict(value = {"userCache"},allEntries = true)
+	public void deleteObj(Serializable id) {
+		orgRepository.deleteById(id);
+	}
+
+	@Override
+	public Page<Org> findAll(Pageable pageable) {
+		return orgRepository.findAll(pageable);
+	}
+
+	@Override
+	public List<Org> findAll() {
+		return orgRepository.findAll();
 	}
 }

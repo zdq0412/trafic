@@ -130,13 +130,22 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		}
 		employee.setSex(IdCardUtil.getSex(employeeDto.getIdnum()));
 		employee.setAge(IdCardUtil.getAge(employeeDto.getIdnum()));
+
+		deleteByIdnumAndOrgIdIsNull(employeeDto.getIdnum());
 		employeeRepository.save(employee);
+	}
+	/**
+	 * 根据身份证号删除不在企业的人员信息
+	 * @param idnum
+	 */
+	private void deleteByIdnumAndOrgIdIsNull(String idnum){
+		employeeRepository.deleteByIdnumAndOrgIdIsNull(idnum);
 	}
 
 	@Override
 	public void updateEmployee(EmployeeDto employeeDto,Org org) {
 		Employee employee = (Employee) employeeRepository.findById(employeeDto.getId()).get();
-		if(!StringUtils.isEmpty(employeeDto.getPhoto()) && !employeeDto.getPhoto().equals(employee.getPhoto())){
+		if(!StringUtils.isEmpty(employeeDto.getPhoto()) && !StringUtils.isEmpty(employee.getPhoto()) &&!employeeDto.getPhoto().equals(employee.getPhoto())){
 				File photo = new File(employee.getRealPath());
 				photo.delete();
 		}
@@ -144,7 +153,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		//手机号不空，创建用户，手机号作为用户名
 		if(!StringUtils.isEmpty(employeeDto.getTel())){
 			//根据手机号查找人员
-			Employee employee1 = employeeRepository.findByTel(employeeDto.getTel());
+			Employee employee1 = employeeRepository.findByTelAndOrgId(employeeDto.getTel(),org.getId());
 			if(employee1!=null && !employee1.getId().equals(employee.getId())){
 				throw new RuntimeException("手机号已被使用!");
 			}
@@ -185,6 +194,8 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 
 				employee.setDepartment(newDepartment);
 			}
+		}else{
+			employee.setDepartment(null);
 		}
 		if(!StringUtils.isEmpty(employeeDto.getPositionId())){
 			Position position  = employee.getPosition();
@@ -194,12 +205,17 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 
 				employee.setPosition(newPosition);
 			}
+		}else{
+			employee.setPosition(null);
 		}
 		employee.setRealPath(employeeDto.getRealPath());
 		employee.setIdnum(employeeDto.getIdnum());
 		employee.setNote(employeeDto.getNote());
 		employee.setSex(IdCardUtil.getSex(employeeDto.getIdnum()));
 		employee.setAge(IdCardUtil.getAge(employeeDto.getIdnum()));
+		if(!employeeDto.getIdnum().equals(employee.getIdnum())){
+			deleteByIdnumAndOrgIdIsNull(employeeDto.getIdnum());
+		}
 		employeeRepository.save(employee);
 	}
 
