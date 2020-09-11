@@ -1,10 +1,9 @@
-package com.jxqixin.trafic.preload;
+package com.jxqixin.trafic.server;
 
 import com.jxqixin.trafic.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
 /**
  * 预加载数据
  */

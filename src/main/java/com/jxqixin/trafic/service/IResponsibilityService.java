@@ -28,5 +28,5 @@ public interface IResponsibilityService extends ICommonService<Responsibility> {
      * @param org
      * @param currentUsername
      */
-    void importTemplate(String templateId, Org org, String currentUsername);
+    Responsibility importTemplate(String templateId, Org org, String currentUsername);
 }

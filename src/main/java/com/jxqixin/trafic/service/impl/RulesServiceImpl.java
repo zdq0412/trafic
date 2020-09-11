@@ -116,7 +116,7 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 		}, pageable);
 	}
 	@Override
-	public void importTemplate(String templateId, Org org) {
+	public Rules importTemplate(String templateId, Org org) {
 		RuleTemplate template = (RuleTemplate) templateRepository.findById(templateId).get();
 		Rules rules = new Rules();
 		rules.setName(template.getName());
@@ -132,6 +132,6 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 			rules.setRegion(org.getRegion());
 			rules.setOrgCategory(org.getOrgCategory());
 		}
-		rulesRepository.save(rules);
+		return (Rules) rulesRepository.save(rules);
 	}
 }

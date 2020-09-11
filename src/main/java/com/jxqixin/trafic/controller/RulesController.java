@@ -79,8 +79,8 @@ public class RulesController extends CommonController{
      */
     @PostMapping("/rules/template")
     public JsonResult importTemplate(String templateId, HttpServletRequest request){
-        rulesService.importTemplate(templateId,getOrg(request));
-        return new JsonResult(Result.SUCCESS);
+        Rules rules = rulesService.importTemplate(templateId,getOrg(request));
+        return new JsonResult(Result.SUCCESS,rules);
     }
 
     /**

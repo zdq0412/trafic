@@ -39,5 +39,5 @@ public interface IRulesService extends ICommonService<Rules> {
      * @param templateId
      * @param org
      */
-    void importTemplate(String templateId, Org org);
+    Rules importTemplate(String templateId, Org org);
 }

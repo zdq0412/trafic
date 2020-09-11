@@ -44,7 +44,21 @@ public class LawController extends CommonController{
     public JsonResult addLaw(LawDto lawDto, HttpServletRequest request){
         Law law = new Law();
         BeanUtils.copyProperties(lawDto,law);
-
+        if(!StringUtils.isEmpty(lawDto.getProvinceId())){
+            Category province = new Category();
+            province.setId(lawDto.getProvinceId());
+            law.setProvince(province);
+        }
+        if(!StringUtils.isEmpty(lawDto.getCityId())){
+            Category city = new Category();
+            city.setId(lawDto.getCityId());
+            law.setCity(city);
+        }
+        if(!StringUtils.isEmpty(lawDto.getRegionId())){
+            Category region = new Category();
+            region.setId(lawDto.getRegionId());
+            law.setRegion(region);
+        }
         if(!StringUtils.isEmpty(lawDto.getPublishDate())){
             try {
                 law.setPublishDate(format.parse(lawDto.getPublishDate()));
@@ -111,16 +125,22 @@ public class LawController extends CommonController{
             Category province = new Category();
             province.setId(lawDto.getProvinceId());
             savedLaw.setProvince(province);
+        }else{
+            savedLaw.setProvince(null);
         }
         if(!StringUtils.isEmpty(lawDto.getCityId())){
             Category city = new Category();
             city.setId(lawDto.getCityId());
             savedLaw.setCity(city);
+        }else{
+            savedLaw.setCity(null);
         }
         if(!StringUtils.isEmpty(lawDto.getRegionId())){
             Category region = new Category();
             region.setId(lawDto.getRegionId());
             savedLaw.setRegion(region);
+        }else{
+            savedLaw.setRegion(null);
         }
         savedLaw.setPublishDepartment(lawDto.getPublishDepartment());
         savedLaw.setTimeliness(lawDto.getTimeliness());

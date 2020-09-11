@@ -1,11 +1,8 @@
 package com.jxqixin.trafic.service;
-
-import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.SecurityCheckDto;
 import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.SecurityCheck;
 import org.springframework.data.domain.Page;
-
 public interface ISecurityCheckService extends ICommonService<SecurityCheck> {
     /**
      * 分页查询模板信息

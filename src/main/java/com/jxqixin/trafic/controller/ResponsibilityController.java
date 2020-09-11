@@ -89,7 +89,7 @@ public class ResponsibilityController extends CommonController{
      */
     @PostMapping("/responsibility/template")
     public JsonResult importTemplate(String templateId, HttpServletRequest request){
-        responsibilityService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
-        return new JsonResult(Result.SUCCESS);
+       Responsibility responsibility = responsibilityService.importTemplate(templateId,getOrg(request),getCurrentUsername(request));
+        return new JsonResult(Result.SUCCESS,responsibility);
     }
 }

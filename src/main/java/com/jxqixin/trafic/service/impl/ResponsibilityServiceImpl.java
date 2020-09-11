@@ -84,7 +84,7 @@ public class ResponsibilityServiceImpl extends CommonServiceImpl<Responsibility>
 	}
 
 	@Override
-	public void importTemplate(String templateId, Org org, String currentUsername) {
+	public Responsibility importTemplate(String templateId, Org org, String currentUsername) {
 		ResponsibilityTemplate template = (ResponsibilityTemplate) responsibilityTemplateRepository.findById(templateId).get();
 		Responsibility responsibility = new Responsibility();
 		BeanUtils.copyProperties(template,responsibility);
@@ -95,6 +95,7 @@ public class ResponsibilityServiceImpl extends CommonServiceImpl<Responsibility>
 		responsibility.setRealPath(null);
 		responsibility.setCreateDate(new Date());
 		responsibility.setCreator(currentUsername);
-		templateRepository.save(responsibility);
+		responsibility = (Responsibility) templateRepository.save(responsibility);
+		return responsibility;
 	}
 }
