@@ -146,7 +146,6 @@ public class EmployeeController extends CommonController{
      */
     @PostMapping("/employee/updateEmployeeNoPhoto")
     public JsonResult updateEmployeeNoPhoto(EmployeeDto employeeDto, HttpServletRequest request){
-        User user = userService.queryUserByUsername(getCurrentUsername(request));
         Result result = Result.SUCCESS;
         try {
             employeeService.updateEmployee(employeeDto,getOrg(request));

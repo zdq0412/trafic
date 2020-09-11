@@ -77,6 +77,7 @@ public class RulesServiceImpl extends CommonServiceImpl<Rules> implements IRules
 	}
 	@Override
 	public void deleteById(String id) {
+		noticeRepository.updateRulesId2Null(id);
 		rulesRepository.deleteById(id);
 	}
 	@Override

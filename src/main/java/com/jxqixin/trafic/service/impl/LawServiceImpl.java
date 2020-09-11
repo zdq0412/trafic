@@ -91,6 +91,7 @@ public class LawServiceImpl extends CommonServiceImpl<Law> implements ILawServic
 	}
 	@Override
 	public void deleteById(String id) {
+		noticeRepository.updateLawId2Null(id);
 		lawRepository.deleteById(id);
 	}
 	@Override

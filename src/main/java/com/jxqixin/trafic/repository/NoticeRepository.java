@@ -1,6 +1,7 @@
 package com.jxqixin.trafic.repository;
 import com.jxqixin.trafic.model.Law;
 import com.jxqixin.trafic.model.Notice;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.io.Serializable;
@@ -34,4 +35,20 @@ public interface NoticeRepository<ID extends Serializable> extends CommonReposit
      */
     @Query(nativeQuery = true,value="select * from m006_notice where rules_id=?1")
     List<Notice> findByRulesId(String rulesId);
+
+    /**
+     * 将公司制度ID设置为null
+     * @param id 公司制度ID
+     */
+    @Modifying
+    @Query(nativeQuery = true,value = "update m006_notice set rules_id=null where rules_id=?1")
+    void updateRulesId2Null(String id);
+
+    /**
+     * 将法律规章ID设置为null
+     * @param id 法律规章ID
+     */
+    @Modifying
+    @Query(nativeQuery = true,value = "update m006_notice set law_id=null where law_id=?1")
+    void updateLawId2Null(String id);
 }

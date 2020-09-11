@@ -198,13 +198,16 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			employee.setDepartment(null);
 		}
 		if(!StringUtils.isEmpty(employeeDto.getPositionId())){
-			Position position  = employee.getPosition();
+			/*Position position  = employee.getPosition();
 			if(position!=null && !position.getId().equals(employeeDto.getPositionId().trim())){
 				Position newPosition = new Position();
 				newPosition.setId(employeeDto.getPositionId());
 
 				employee.setPosition(newPosition);
-			}
+			}*/
+			Position position = new Position();
+			position.setId(employeeDto.getPositionId());
+			employee.setPosition(position);
 		}else{
 			employee.setPosition(null);
 		}
