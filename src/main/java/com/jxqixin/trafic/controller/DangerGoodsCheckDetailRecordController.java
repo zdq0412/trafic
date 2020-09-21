@@ -146,7 +146,7 @@ public class DangerGoodsCheckDetailRecordController extends CommonController{
      * @param dangerGoodsCheckDetailRecordDto
      * @return
      */
-    @PutMapping("/dangerGoodsCheckDetailRecord/dangerGoodsCheckDetailRecord")
+    @PostMapping("/dangerGoodsCheckDetailRecord/updateDangerGoodsCheckDetailRecord")
     public JsonResult updateDangerGoodsCheckDetailRecord(DangerGoodsCheckDetailRecordDto dangerGoodsCheckDetailRecordDto){
         DangerGoodsCheckDetailRecord savedDangerGoodsCheckDetailRecord = dangerGoodsCheckDetailRecordService.queryObjById(dangerGoodsCheckDetailRecordDto.getId());
         setProperties(savedDangerGoodsCheckDetailRecord,dangerGoodsCheckDetailRecordDto);

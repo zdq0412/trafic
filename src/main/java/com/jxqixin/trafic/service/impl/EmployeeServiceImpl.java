@@ -1,14 +1,12 @@
 package com.jxqixin.trafic.service.impl;
-import com.jxqixin.trafic.common.NameSpecification;
+
 import com.jxqixin.trafic.dto.EmployeeDto;
-import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.EmployeeRepository;
 import com.jxqixin.trafic.repository.UserRepository;
 import com.jxqixin.trafic.service.IEmployeeService;
 import com.jxqixin.trafic.util.IdCardUtil;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -79,15 +77,23 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			if(user!=null){
 				throw new RuntimeException("手机号已被使用!");
 			}
-
-			//根据手机号查找人员
-			User employee1 = userRepository.findByUsername(employeeDto.getTel());
-			if(employee1!=null){
-				throw new RuntimeException("手机号已被使用!");
+			//根据电话号码查找员工信息
+			Employee employee1 = employeeRepository.findByTel(employeeDto.getTel());
+			if(employee1!=null ){
+				if(employee1.getOrg()!=null ){
+					if(employee1.getOrg().getId().equals(org.getId())){
+						throw new RuntimeException("手机号已被使用!");
+					}else{
+						throw new RuntimeException("该手机号已在别处使用!");
+					}
+				}else{
+					//employee.setId(employee1.getId());
+                    employeeRepository.deleteById(employee1.getId());
+				}
 			}
 			user = new User();
 			user.setUsername(employee.getTel());
-			user.setPassword(new BCryptPasswordEncoder().encode(defaultPassword));
+			user.setPassword(new BCryptPasswordEncoder().encode(employee.getTel().substring(5)));
 			user.setOrg(org);
 			user.setTel(employee.getTel());
 			user.setRealname(employee.getName());
@@ -97,7 +103,6 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			if(!StringUtils.isEmpty(employeeDto.getRoleId())){
 				Role role = new Role();
 				role.setId(employeeDto.getRoleId());
-
 				user.setRole(role);
 			}
 			user = (User) userRepository.save(user);
@@ -146,18 +151,30 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 	public void updateEmployee(EmployeeDto employeeDto,Org org) {
 		Employee employee = (Employee) employeeRepository.findById(employeeDto.getId()).get();
 		if(!StringUtils.isEmpty(employeeDto.getPhoto()) && !StringUtils.isEmpty(employee.getPhoto()) &&!employeeDto.getPhoto().equals(employee.getPhoto())){
-				File photo = new File(employee.getRealPath());
-				photo.delete();
+			File photo = new File(employee.getRealPath());
+			photo.delete();
 		}
 
 		//手机号不空，创建用户，手机号作为用户名
 		if(!StringUtils.isEmpty(employeeDto.getTel())){
-			//根据手机号查找人员
+			/*//根据手机号查找人员
 			Employee employee1 = employeeRepository.findByTelAndOrgId(employeeDto.getTel(),org.getId());
 			if(employee1!=null && !employee1.getId().equals(employee.getId())){
 				throw new RuntimeException("手机号已被使用!");
+			}*/
+			//根据电话号码查找员工信息
+			Employee employee1 = employeeRepository.findByTel(employeeDto.getTel());
+			if(employee1!=null && !employee.getId().equals(employee1.getId())){
+				if(employee1.getOrg()!=null ){
+					if(employee1.getOrg().getId().equals(org.getId())){
+						throw new RuntimeException("手机号已被使用!");
+					}else{
+						throw new RuntimeException("该手机号已在别处使用!");
+					}
+				}else{
+					employee.setId(employee1.getId());
+				}
 			}
-
 			User user = employee.getUser();
 			if(!StringUtils.isEmpty(employeeDto.getRoleId())){
 				Role userRole = user.getRole();
@@ -166,7 +183,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 					role.setId(employeeDto.getRoleId());
 
 					user.setRole(role);
-					user = (User) userRepository.save(user);
+					userRepository.save(user);
 				}
 			}
 		}else{
@@ -187,24 +204,13 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			employee.setPhoto(employeeDto.getPhoto());
 		}
 		if(!StringUtils.isEmpty(employeeDto.getDepartmentId())){
-			Department department  = employee.getDepartment();
-			if(department!=null && !department.getId().equals(employeeDto.getDepartmentId().trim())){
 				Department newDepartment = new Department();
 				newDepartment.setId(employeeDto.getDepartmentId());
-
 				employee.setDepartment(newDepartment);
-			}
 		}else{
 			employee.setDepartment(null);
 		}
 		if(!StringUtils.isEmpty(employeeDto.getPositionId())){
-			/*Position position  = employee.getPosition();
-			if(position!=null && !position.getId().equals(employeeDto.getPositionId().trim())){
-				Position newPosition = new Position();
-				newPosition.setId(employeeDto.getPositionId());
-
-				employee.setPosition(newPosition);
-			}*/
 			Position position = new Position();
 			position.setId(employeeDto.getPositionId());
 			employee.setPosition(position);

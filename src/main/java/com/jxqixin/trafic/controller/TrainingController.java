@@ -108,6 +108,7 @@ public class TrainingController extends CommonController{
         savedTraining.setAttendants(trainingDto.getAttendants());
         savedTraining.setPresident(trainingDto.getPresident());
         savedTraining.setRecorder(trainingDto.getRecorder());
+        savedTraining.setRealAttendance(trainingDto.getRealAttendance());
         trainingService.updateObj(savedTraining);
         return new JsonResult(Result.SUCCESS);
     }

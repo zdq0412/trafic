@@ -51,4 +51,6 @@ public interface EmployeeRepository<ID extends Serializable> extends CommonRepos
     @Modifying
     @Query(nativeQuery = true,value = "delete from m003_employee where idnum=?1 and org_id is null")
     void deleteByIdnumAndOrgIdIsNull(String idnum);
+    @Query("select e from Employee e where e.tel=?1")
+    Employee findByTel(String tel);
 }

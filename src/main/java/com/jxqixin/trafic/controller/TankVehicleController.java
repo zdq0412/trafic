@@ -46,9 +46,15 @@ public class TankVehicleController extends CommonController{
     public JsonResult addTankVehicle(TankVehicleDto tankVehicleDto,HttpServletRequest request){
         TankVehicle savedTankVehicle = new TankVehicle();
         savedTankVehicle.setName(tankVehicleDto.getName());
+        try {
+            savedTankVehicle.setCheckDate(format.parse(tankVehicleDto.getCheckDate()));
+        } catch (ParseException e) {
+            savedTankVehicle.setCheckDate(null);
+        }
         savedTankVehicle.setCreateDate(new Date());
         savedTankVehicle.setCreator(getCurrentUsername(request));
         savedTankVehicle.setOrg(getOrg(request));
+        savedTankVehicle.setNote(tankVehicleDto.getNote());
         tankVehicleService.addObj(savedTankVehicle);
         return new JsonResult(Result.SUCCESS);
     }

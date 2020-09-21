@@ -1637,9 +1637,55 @@ create table m065_four_record_template(
   region_id  varchar(36) comment '所属地区',
   org_category_id varchar(36) comment '企业类别',
   org_id varchar(36) comment '所属企业',
-  constraint fk_m061_four_record_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m065_four_record_template_org_org_id foreign key(org_id) references org(id),
   constraint fk_m065_four_record_template_category_province_id foreign key(province_id) references category(id),
   constraint fk_m065_four_record_template_category_city_id foreign key(city_id) references category(id),
   constraint fk_m065_four_record_template_category_region_id foreign key(region_id) references category(id),
   constraint fk_org_category_m065_four_record_template foreign key(org_category_id) references org_category(id)
 ) comment '四不放过记录模板表';
+
+#GPS记录模板
+drop table if exists m066_gps_account_template;
+create table m066_gps_account_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate datetime comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '所属企业',
+  constraint fk_m066_gps_account_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m066_gps_account_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m066_gps_account_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m066_gps_account_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m066_gps_account_template foreign key(org_category_id) references org_category(id)
+) comment 'GPS记录模板';
+
+#安全投入台账模板
+drop table if exists m067_safety_account_template;
+create table m067_safety_account_template(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  fileName varchar(500) comment '文件原始名称',
+  note varchar(2000) comment '备注',
+  createDate datetime comment '创建日期',
+  creator varchar(100) comment '创建人',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  province_id varchar(36) comment '所属省',
+  city_id varchar(36) comment '所属市',
+  region_id  varchar(36) comment '所属地区',
+  org_category_id varchar(36) comment '企业类别',
+  org_id varchar(36) comment '所属企业',
+  constraint fk_m067_safety_account_template_org_org_id foreign key(org_id) references org(id),
+  constraint fk_m067_safety_account_template_category_province_id foreign key(province_id) references category(id),
+  constraint fk_m067_safety_account_template_category_city_id foreign key(city_id) references category(id),
+  constraint fk_m067_safety_account_template_category_region_id foreign key(region_id) references category(id),
+  constraint fk_org_category_m067_safety_account_template foreign key(org_category_id) references org_category(id)
+) comment '安全投入台账模板';

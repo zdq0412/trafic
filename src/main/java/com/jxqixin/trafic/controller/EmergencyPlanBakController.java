@@ -80,7 +80,7 @@ public class EmergencyPlanBakController extends CommonController{
      * @param emergencyPlanBakDto
      * @return
      */
-    @PutMapping("/emergencyPlanBak/preplan")
+    @PostMapping("/emergencyPlanBak/updatePreplan")
     public JsonResult preplan(EmergencyPlanBakDto emergencyPlanBakDto){
         EmergencyPlanBak savedEmergencyPlanBak = emergencyPlanBakService.queryObjById(emergencyPlanBakDto.getId());
         try {

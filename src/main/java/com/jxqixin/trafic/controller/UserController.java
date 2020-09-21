@@ -1,13 +1,11 @@
 package com.jxqixin.trafic.controller;
+
 import com.jxqixin.trafic.constant.Result;
-import com.jxqixin.trafic.dto.EmployeeDto;
-import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.UserDto;
 import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.service.IAreaManagerService;
 import com.jxqixin.trafic.service.IUserService;
 import com.jxqixin.trafic.util.FileUtil;
-import com.jxqixin.trafic.util.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,8 +28,8 @@ import java.util.UUID;
 public class UserController extends CommonController{
     @Autowired
     private IUserService userService;
-    /*@Value("${defaultPassword}")
-    private String defaultPassword;*/
+    @Value("${defaultPassword}")
+    private String defaultPassword;
     @Autowired
     private IAreaManagerService areaManagerService;
     /**
@@ -74,9 +72,13 @@ public class UserController extends CommonController{
     public JsonResult resetPassword(String username){
         User user = userService.queryUserByUsername(username);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(user.getTel().substring(user.getTel().length()-6)));
+        String newPass = defaultPassword;
+        if(!StringUtils.isEmpty(user.getTel())){
+            newPass = user.getTel().substring(user.getTel().length()-6);
+        }
+        user.setPassword(passwordEncoder.encode(newPass));
         userService.updateObj(user);
-        return new JsonResult(Result.SUCCESS);
+        return new JsonResult(Result.SUCCESS,newPass);
     }
     /**
      * 禁用或启用用户
@@ -155,7 +157,7 @@ public class UserController extends CommonController{
      * @param userDto
      * @return
      */
-    @PutMapping("/user/user")
+    @PostMapping("/user/updateUser")
     public JsonResult updateUser(UserDto userDto,HttpServletRequest request){
         User s = userService.queryUserByUsername(userDto.getUsername());
         if(s!=null && !s.getId().equals(userDto.getId())){

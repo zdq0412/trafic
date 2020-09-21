@@ -5,12 +5,14 @@ spring:
     url: jdbc:mysql://localhost:3306/trafic?useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2B8
     username: root
     password: admin
+    #password: qwe123QWE!@#
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     database: 0
     port: 6379
     host: 127.0.0.1   #单位
     #host: 192.168.138.128   #家
+    #password: qwe123QWE!@#
     password: admin
     jedis:
       pool:
@@ -37,22 +39,19 @@ server:
 #配置文件上传的目录
 uploadFile:
   urlMapping: /files/**  #通过地址访问的URL
-  resourceLocation: d:/uploadFiles/  #本地存储目录
+  resourceLocation: c:/uploadFiles/  #本地存储目录
 
 defaultPassword: 123456
-
 mybatis:
   type-aliases-package: com.jxqixin.trafic.model
   mapper-locations: classpath:mapper/*.xml
-
 #超级管理员角色名称
 superRole: admin
-
 
 logging:
   level:
     root: info
   file:
-    path: d:\\log
+    path: c:\\log
     max-size: 10MB
     max-history: 30

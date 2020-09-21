@@ -63,6 +63,7 @@ public class OrgServiceImpl /*extends CommonServiceImpl<Org>*/ implements IOrgSe
 		return orgRepository.findByCode(code);
 	}
 	@Override
+	@CacheEvict(value = "userCache",allEntries = true)
 	public void addOrg(Org org) {
 		//根据手机号查找用户
 		User u = userRepository.findByUsername(org.getTel());

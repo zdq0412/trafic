@@ -75,7 +75,7 @@ public class EmployeeController extends CommonController{
      * @return
      */
     @PostMapping("/employee/addEmployee")
-    public JsonResult addEmployee(EmployeeDto employeeDto, @RequestParam("file") MultipartFile file, HttpServletRequest request){
+    public JsonResult addEmployee(EmployeeDto employeeDto, @RequestParam("uploadFile") MultipartFile file, HttpServletRequest request){
         User user = userService.queryUserByUsername(getCurrentUsername(request));
         String urlMapping = "";
         Result result = Result.SUCCESS;
@@ -89,7 +89,7 @@ public class EmployeeController extends CommonController{
             employeeDto.setRealPath(savedFile.getAbsolutePath());
             employeeService.addEmployee(employeeDto,user.getOrg());
         } catch (RuntimeException | IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             result = Result.FAIL;
             result.setMessage(e.getMessage());
         }
