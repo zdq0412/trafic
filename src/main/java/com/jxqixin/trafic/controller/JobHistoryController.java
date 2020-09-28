@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 控制器
+ * 人员档案，从业经历控制器
  */
 @RestController
 public class JobHistoryController extends CommonController{
@@ -42,6 +42,12 @@ public class JobHistoryController extends CommonController{
      */
     @PostMapping("/jobHistory/jobHistory")
     public JsonResult addJobHistory(JobHistoryDto jobHistoryDto){
+        JsonResult jsonResult = checkEmpId(jobHistoryDto.getEmpId());
+        if(jsonResult.getResult().getResultCode()!=200){
+            return jsonResult;
+        }
+        jsonResult.setResult(Result.SUCCESS);
+
         JobHistory jobHistory = new JobHistory();
         BeanUtils.copyProperties(jobHistoryDto,jobHistory);
         jobHistory.setCreateDate(new Date());
@@ -62,7 +68,7 @@ public class JobHistoryController extends CommonController{
             jobHistory.setEmployee(employee);
         }
         jobHistoryService.addObj(jobHistory);
-        return new JsonResult(Result.SUCCESS);
+        return jsonResult;
     }
     /**
      * 编辑

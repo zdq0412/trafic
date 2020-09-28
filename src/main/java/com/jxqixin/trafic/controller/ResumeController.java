@@ -43,6 +43,12 @@ public class ResumeController extends CommonController{
      */
     @PostMapping("/resume/resume")
     public JsonResult addResume(ResumeDto resumeDto){
+       JsonResult jsonResult = checkEmpId(resumeDto.getEmpId());
+       if(jsonResult.getResult().getResultCode()!=200){
+           return jsonResult;
+       }
+       jsonResult.setResult(Result.SUCCESS);
+
         Resume resume = new Resume();
         BeanUtils.copyProperties(resumeDto,resume);
         resume.setCreateDate(new Date());
@@ -63,7 +69,7 @@ public class ResumeController extends CommonController{
             resume.setEmployee(employee);
         }
         resumeService.addObj(resume);
-        return new JsonResult(Result.SUCCESS);
+        return jsonResult;
     }
     /**
      * 编辑

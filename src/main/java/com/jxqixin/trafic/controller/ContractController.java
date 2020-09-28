@@ -44,6 +44,12 @@ public class ContractController extends CommonController{
      */
     @PostMapping("/contract/contract")
     public JsonResult addContract(ContractDto contractDto){
+        JsonResult jsonResult = checkEmpId(contractDto.getEmpId());
+        if(jsonResult.getResult().getResultCode()!=200){
+            return jsonResult;
+        }
+        jsonResult.setResult(Result.SUCCESS);
+
         Contract contract = new Contract();
         BeanUtils.copyProperties(contractDto,contract);
         contract.setCreateDate(new Date());
@@ -64,7 +70,7 @@ public class ContractController extends CommonController{
             contract.setEmployee(employee);
         }
         contractService.addObj(contract);
-        return new JsonResult(Result.SUCCESS);
+        return jsonResult;
     }
     /**
      * 编辑

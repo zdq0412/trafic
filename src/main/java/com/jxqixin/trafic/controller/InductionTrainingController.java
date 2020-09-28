@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 控制器
+ * 人员档案，入职培训控制器
  */
 @RestController
 public class InductionTrainingController extends CommonController{
@@ -41,6 +41,12 @@ public class InductionTrainingController extends CommonController{
      */
     @PostMapping("/inductionTraining/inductionTraining")
     public JsonResult addInductionTraining(InductionTrainingDto inductionTrainingDto){
+        JsonResult jsonResult = checkEmpId(inductionTrainingDto.getEmpId());
+        if(jsonResult.getResult().getResultCode()!=200){
+            return jsonResult;
+        }
+        jsonResult.setResult(Result.SUCCESS);
+
         InductionTraining inductionTraining = new InductionTraining();
         BeanUtils.copyProperties(inductionTrainingDto,inductionTraining);
         inductionTraining.setCreateDate(new Date());
@@ -61,7 +67,7 @@ public class InductionTrainingController extends CommonController{
             inductionTraining.setEmployee(employee);
         }
         inductionTrainingService.addObj(inductionTraining);
-        return new JsonResult(Result.SUCCESS);
+        return jsonResult;
     }
     /**
      * 编辑

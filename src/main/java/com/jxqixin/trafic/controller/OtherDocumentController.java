@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 控制器
+ * 人员档案，其他档案控制器
  */
 @RestController
 public class OtherDocumentController extends CommonController{
@@ -41,6 +41,12 @@ public class OtherDocumentController extends CommonController{
      */
     @PostMapping("/otherDocument/otherDocument")
     public JsonResult addOtherDocument(OtherDocumentDto otherDocumentDto){
+        JsonResult jsonResult = checkEmpId(otherDocumentDto.getEmpId());
+        if(jsonResult.getResult().getResultCode()!=200){
+            return jsonResult;
+        }
+        jsonResult.setResult(Result.SUCCESS);
+
         OtherDocument otherDocument = new OtherDocument();
         BeanUtils.copyProperties(otherDocumentDto,otherDocument);
         otherDocument.setCreateDate(new Date());
@@ -61,7 +67,7 @@ public class OtherDocumentController extends CommonController{
             otherDocument.setEmployee(employee);
         }
         otherDocumentService.addObj(otherDocument);
-        return new JsonResult(Result.SUCCESS);
+        return jsonResult;
     }
     /**
      * 编辑

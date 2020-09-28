@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 控制器
+ * 人员档案，安全责任书控制器
  */
 @RestController
 public class SafetyResponsibilityAgreementController extends CommonController{
@@ -43,6 +43,12 @@ public class SafetyResponsibilityAgreementController extends CommonController{
      */
     @PostMapping("/safetyResponsibilityAgreement/safetyResponsibilityAgreement")
     public JsonResult addSafetyResponsibilityAgreement(SafetyResponsibilityAgreementDto safetyResponsibilityAgreementDto){
+        JsonResult jsonResult = checkEmpId(safetyResponsibilityAgreementDto.getEmpId());
+        if(jsonResult.getResult().getResultCode()!=200){
+            return jsonResult;
+        }
+        jsonResult.setResult(Result.SUCCESS);
+
         SafetyResponsibilityAgreement safetyResponsibilityAgreement = new SafetyResponsibilityAgreement();
         BeanUtils.copyProperties(safetyResponsibilityAgreementDto,safetyResponsibilityAgreement);
         safetyResponsibilityAgreement.setCreateDate(new Date());
@@ -66,7 +72,7 @@ public class SafetyResponsibilityAgreementController extends CommonController{
             safetyResponsibilityAgreement.setEmployee(employee);
         }
         safetyResponsibilityAgreementService.addObj(safetyResponsibilityAgreement);
-        return new JsonResult(Result.SUCCESS);
+        return jsonResult;
     }
     /**
      * 编辑

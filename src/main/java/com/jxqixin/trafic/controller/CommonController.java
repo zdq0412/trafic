@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.controller;
 
+import com.jxqixin.trafic.constant.Result;
+import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.service.IUserService;
 import com.jxqixin.trafic.util.RedisUtil;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -117,5 +120,21 @@ public class CommonController {
      */
     public Org getOrg(HttpServletRequest request){
         return userService.queryUserByUsername(getCurrentUsername(request)).getOrg();
+    }
+
+    /**
+     * 员工档案，新增员工档案，验证员工ID是否为空
+     * @param empId
+     * @return
+     */
+    public JsonResult checkEmpId(String empId){
+        Result result = Result.SUCCESS;
+        JsonResult jsonResult = new JsonResult(result);
+        if(StringUtils.isEmpty(empId)){
+            result = Result.FAIL;
+            result.setMessage("获取人员ID失败，请重新从人员档案进入!");
+            jsonResult.setResult(result);
+        }
+        return jsonResult;
     }
 }

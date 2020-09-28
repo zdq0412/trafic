@@ -15,7 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 /**
- * 控制器
+ * 人员档案，资质文件控制器
  */
 @RestController
 public class QualificationDocumentController extends CommonController{
@@ -39,6 +39,12 @@ public class QualificationDocumentController extends CommonController{
      */
     @PostMapping("/qualificationDocument/qualificationDocument")
     public JsonResult addQualificationDocument(QualificationDocumentDto qualificationDocumentDto){
+        JsonResult jsonResult = checkEmpId(qualificationDocumentDto.getEmpId());
+        if(jsonResult.getResult().getResultCode()!=200){
+            return jsonResult;
+        }
+        jsonResult.setResult(Result.SUCCESS);
+
         QualificationDocument qualificationDocument = new QualificationDocument();
         BeanUtils.copyProperties(qualificationDocumentDto,qualificationDocument);
         qualificationDocument.setCreateDate(new Date());
@@ -59,7 +65,7 @@ public class QualificationDocumentController extends CommonController{
             qualificationDocument.setEmployee(employee);
         }
         qualificationDocumentService.addObj(qualificationDocument);
-        return new JsonResult(Result.SUCCESS);
+        return jsonResult;
     }
     /**
      * 编辑
