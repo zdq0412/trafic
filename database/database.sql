@@ -1689,3 +1689,22 @@ create table m067_safety_account_template(
   constraint fk_m067_safety_account_template_category_region_id foreign key(region_id) references category(id),
   constraint fk_org_category_m067_safety_account_template foreign key(org_category_id) references org_category(id)
 ) comment '安全投入台账模板';
+
+#过期提醒记录,企业资质、人员资质、设备档案和企业台账
+drop table if exists remind;
+create table remind(
+    id varchar(36) primary key comment '主键',
+    name varchar(500) comment '企业资质、人员证书、设备档案或企业台账的名称',
+    subjectName varchar(500) comment '所属主体名称,如：企业名称、人员名称、企业台账名称或设备名称',
+    endDate datetime comment '截止日期',
+    createDate datetime comment '创建日期',
+    orgId varchar(36) comment '企业ID',
+    orgName varchar(500) comment '企业名称',
+    bgColor varchar(20) comment '提示背景颜色，警告：橙色FF9900，过期:红色FF0000',
+    deductPoints integer comment '扣除的分数',
+    type varchar(50) comment '类别,台账：account,资质:qualifications,设备:device,人员：employee',
+    deleted bit default 0 comment '删除标识',
+    tableName varchar(200) comment '所属表名称'
+) comment '过期提醒记录,企业资质、人员资质、设备档案和企业台账';
+
+
