@@ -17,6 +17,8 @@ public class Remind implements Serializable {
 	@Id
 	@GeneratedValue(generator = "id_gen")
 	private String id;
+	/**资源ID，即企业资质、人员资质、设备档案和企业台账等记录的id*/
+	private String srcId;
 	/**企业资质、人员证书、设备档案或企业台账的名称*/
 	private String name;
 	/**创建日期*/
@@ -38,13 +40,31 @@ public class Remind implements Serializable {
 	/**提示背景颜色，警告：橙色FF9900，过期:红色FF0000*/
 	private String bgColor;
 	/**扣除的分数*/
-	private int deductPoints;
+	private int deductPoints=0;
 	/**所属类别，台账：account,资质:qualifications,设备:device,人员：employee*/
 	private String type;
 	/**删除标识*/
 	private boolean deleted=false;
 	/**所属表名称*/
 	private String tableName;
+	/**日期或截止日期字段名称*/
+	private String colName;
+
+	public String getColName() {
+		return colName;
+	}
+
+	public void setColName(String colName) {
+		this.colName = colName;
+	}
+
+	public String getSrcId() {
+		return srcId;
+	}
+
+	public void setSrcId(String srcId) {
+		this.srcId = srcId;
+	}
 
 	public String getId() {
 		return id;

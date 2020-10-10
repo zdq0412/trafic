@@ -156,7 +156,7 @@ drop table if exists m001_org_img;
 create table m001_org_img(
  id varchar(36) primary key comment 'ID主键',
   name varchar(50) not null comment '图片名称',
-  url varchar(200) comment '资质文件路径',
+  url varchar(200) comment '图片路径',
   realPath varchar(200) comment '实际路径',
   uploadDate datetime comment '上传日期',
   org_id varchar(36) not null comment '所属企业ID',
@@ -1694,17 +1694,19 @@ create table m067_safety_account_template(
 drop table if exists remind;
 create table remind(
     id varchar(36) primary key comment '主键',
+    srcId varchar(36) not null comment '资源ID，即企业资质、人员资质、设备档案和企业台账等记录的id',
     name varchar(500) comment '企业资质、人员证书、设备档案或企业台账的名称',
     subjectName varchar(500) comment '所属主体名称,如：企业名称、人员名称、企业台账名称或设备名称',
     endDate datetime comment '截止日期',
     createDate datetime comment '创建日期',
     orgId varchar(36) comment '企业ID',
     orgName varchar(500) comment '企业名称',
-    bgColor varchar(20) comment '提示背景颜色，警告：橙色FF9900，过期:红色FF0000',
-    deductPoints integer comment '扣除的分数',
-    type varchar(50) comment '类别,台账：account,资质:qualifications,设备:device,人员：employee',
+    bgColor varchar(20) comment '提示背景颜色，警告：橙色#FF9900，过期:红色#FF0000',
+    deductPoints integer default 0 comment '扣除的分数',
+    type varchar(50) comment '类别,资质、月计划、年计划、半年计划等',
     deleted bit default 0 comment '删除标识',
-    tableName varchar(200) comment '所属表名称'
+    tableName varchar(200) comment '所属表名称',
+    colName varchar(100) comment '日期或截止日期字段名称'
 ) comment '过期提醒记录,企业资质、人员资质、设备档案和企业台账';
 
 
