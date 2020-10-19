@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.jxqixin</groupId>
     <artifactId>trafic-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>trafic-server</name>
     <properties>
         <java.version>1.8</java.version>
