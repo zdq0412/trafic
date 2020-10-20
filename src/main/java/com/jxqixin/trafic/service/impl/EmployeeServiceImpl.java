@@ -47,9 +47,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 	@Override
 	public Page findEmployees(EmployeeDto employeeDto,Org org) {
 		Pageable pageable = PageRequest.of(employeeDto.getPage(),employeeDto.getLimit());
-		return employeeRepository.findAll(new Specification() {
-			@Override
-			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+		return employeeRepository.findAll((root,criteriaQuery,criteriaBuilder)-> {
 				List<Predicate> list = new ArrayList<>();
 				if(org!=null) {
 					Join<Employee, Org> orgJoin = root.join("org", JoinType.INNER);
@@ -62,7 +60,6 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
-			}
 		}, pageable);
 	}
 	@Override

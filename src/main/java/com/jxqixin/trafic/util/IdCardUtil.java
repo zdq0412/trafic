@@ -1,17 +1,31 @@
 package com.jxqixin.trafic.util;
+import org.thymeleaf.expression.Strings;
 import org.thymeleaf.util.StringUtils;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 /**
  * 身份证号码工具类
  */
 public class IdCardUtil {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-
+    /**
+     * 身份证脱敏处理
+     * @param idNumber
+     * @return
+     */
+    public static String maskIdnum(String idNumber){
+        if (!StringUtils.isEmpty(idNumber)) {
+            if (idNumber.length() == 15){
+                idNumber = idNumber.replaceAll("(\\w{6})\\w*(\\w{3})", "$1******$2");
+            }
+            if (idNumber.length() == 18){
+                idNumber = idNumber.replaceAll("(\\w{6})\\w*(\\w{3})", "$1*********$2");
+            }
+        }
+        return idNumber;
+    }
     /**
      * 从身份证号中获取性别
      * @param idnum

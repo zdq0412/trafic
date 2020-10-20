@@ -8,6 +8,7 @@ import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IEmployeeService;
 import com.jxqixin.trafic.service.IUserService;
+import com.jxqixin.trafic.util.IdCardUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
@@ -67,6 +68,10 @@ public class EmployeeController extends CommonController{
     @GetMapping("/employee/employeesByPage")
     public ModelMap queryEmployees(EmployeeDto employeeDto,HttpServletRequest request){
         Page page = employeeService.findEmployees(employeeDto,getOrg(request));
+        List<Employee> employeeList = page.getContent();
+        employeeList.forEach(employee -> {
+            employee.setIdnum(IdCardUtil.maskIdnum(employee.getIdnum()));
+        });
         return pageModelMap(page);
     }
     /**

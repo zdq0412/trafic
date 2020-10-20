@@ -20,7 +20,11 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         JsonResult result = new JsonResult(Result.USER_NOT_LOGIN);
         httpServletResponse.setContentType("text/json;charset=utf-8");
-        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        String origin = httpServletRequest.getHeader("Origin");
+        if(origin == null) {
+            origin = httpServletRequest.getHeader("Referer");
+        }
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", origin);
         httpServletResponse.getWriter().write(JSON.toJSONString(result, EnumAsJaveBeanConfig.getSerializeConfig()));
     }
 }

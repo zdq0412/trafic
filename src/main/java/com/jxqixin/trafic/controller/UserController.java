@@ -1,5 +1,7 @@
 package com.jxqixin.trafic.controller;
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.LineCaptcha;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.dto.UserDto;
 import com.jxqixin.trafic.model.*;
@@ -16,7 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -52,7 +58,24 @@ public class UserController extends CommonController{
         userService.updateObj(user);
         return new JsonResult(Result.SUCCESS);
     }
-
+    /**
+     * 登录验证码
+     * @param response
+     * @param session
+     * @throws IOException
+     */
+    @GetMapping("/verifyCode")
+    public void  verifyCode(HttpServletResponse response, HttpSession session) throws IOException {
+        // 定义图形验证码的长、宽、验证码位数、线性数量
+        //还有更多功能自行研究，这里只做简单实现
+        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(125, 50,4,5);
+        //保存到session
+        session.setAttribute("code", lineCaptcha.getCode());
+        //响应输出流
+        ServletOutputStream outputStream = response.getOutputStream();
+        //将生成的验证码图片通过流的方式返回给前端
+        ImageIO.write(lineCaptcha.getImage(), "JPEG", outputStream);
+    }
     /**
      * 查询用户是否具有企业信息
      * @param request

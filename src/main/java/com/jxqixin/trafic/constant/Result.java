@@ -10,7 +10,8 @@ public enum Result{
     SUCCESS(200,"操作成功!"),
     FAIL(300,"操作失败!"),
     USER_NOT_LOGIN(400,"用户未登陆!"),
-    LOGIN_TIMEOUT(600,"登录超时!");
+    LOGIN_TIMEOUT(600,"登录超时!"),
+    VERIFYCODE_ERROR(500,"验证码错误");
     /**返回码*/
     private int resultCode;
     /**返回信息*/
