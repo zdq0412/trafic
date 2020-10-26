@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.config;
 
+import com.jxqixin.trafic.constant.OriginIp;
 import com.jxqixin.trafic.interceptors.AuthencationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     protected void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 //.allowedOrigins("*")
-                .allowedOrigins("http://192.168.0.131:8080","http://192.168.0.131:8088")
+                .allowedOrigins(OriginIp.WEB_IP,OriginIp.SERVER_IP)
                 .allowCredentials(true)
                 .allowedMethods("*")
                 .maxAge(3600);

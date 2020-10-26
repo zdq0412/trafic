@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.config;
 
+import com.jxqixin.trafic.constant.OriginIp;
 import com.jxqixin.trafic.filters.VerifyCodeFilter;
 import com.jxqixin.trafic.handler.CustomizeAuthenticationFailHandler;
 import com.jxqixin.trafic.handler.CustomizeAuthenticationSuccessHandler;
@@ -17,12 +18,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,9 +63,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		CorsConfigurationSource source =   new UrlBasedCorsConfigurationSource();
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		List<String> list = new ArrayList<>();
-		list.add("http://192.168.0.131:8080");
-		list.add("http://192.168.0.131:8088");
-		//corsConfiguration.addAllowedOrigin("http://192.168.0.131:8080,http://192.168.0.131:8088");	//同源配置，*表示任何请求都视为同源，若需指定ip和端口可以改为如“localhost：8080”，多个以“，”分隔；
+		list.add(OriginIp.WEB_IP);
+		list.add(OriginIp.SERVER_IP);
 		corsConfiguration.setAllowedOrigins(list);
 		corsConfiguration.addAllowedHeader("*");//header，允许哪些header，本案中使用的是token，此处可将*替换为token；
 		corsConfiguration.addAllowedMethod("*");	//允许的请求方法，PSOT、GET等

@@ -28,7 +28,6 @@ public class CustomizeAuthenticationFailHandler implements AuthenticationFailure
         JsonResult result = new JsonResult(Result.FAIL);
         //处理编码方式，防止中文乱码的情况
         httpServletResponse.setContentType("text/json;charset=utf-8");
-        httpServletResponse.setContentType("text/json;charset=utf-8");
         String origin = httpServletRequest.getHeader("Origin");
         if(origin == null) {
             origin = httpServletRequest.getHeader("Referer");
