@@ -50,6 +50,8 @@ public class UploadController extends CommonController {
     private IEmergencyPlanBakService emergencyPlanBakService;
     @Autowired
     private IPreplanDrillRecordService preplanDrillRecordService;
+    @Autowired
+    private IDeviceArchiveService deviceArchiveService;
     /**
      * 上传人员档案
      * @return
@@ -235,6 +237,17 @@ public class UploadController extends CommonController {
                 deviceMaintain.setUrl(url);
                 deviceMaintain.setRealPath(realPath);
                 deviceMaintainService.updateObj(deviceMaintain);
+                break;
+            }
+            //上传设备档案文件
+            case "deviceArchive":{
+                DeviceArchive deviceArchive = deviceArchiveService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(deviceArchive.getRealPath())){
+                    deleteTemplateFile(deviceArchive.getRealPath());
+                }
+                deviceArchive.setUrl(url);
+                deviceArchive.setRealPath(realPath);
+                deviceArchiveService.updateObj(deviceArchive);
                 break;
             }
             //应急预案文件

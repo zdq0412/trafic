@@ -78,7 +78,7 @@ public class DeviceController extends CommonController{
         return new JsonResult(result,urlMapping);
     }*/
     /**
-     * 新增设备，不上传头像
+     * 新增设备
      * @param deviceDto
      * @return
      */

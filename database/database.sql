@@ -1,4 +1,3 @@
-
 #企业类别表
 drop table if exists org_category;
 create table org_category(
@@ -1709,4 +1708,30 @@ create table remind(
     colName varchar(100) comment '日期或截止日期字段名称'
 ) comment '过期提醒记录,企业资质、人员资质、设备档案和企业台账';
 
+#-------------------------------------------20201027--------------------------------------------
+#设备档案管理
+drop table if exists m012_device_archive;
+create table m012_device_archive(
+  id varchar(36) primary key comment '主键',
+  name varchar(500) comment '名称',
+  beginDate datetime comment '有效期起始时间',
+  endDate datetime comment '有效期终止时间',
+  createDate datetime comment '创建日期',
+  money decimal(15,3) default 0.00 comment '金额',
+  supplier varchar(200) comment '供应方',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  note varchar(200) comment '备注',
+  device_id varchar(36) comment '所属设备ID',
+  constraint fk_m012_device_archive_id foreign key(device_id) references m012_device(id)
+  )comment '设备档案管理';
 
+#图片表：存储会议、培训、日常检查等现场图片
+drop table if exists pics;
+create table pics(
+  id varchar(36) primary key comment '主键',
+  url varchar(500) comment '文件访问路径',
+  realPath varchar(500) comment '实际存储路径',
+  type varchar(20) comment '图片所属类别:MEETING,TRAINING,CHECKING...',
+  pid varchar(36) comment '所属类别记录ID'
+)comment '图片表：存储会议、培训、日常检查等现场图片';
