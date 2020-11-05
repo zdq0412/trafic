@@ -183,6 +183,7 @@ public class RemindTask {
                 remind.setType(deviceArchive.getName());
                 remind.setTableName("m012_device_archive");
                 remind.setDeleted(false);
+                remind.setDeductPoints(5);
                 remind.setColName("endDate");
                 remindList.add(remind);
             });
