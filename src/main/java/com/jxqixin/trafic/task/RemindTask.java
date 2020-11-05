@@ -29,8 +29,7 @@ public class RemindTask {
      * 每天凌晨一点执行，资质文件
      * 企业资质文件、人员资质文件、人员合同、设备档案
      */
-    //@Scheduled(cron = "0 0 1 * * ?")
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(cron = "0 0 1 * * ?")
     public void remindDay(){
         try {
             List<Remind> remindList = new ArrayList<>();
@@ -73,10 +72,10 @@ public class RemindTask {
                 remind.setBgColor("#FF9900");
                 remind.setCreateDate(now);
                 remind.setEndDate(qualificationDocument.getEndDate());
-                remind.setName(qualificationDocument.getName());
                 //根据人员资质ID查找人员
                 Employee employee = remindService.findEmployeeByQualificationDocumentId(qualificationDocument.getId());
                 if(employee!=null){
+                    remind.setName(qualificationDocument.getName() + "(" + employee.getName() +")");
                     Org org = remindService.findOrgByEmployeeId(employee.getId());
                     if(org!=null){
                         remind.setOrgId(org.getId());
@@ -106,9 +105,9 @@ public class RemindTask {
                 remind.setBgColor("#FF9900");
                 remind.setCreateDate(now);
                 remind.setEndDate(contract.getEndDate());
-                remind.setName(contract.getName());
                 Employee employee = remindService.findEmployeeByContractId(contract.getId());
                 if(employee!=null){
+                    remind.setName(contract.getName() + "(" + employee.getName() +")");
                     Org org = remindService.findOrgByEmployeeId(employee.getId());
                     if(org!=null){
                         remind.setOrgId(org.getId());
@@ -138,10 +137,9 @@ public class RemindTask {
                 remind.setBgColor("#FF9900");
                 remind.setCreateDate(now);
                 remind.setEndDate(deviceArchive.getEndDate());
-                remind.setName(deviceArchive.getName());
-
                 Device device = remindService.findDeviceByDeviceArchiveId(deviceArchive.getId());
                 if(device!=null){
+                    remind.setName(deviceArchive.getName() + "(" + device.getName() +")");
                     Org org = remindService.findOrgByDeviceId(device.getId());
                     if(org!=null){
                         remind.setOrgId(org.getId());
@@ -171,10 +169,9 @@ public class RemindTask {
                 remind.setBgColor("#FF0000");
                 remind.setCreateDate(now);
                 remind.setEndDate(deviceArchive.getEndDate());
-                remind.setName(deviceArchive.getName());
-
                 Device device = remindService.findDeviceByDeviceArchiveId(deviceArchive.getId());
                 if(device!=null){
+                    remind.setName(deviceArchive.getName() + "(" + device.getName() +")");
                     Org org = remindService.findOrgByDeviceId(device.getId());
                     if(org!=null){
                         remind.setOrgId(org.getId());
@@ -233,9 +230,9 @@ public class RemindTask {
                 remind.setBgColor("#FF0000");
                 remind.setCreateDate(now);
                 remind.setEndDate(qualificationDocument.getEndDate());
-                remind.setName(qualificationDocument.getName());
                 Employee employee = remindService.findEmployeeByQualificationDocumentId(qualificationDocument.getId());
                 if(employee!=null){
+                    remind.setName(qualificationDocument.getName() + "(" + employee.getName() +")");
                     Org org = remindService.findOrgByEmployeeId(employee.getId());
                     if(org!=null){
                         remind.setOrgId(org.getId());
@@ -266,10 +263,10 @@ public class RemindTask {
                 remind.setBgColor("#FF0000");
                 remind.setCreateDate(now);
                 remind.setEndDate(contract.getEndDate());
-                remind.setName(contract.getName());
                 //根据劳动合同ID查找人员对象
                 Employee employee = remindService.findEmployeeByContractId(contract.getId());
                 if(employee!=null){
+                    remind.setName(contract.getName() + "(" + employee.getName() +")");
                     //根据人员ID查找所在企业
                     Org org = remindService.findOrgByEmployeeId(employee.getId());
                     if(org!=null){
