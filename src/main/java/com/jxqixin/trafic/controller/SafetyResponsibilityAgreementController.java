@@ -71,7 +71,7 @@ public class SafetyResponsibilityAgreementController extends CommonController{
 
             safetyResponsibilityAgreement.setEmployee(employee);
         }
-        safetyResponsibilityAgreementService.addObj(safetyResponsibilityAgreement);
+        safetyResponsibilityAgreementService.addSafetyResponsibilityAgreement(safetyResponsibilityAgreement);
         return jsonResult;
     }
     /**

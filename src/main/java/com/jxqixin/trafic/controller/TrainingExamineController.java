@@ -66,7 +66,7 @@ public class TrainingExamineController extends CommonController{
 
             trainingExamine.setEmployee(employee);
         }
-        trainingExamineService.addObj(trainingExamine);
+        trainingExamineService.addTrainingExamine(trainingExamine);
         return jsonResult;
     }
     /**

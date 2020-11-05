@@ -66,7 +66,7 @@ public class OtherDocumentController extends CommonController{
 
             otherDocument.setEmployee(employee);
         }
-        otherDocumentService.addObj(otherDocument);
+        otherDocumentService.addOtherDocument(otherDocument);
         return jsonResult;
     }
     /**

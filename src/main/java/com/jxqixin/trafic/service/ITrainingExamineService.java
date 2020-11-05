@@ -16,4 +16,9 @@ public interface ITrainingExamineService extends ICommonService<TrainingExamine>
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 新增培训考核
+     * @param trainingExamine
+     */
+    void addTrainingExamine(TrainingExamine trainingExamine);
 }

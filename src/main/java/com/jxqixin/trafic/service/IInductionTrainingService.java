@@ -16,4 +16,9 @@ public interface IInductionTrainingService extends ICommonService<InductionTrain
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 新增入职培训
+     * @param inductionTraining
+     */
+    void addInductionTraining(InductionTraining inductionTraining);
 }

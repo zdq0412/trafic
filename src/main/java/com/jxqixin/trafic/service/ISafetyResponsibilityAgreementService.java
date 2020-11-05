@@ -17,4 +17,9 @@ public interface ISafetyResponsibilityAgreementService extends ICommonService<Sa
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 新增安全责任书
+     * @param safetyResponsibilityAgreement
+     */
+    void addSafetyResponsibilityAgreement(SafetyResponsibilityAgreement safetyResponsibilityAgreement);
 }

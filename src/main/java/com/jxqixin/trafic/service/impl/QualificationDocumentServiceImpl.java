@@ -1,11 +1,15 @@
 package com.jxqixin.trafic.service.impl;
 
+import com.jxqixin.trafic.constant.EmpArchiveType;
 import com.jxqixin.trafic.dto.QualificationDocumentDto;
 import com.jxqixin.trafic.model.Employee;
 import com.jxqixin.trafic.model.QualificationDocument;
+import com.jxqixin.trafic.model.Resume;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.QualificationDocumentRepository;
+import com.jxqixin.trafic.service.IEmployeeService;
 import com.jxqixin.trafic.service.IQualificationDocumentService;
+import com.jxqixin.trafic.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +29,8 @@ import java.util.List;
 public class QualificationDocumentServiceImpl extends CommonServiceImpl<QualificationDocument> implements IQualificationDocumentService {
 	@Autowired
 	private QualificationDocumentRepository qualificationDocumentRepository;
+	@Autowired
+	private IEmployeeService employeeService;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return qualificationDocumentRepository;
@@ -51,5 +57,27 @@ public class QualificationDocumentServiceImpl extends CommonServiceImpl<Qualific
 		QualificationDocument qualificationDocument = (QualificationDocument) qualificationDocumentRepository.findById(id).get();
 		qualificationDocument.setDeleted(true);
 		qualificationDocumentRepository.save(qualificationDocument);
+		setArchiveCode(qualificationDocument);
+	}
+
+	@Override
+	public void addQualificationDocument(QualificationDocument qualificationDocument) {
+		addObj(qualificationDocument);
+		setArchiveCode(qualificationDocument);
+	}
+
+	/**
+	 * 设置档案码
+	 * @param qualificationDocument
+	 */
+	private void setArchiveCode(QualificationDocument qualificationDocument){
+		Long count = qualificationDocumentRepository.count((root, criteriaQuery, criteriaBuilder) -> {
+			Join<Resume,Employee> employeeJoin = root.join("employee",JoinType.INNER);
+			return criteriaBuilder.and(criteriaBuilder.equal(root.get("deleted"),false),criteriaBuilder.equal(employeeJoin.get("id"),qualificationDocument.getEmployee().getId()));
+		});
+		if(count == null)count = 0l;
+		Employee employee = employeeService.queryObjById(qualificationDocument.getEmployee().getId());
+		employee.setArchiveCode(StringUtil.handleEmpArchiveCode(EmpArchiveType.QUALIFICATIONDOCUMENT,employee.getArchiveCode(),count.intValue()));
+		employeeService.updateObj(employee);
 	}
 }

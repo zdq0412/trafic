@@ -56,7 +56,11 @@ public interface IRemindService extends ICommonService<Remind> {
      * @return
      */
     List<Contract> findExpiredContract();
-
+    /**
+     * 查找已经过期的设备档案
+     * @return
+     */
+    List<DeviceArchive> findExpiredDeviceArchives();
     /**
      * 查找当前月的安全会议台账
      * @param orgId
@@ -159,4 +163,21 @@ public interface IRemindService extends ICommonService<Remind> {
      * @param id
      */
     void deleteRemind(String id);
+    /**
+     * 根据设备档案ID查找设备信息
+     * @param deviceArchiveId
+     * @return
+     */
+    Device findDeviceByDeviceArchiveId(String deviceArchiveId);
+    /**
+     * 根据设备ID查找机构信息
+     * @param deviceId
+     * @return
+     */
+    Org findOrgByDeviceId(String deviceId);
+    /**
+     * * 查询即将过期设备档案，提前三十天
+     * @return
+     */
+    List<DeviceArchive> findWarningDeviceArchives();
 }

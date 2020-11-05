@@ -105,7 +105,7 @@ public class OrgController extends CommonController{
      * @return
      */
     @PostMapping("/org/updateOrg")
-    public JsonResult updateOrg(OrgDto orgDto){
+    public JsonResult updateOrg(OrgDto orgDto,HttpServletRequest request){
         Org s = orgService.findByName(orgDto.getName());
 
         Result fail = Result.FAIL;
@@ -145,10 +145,12 @@ public class OrgController extends CommonController{
         if(!StringUtils.isEmpty(orgDto.getOrgCategoryId())){
             OrgCategory orgCategory = new OrgCategory();
             orgCategory.setId(orgDto.getOrgCategoryId());
-
             savedOrg.setOrgCategory(orgCategory);
         }
         orgService.updateObj(savedOrg);
+        if(getOrg(request)!=null){
+            getCurrentUser(request).setOrg(savedOrg);
+        }
         return new JsonResult(Result.SUCCESS);
     }
     /**

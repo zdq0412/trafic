@@ -14,6 +14,8 @@ public interface RemindMapper {
      */
     @Select("select * from m001_org_doc od  where datediff(od.endDate,now()) BETWEEN 1 and 30 and not EXISTS (select r.srcId from remind r where r.srcId=od.id )")
     List<OrgDoc> findWarningOrgDoc();
+    @Select("select * from m012_device_archive od  where datediff(od.endDate,now()) BETWEEN 1 and 30 and not EXISTS (select r.srcId from remind r where r.srcId=od.id )")
+    List<DeviceArchive> findWarningDeviceArchives();
     @Select("select * from m011_contract od  where datediff(od.endDate,now()) BETWEEN 1 and 30 and not EXISTS (select r.srcId from remind r where r.srcId=od.id )")
     List<Contract> findWarningContract();
     @Select("select * from m011_qualification_document od  where datediff(od.endDate,now()) BETWEEN 1 and 30 and not EXISTS (select r.srcId from remind r where r.srcId=od.id )")
@@ -22,6 +24,8 @@ public interface RemindMapper {
     void updateRemind2Expired();
     @Select("select * from m001_org_doc od  where datediff(od.endDate,now())<0 and not EXISTS (select r.srcId from remind r where r.srcId=od.id )")
     List<OrgDoc> findExpiredOrgDoc();
+    @Select("select * from m012_device_archive od  where datediff(od.endDate,now())<0 and not EXISTS (select r.srcId from remind r where r.srcId=od.id )")
+    List<DeviceArchive> findExpiredDeviceArchives();
     @Select("select * from m011_qualification_document od  where datediff(od.endDate,now())<0 and not EXISTS (select r.srcId from remind r where r.srcId=od.id )")
     List<QualificationDocument> findExpiredQualificationDocument();
     @Select("select * from m011_contract od  where datediff(od.endDate,now())<0 and not EXISTS (select r.srcId from remind r where r.srcId=od.id )")
@@ -54,14 +58,18 @@ public interface RemindMapper {
     Employee findEmployeeByContractId(String contractId);
     @Select("select o.* from org o inner join m003_employee d on d.org_id=o.id where d.id=#{employeeId}")
     Org findOrgByEmployeeId(String employeeId);
+    @Select("select o.* from org o inner join m012_device d on d.org_id=o.id where d.id=#{deviceId}")
+    Org findOrgByDeviceId(String deviceId);
     @Select("select o.* from m003_employee o inner join m011_qualification_document d on d.emp_id=o.id where d.id=#{qualificationDocumentId}")
     Employee findEmployeeByQualificationDocumentId(String qualificationDocumentId);
+    @Select("select d.* from m012_device d inner join m012_device_archive da on d.id=da.device_id where da.id=#{deviceArchiveId}")
+    Device findDeviceByDeviceArchiveId(String deviceArchiveId);
     /**
      * 根据SRCID查找截止日期
      * @param srcId
      * @return
      */
-    @Select("select endDate from ${param2} where id=#{param1}")
+    @Select("select endDate from ${param2} where id=#{param1} and deleted=0")
     Date findEndDateById(String srcId,String tableName);
     /**
      * 月度计划、半年计划、年度计划

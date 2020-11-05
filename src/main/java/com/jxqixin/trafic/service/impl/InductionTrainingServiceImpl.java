@@ -1,13 +1,17 @@
 package com.jxqixin.trafic.service.impl;
 
+import com.jxqixin.trafic.constant.EmpArchiveType;
 import com.jxqixin.trafic.dto.InductionTrainingDto;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.model.Employee;
 import com.jxqixin.trafic.model.InductionTraining;
 import com.jxqixin.trafic.model.JobHistory;
+import com.jxqixin.trafic.model.Resume;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.InductionTrainingRepository;
+import com.jxqixin.trafic.service.IEmployeeService;
 import com.jxqixin.trafic.service.IInductionTrainingService;
+import com.jxqixin.trafic.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +31,8 @@ import java.util.List;
 public class InductionTrainingServiceImpl extends CommonServiceImpl<InductionTraining> implements IInductionTrainingService {
 	@Autowired
 	private InductionTrainingRepository inductionTrainingRepository;
+	@Autowired
+	private IEmployeeService employeeService;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return inductionTrainingRepository;
@@ -55,5 +61,28 @@ public class InductionTrainingServiceImpl extends CommonServiceImpl<InductionTra
 		InductionTraining inductionTraining = (InductionTraining) inductionTrainingRepository.findById(id).get();
 		inductionTraining.setDeleted(true);
 		inductionTrainingRepository.save(inductionTraining);
+
+		setArchiveCode(inductionTraining);
+	}
+
+	@Override
+	public void addInductionTraining(InductionTraining inductionTraining) {
+		addObj(inductionTraining);
+		setArchiveCode(inductionTraining);
+	}
+
+	/**
+	 * 设置档案码
+	 * @param inductionTraining
+	 */
+	private void setArchiveCode(InductionTraining inductionTraining){
+		Long count = inductionTrainingRepository.count((root, criteriaQuery, criteriaBuilder) -> {
+			Join<Resume,Employee> employeeJoin = root.join("employee",JoinType.INNER);
+			return criteriaBuilder.and(criteriaBuilder.equal(root.get("deleted"),false),criteriaBuilder.equal(employeeJoin.get("id"),inductionTraining.getEmployee().getId()));
+		});
+		if(count == null)count = 0l;
+		Employee employee = employeeService.queryObjById(inductionTraining.getEmployee().getId());
+		employee.setArchiveCode(StringUtil.handleEmpArchiveCode(EmpArchiveType.INDUCTIONTRAINING,employee.getArchiveCode(),count.intValue()));
+		employeeService.updateObj(employee);
 	}
 }

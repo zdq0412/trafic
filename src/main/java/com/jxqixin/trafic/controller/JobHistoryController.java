@@ -67,7 +67,8 @@ public class JobHistoryController extends CommonController{
 
             jobHistory.setEmployee(employee);
         }
-        jobHistoryService.addObj(jobHistory);
+        //jobHistoryService.addObj(jobHistory);
+        jobHistoryService.addJobHistory(jobHistory);
         return jsonResult;
     }
     /**

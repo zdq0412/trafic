@@ -107,7 +107,9 @@ public class MeetingController extends CommonController{
         Meeting savedMeeting = meetingService.queryObjById(meetingDto.getId());
         if(!StringUtils.isEmpty(meetingDto.getEndMeetingDate())){
             Calendar meetingDateCal = Calendar.getInstance();
-            meetingDateCal.setTime(savedMeeting.getMeetingDate());
+            if(savedMeeting.getMeetingDate()!=null) {
+                meetingDateCal.setTime(savedMeeting.getMeetingDate());
+            }
 
             Calendar endMeetingDateCal = Calendar.getInstance();
             try {

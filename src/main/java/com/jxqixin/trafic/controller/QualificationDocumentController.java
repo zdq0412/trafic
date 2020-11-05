@@ -64,7 +64,8 @@ public class QualificationDocumentController extends CommonController{
 
             qualificationDocument.setEmployee(employee);
         }
-        qualificationDocumentService.addObj(qualificationDocument);
+        //qualificationDocumentService.addObj(qualificationDocument);
+        qualificationDocumentService.addQualificationDocument(qualificationDocument);
         return jsonResult;
     }
     /**

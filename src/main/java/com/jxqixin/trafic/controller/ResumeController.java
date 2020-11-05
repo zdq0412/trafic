@@ -1,7 +1,5 @@
 package com.jxqixin.trafic.controller;
-
 import com.jxqixin.trafic.constant.Result;
-import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.ResumeDto;
 import com.jxqixin.trafic.model.Employee;
 import com.jxqixin.trafic.model.JsonResult;
@@ -13,11 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-
 /**
  * 控制器
  */
@@ -48,7 +43,6 @@ public class ResumeController extends CommonController{
            return jsonResult;
        }
        jsonResult.setResult(Result.SUCCESS);
-
         Resume resume = new Resume();
         BeanUtils.copyProperties(resumeDto,resume);
         resume.setCreateDate(new Date());
@@ -65,10 +59,10 @@ public class ResumeController extends CommonController{
         if(!StringUtils.isEmpty(resumeDto.getEmpId())){
             Employee employee = new Employee();
             employee.setId(resumeDto.getEmpId());
-
             resume.setEmployee(employee);
         }
-        resumeService.addObj(resume);
+        //resumeService.addObj(resume);
+        resumeService.addResume(resume);
         return jsonResult;
     }
     /**

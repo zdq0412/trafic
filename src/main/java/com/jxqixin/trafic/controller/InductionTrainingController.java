@@ -66,7 +66,7 @@ public class InductionTrainingController extends CommonController{
 
             inductionTraining.setEmployee(employee);
         }
-        inductionTrainingService.addObj(inductionTraining);
+        inductionTrainingService.addInductionTraining(inductionTraining);
         return jsonResult;
     }
     /**

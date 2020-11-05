@@ -17,4 +17,9 @@ public interface IJobHistoryService extends ICommonService<JobHistory> {
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 新增从业经历
+     * @param jobHistory
+     */
+    void addJobHistory(JobHistory jobHistory);
 }

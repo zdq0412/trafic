@@ -14,6 +14,8 @@ public class Employee implements Serializable {
     private String id;
     /**名称*/
     private String name;
+    /**以句点作为分隔的档案码,句点前数值表示的含义,0:简历数,1:劳动合同数,2:资质文件数,3:从业经历数,4:入职培训数,5:安全责任书数,6:培训考核情况数,7:其他文件数*/
+    private String archiveCode;
     /**性别*/
     private String sex;
     /**年龄*/
@@ -149,5 +151,13 @@ public class Employee implements Serializable {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public String getArchiveCode() {
+        return archiveCode;
+    }
+
+    public void setArchiveCode(String archiveCode) {
+        this.archiveCode = archiveCode;
     }
 }

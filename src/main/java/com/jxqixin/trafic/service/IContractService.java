@@ -17,4 +17,9 @@ public interface IContractService extends ICommonService<Contract> {
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 新增合同
+     * @param contract
+     */
+    void addContract(Contract contract);
 }

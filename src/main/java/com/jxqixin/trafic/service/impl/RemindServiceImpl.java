@@ -60,6 +60,10 @@ public class RemindServiceImpl extends CommonServiceImpl<Remind> implements IRem
 		return remindMapper.findWarningOrgDoc();
 	}
 	@Override
+	public List<DeviceArchive> findWarningDeviceArchives() {
+		return remindMapper.findWarningDeviceArchives();
+	}
+	@Override
 	public List<Contract> findWarningContract() {
 		return remindMapper.findWarningContract();
 	}
@@ -87,6 +91,12 @@ public class RemindServiceImpl extends CommonServiceImpl<Remind> implements IRem
 	public List<Contract> findExpiredContract() {
 		return remindMapper.findExpiredContract();
 	}
+
+	@Override
+	public List<DeviceArchive> findExpiredDeviceArchives() {
+		return remindMapper.findExpiredDeviceArchives();
+	}
+
 	@Override
 	public List<Meeting> findCurrentMonthMeeting(String orgId) {
 		return remindMapper.findCurrentMonthMeeting(orgId);
@@ -225,5 +235,13 @@ public class RemindServiceImpl extends CommonServiceImpl<Remind> implements IRem
 		//已处理，执行删除操作
 		remind.setDeleted(true);
 		remindRepository.save(remind);
+	}
+	@Override
+	public Device findDeviceByDeviceArchiveId(String deviceArchiveId) {
+		return remindMapper.findDeviceByDeviceArchiveId(deviceArchiveId);
+	}
+	@Override
+	public Org findOrgByDeviceId(String deviceId) {
+		return remindMapper.findOrgByDeviceId(deviceId);
 	}
 }

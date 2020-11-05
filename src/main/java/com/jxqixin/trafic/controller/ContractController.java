@@ -69,7 +69,8 @@ public class ContractController extends CommonController{
 
             contract.setEmployee(employee);
         }
-        contractService.addObj(contract);
+       // contractService.addObj(contract);
+        contractService.addContract(contract);
         return jsonResult;
     }
     /**

@@ -16,4 +16,9 @@ public interface IOtherDocumentService extends ICommonService<OtherDocument> {
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 新增其他文档
+     * @param otherDocument
+     */
+    void addOtherDocument(OtherDocument otherDocument);
 }

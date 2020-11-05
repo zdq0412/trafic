@@ -16,4 +16,9 @@ public interface IQualificationDocumentService extends ICommonService<Qualificat
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 添加资质文件
+     * @param qualificationDocument
+     */
+    void addQualificationDocument(QualificationDocument qualificationDocument);
 }

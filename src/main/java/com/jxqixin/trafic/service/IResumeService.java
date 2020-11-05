@@ -17,4 +17,9 @@ public interface IResumeService extends ICommonService<Resume> {
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 新增简历
+     * @param resume
+     */
+    void addResume(Resume resume);
 }

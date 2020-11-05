@@ -371,6 +371,7 @@ create table m003_employee(
   note varchar(2000) comment '备注',
   photo varchar(200) comment '头像',
   realPath varchar(200) comment '真实路径',
+  archiveCode varchar(50) default '0.0.0.0.0.0.0.0' comment '以句点作为分隔的档案码,句点前数值表示的含义,0:简历数,1:劳动合同数,2:资质文件数,3:从业经历数,4:入职培训数,5:安全责任书数,6:培训考核情况数,7:其他文件数',
   user_id varchar(36) comment '人员对应用户ID',
   department_id varchar(36) comment '部门id',
   position_id varchar(36) comment '职位id',

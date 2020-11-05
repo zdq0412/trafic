@@ -3,6 +3,7 @@ package com.jxqixin.trafic.controller;
 import com.jxqixin.trafic.constant.Result;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Org;
+import com.jxqixin.trafic.model.User;
 import com.jxqixin.trafic.service.IUserService;
 import com.jxqixin.trafic.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +123,9 @@ public class CommonController {
         return userService.queryUserByUsername(getCurrentUsername(request)).getOrg();
     }
 
+    public User getCurrentUser(HttpServletRequest request){
+        return userService.queryUserByUsername(getCurrentUsername(request));
+    }
     /**
      * 员工档案，新增员工档案，验证员工ID是否为空
      * @param empId
