@@ -57,7 +57,7 @@ public class DeviceMaintainController extends CommonController{
 
             deviceMaintain.setDevice(device);
         }
-        deviceMaintainService.addObj(deviceMaintain);
+        deviceMaintainService.addDeviceMaintain(deviceMaintain);
         return new JsonResult(Result.SUCCESS);
     }
     /**

@@ -4,7 +4,6 @@ import com.jxqixin.trafic.constant.EmpArchiveType;
 import com.jxqixin.trafic.dto.QualificationDocumentDto;
 import com.jxqixin.trafic.model.Employee;
 import com.jxqixin.trafic.model.QualificationDocument;
-import com.jxqixin.trafic.model.Resume;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.QualificationDocumentRepository;
 import com.jxqixin.trafic.service.IEmployeeService;
@@ -72,7 +71,7 @@ public class QualificationDocumentServiceImpl extends CommonServiceImpl<Qualific
 	 */
 	private void setArchiveCode(QualificationDocument qualificationDocument){
 		Long count = qualificationDocumentRepository.count((root, criteriaQuery, criteriaBuilder) -> {
-			Join<Resume,Employee> employeeJoin = root.join("employee",JoinType.INNER);
+			Join<QualificationDocument,Employee> employeeJoin = root.join("employee",JoinType.INNER);
 			return criteriaBuilder.and(criteriaBuilder.equal(root.get("deleted"),false),criteriaBuilder.equal(employeeJoin.get("id"),qualificationDocument.getEmployee().getId()));
 		});
 		if(count == null)count = 0l;

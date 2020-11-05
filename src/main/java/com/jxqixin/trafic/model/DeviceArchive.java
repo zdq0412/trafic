@@ -37,6 +37,8 @@ public class DeviceArchive implements Serializable {
 	private String url;
 	/**真实路径，即存储路径*/
 	private String realPath;
+	/**删除标记*/
+	private Boolean deleted=false;
 	@ManyToOne
 	@JoinColumn(name="device_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
@@ -132,5 +134,13 @@ public class DeviceArchive implements Serializable {
 
 	public void setSupplier(String supplier) {
 		this.supplier = supplier;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 }

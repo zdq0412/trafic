@@ -16,4 +16,9 @@ public interface IDeviceMaintainService extends ICommonService<DeviceMaintain> {
      * @param id
      */
     void deleteById(String id);
+    /**
+     * 新增设备保养记录
+     * @param deviceMaintain
+     */
+    void addDeviceMaintain(DeviceMaintain deviceMaintain);
 }

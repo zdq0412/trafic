@@ -3,7 +3,6 @@ package com.jxqixin.trafic.service.impl;
 import com.jxqixin.trafic.constant.EmpArchiveType;
 import com.jxqixin.trafic.dto.SafetyResponsibilityAgreementDto;
 import com.jxqixin.trafic.model.Employee;
-import com.jxqixin.trafic.model.Resume;
 import com.jxqixin.trafic.model.SafetyResponsibilityAgreement;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.SafetyResponsibilityAgreementRepository;
@@ -76,7 +75,7 @@ public class SafetyResponsibilityAgreementServiceImpl extends CommonServiceImpl<
 	 */
 	private void setArchiveCode(SafetyResponsibilityAgreement safetyResponsibilityAgreement){
 		Long count = safetyResponsibilityAgreementRepository.count((root, criteriaQuery, criteriaBuilder) -> {
-			Join<Resume,Employee> employeeJoin = root.join("employee",JoinType.INNER);
+			Join<SafetyResponsibilityAgreement,Employee> employeeJoin = root.join("employee",JoinType.INNER);
 			return criteriaBuilder.and(criteriaBuilder.equal(root.get("deleted"),false),criteriaBuilder.equal(employeeJoin.get("id"),safetyResponsibilityAgreement.getEmployee().getId()));
 		});
 		if(count == null)count = 0l;

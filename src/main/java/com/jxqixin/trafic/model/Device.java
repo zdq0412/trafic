@@ -50,6 +50,8 @@ public class Device implements Serializable {
 	private String realPath;
 	/**删除标识*/
 	private Boolean deleted = false;
+	/**以句点作为分隔的档案码,句点前数值表示的含义,0:保养维修记录数,1:设备档案数*/
+	private String archiveCode;
 	/**所在企业*/
 	@ManyToOne
 	@JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -59,6 +61,14 @@ public class Device implements Serializable {
 	@JoinColumn(name="category_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Category category;
+
+	public String getArchiveCode() {
+		return archiveCode;
+	}
+
+	public void setArchiveCode(String archiveCode) {
+		this.archiveCode = archiveCode;
+	}
 
 	public String getId() {
 		return id;

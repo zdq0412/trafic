@@ -1,5 +1,6 @@
 package com.jxqixin.trafic.util;
 
+import com.jxqixin.trafic.constant.DeviceArchiveType;
 import com.jxqixin.trafic.constant.EmpArchiveType;
 import org.thymeleaf.util.StringUtils;
 
@@ -63,6 +64,24 @@ public class StringUtil {
         }
     }
     /**
+     * 设备档案,档案码操作
+     * @param deviceArchiveType 设备档案类别
+     * @param archiveCode 档案码
+     * @param count 增加或减少的数量
+     * @return 处理后的档案码
+     */
+    public static String handleDeviceArchiveCode(DeviceArchiveType deviceArchiveType, String archiveCode, int count){
+        switch (deviceArchiveType){
+            case MAINTAIN:{
+                return handle("DEVICE",archiveCode,0,count);
+            }
+            case ARCHIVE:{
+                return handle("DEVICE",archiveCode,1,count);
+            }
+        }
+        return "";
+    }
+    /**
      * 人员档案,档案码操作
      * @param empArchiveType 人员档案类别
      * @param archiveCode 档案码
@@ -72,43 +91,50 @@ public class StringUtil {
     public static String handleEmpArchiveCode(EmpArchiveType empArchiveType,String archiveCode, int count){
         switch (empArchiveType){
             case RESUME:{
-                return handle(archiveCode,0,count);
+                return handle("EMP",archiveCode,0,count);
             }
             case CONTRACT:{
-                return handle(archiveCode,1,count);
+                return handle("EMP",archiveCode,1,count);
             }
             case QUALIFICATIONDOCUMENT:{
-                return handle(archiveCode,2,count);
+                return handle("EMP",archiveCode,2,count);
             }
             case JOBHISTORY:{
-                return handle(archiveCode,3,count);
+                return handle("EMP",archiveCode,3,count);
             }
             case INDUCTIONTRAINING:{
-                return handle(archiveCode,4,count);
+                return handle("EMP",archiveCode,4,count);
             }
             case SAFETYRESPONSIBILITYAGREEMENT:{
-                return handle(archiveCode,5,count);
+                return handle("EMP",archiveCode,5,count);
             }
             case TRAININGEXAMINE:{
-                return handle(archiveCode,6,count);
+                return handle("EMP",archiveCode,6,count);
             }
             case OTHERDOCUMENT:{
-                return handle(archiveCode,7,count);
+                return handle("EMP",archiveCode,7,count);
             }
         }
         return "";
     }
     /**
-     * 处理人员档案档案码
+     * 处理档案码: 人员、设备
+     * @param type 档案码类别，EMP:人员档案，DEVICE:设备档案
      * @param archiveCode 档案码
      * @param index 索引，0:简历,1:劳动合同,2:资质文件,3:从业经历,4:入职培训,5:安全责任书,6:培训考核情况,7:其他文件
      * @param count 增加或减少的数量
      * @return 处理后的档案码
      */
-    private static String handle(String archiveCode,int index,int count){
+    private static String handle(String type,String archiveCode,int index,int count){
         String initCode = archiveCode;
         if(StringUtils.isEmpty(initCode)){
-            initCode = "0.0.0.0.0.0.0.0";
+            if("EMP".equals(type)) {
+                initCode = "0.0.0.0.0.0.0.0";
+            }
+
+            if("DEVICE".equals(type)){
+                initCode="0.0";
+            }
         }
         String[] initCodeArr = initCode.split("\\.");
         initCodeArr[index]=count+"";
@@ -120,9 +146,5 @@ public class StringUtil {
             }
         }
         return builder.toString();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(handle("",6,2));
     }
 }

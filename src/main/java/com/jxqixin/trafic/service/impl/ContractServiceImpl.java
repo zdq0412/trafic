@@ -1,9 +1,9 @@
 package com.jxqixin.trafic.service.impl;
+
 import com.jxqixin.trafic.constant.EmpArchiveType;
 import com.jxqixin.trafic.dto.ContractDto;
 import com.jxqixin.trafic.model.Contract;
 import com.jxqixin.trafic.model.Employee;
-import com.jxqixin.trafic.model.Resume;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.ContractRepository;
 import com.jxqixin.trafic.service.IContractService;
@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
+
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class ContractServiceImpl extends CommonServiceImpl<Contract> implements 
 	 */
 	private void setArchiveCode(Contract contract){
 		Long count = contractRepository.count((root, criteriaQuery, criteriaBuilder) -> {
-			Join<Resume,Employee> employeeJoin = root.join("employee",JoinType.INNER);
+			Join<Contract,Employee> employeeJoin = root.join("employee",JoinType.INNER);
 			return criteriaBuilder.and(criteriaBuilder.equal(root.get("deleted"),false),criteriaBuilder.equal(employeeJoin.get("id"),contract.getEmployee().getId()));
 		});
 		if(count == null)count = 0l;

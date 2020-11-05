@@ -77,7 +77,7 @@ public class InductionTrainingServiceImpl extends CommonServiceImpl<InductionTra
 	 */
 	private void setArchiveCode(InductionTraining inductionTraining){
 		Long count = inductionTrainingRepository.count((root, criteriaQuery, criteriaBuilder) -> {
-			Join<Resume,Employee> employeeJoin = root.join("employee",JoinType.INNER);
+			Join<InductionTraining,Employee> employeeJoin = root.join("employee",JoinType.INNER);
 			return criteriaBuilder.and(criteriaBuilder.equal(root.get("deleted"),false),criteriaBuilder.equal(employeeJoin.get("id"),inductionTraining.getEmployee().getId()));
 		});
 		if(count == null)count = 0l;

@@ -1,8 +1,8 @@
 package com.jxqixin.trafic.service.impl;
+
 import com.jxqixin.trafic.constant.EmpArchiveType;
 import com.jxqixin.trafic.dto.TrainingExamineDto;
 import com.jxqixin.trafic.model.Employee;
-import com.jxqixin.trafic.model.Resume;
 import com.jxqixin.trafic.model.TrainingExamine;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.TrainingExamineRepository;
@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
+
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class TrainingExamineServiceImpl extends CommonServiceImpl<TrainingExamin
 	 */
 	private void setArchiveCode(TrainingExamine trainingExamine){
 		Long count = trainingExamineRepository.count((root, criteriaQuery, criteriaBuilder) -> {
-			Join<Resume,Employee> employeeJoin = root.join("employee",JoinType.INNER);
+			Join<TrainingExamine,Employee> employeeJoin = root.join("employee",JoinType.INNER);
 			return criteriaBuilder.and(criteriaBuilder.equal(root.get("deleted"),false),criteriaBuilder.equal(employeeJoin.get("id"),trainingExamine.getEmployee().getId()));
 		});
 		if(count == null)count = 0l;

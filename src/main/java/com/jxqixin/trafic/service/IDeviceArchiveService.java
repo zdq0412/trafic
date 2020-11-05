@@ -14,4 +14,9 @@ public interface IDeviceArchiveService extends ICommonService<DeviceArchive> {
      * @param id
      */
     void deleteById(String id);
+    /***
+     * 新增设备档案
+     * @param deviceArchive
+     */
+    void addDeviceArchive(DeviceArchive deviceArchive);
 }

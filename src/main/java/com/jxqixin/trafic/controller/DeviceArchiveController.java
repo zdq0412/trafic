@@ -57,7 +57,7 @@ public class DeviceArchiveController extends CommonController{
 
             deviceArchive.setDevice(device);
         }
-        deviceArchiveService.addObj(deviceArchive);
+        deviceArchiveService.addDeviceArchive(deviceArchive);
         return new JsonResult(Result.SUCCESS);
     }
     /**

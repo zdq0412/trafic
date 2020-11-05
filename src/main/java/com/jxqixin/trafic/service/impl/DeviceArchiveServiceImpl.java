@@ -1,10 +1,16 @@
 package com.jxqixin.trafic.service.impl;
+import com.jxqixin.trafic.constant.DeviceArchiveType;
+import com.jxqixin.trafic.constant.EmpArchiveType;
 import com.jxqixin.trafic.dto.DeviceArchiveDto;
 import com.jxqixin.trafic.model.Device;
 import com.jxqixin.trafic.model.DeviceArchive;
+import com.jxqixin.trafic.model.Employee;
+import com.jxqixin.trafic.model.Resume;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.DeviceArchiveRepository;
 import com.jxqixin.trafic.service.IDeviceArchiveService;
+import com.jxqixin.trafic.service.IDeviceService;
+import com.jxqixin.trafic.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +29,8 @@ import java.util.List;
 public class DeviceArchiveServiceImpl extends CommonServiceImpl<DeviceArchive> implements IDeviceArchiveService {
 	@Autowired
 	private DeviceArchiveRepository deviceArchiveRepository;
+	@Autowired
+	private IDeviceService deviceService;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return deviceArchiveRepository;
@@ -42,6 +50,32 @@ public class DeviceArchiveServiceImpl extends CommonServiceImpl<DeviceArchive> i
 	}
 	@Override
 	public void deleteById(String id) {
-		deviceArchiveRepository.deleteById(id);
+		DeviceArchive deviceArchive = (DeviceArchive) deviceArchiveRepository.findById(id).get();
+		deviceArchive.setDeleted(true);
+		deviceArchiveRepository.save(deviceArchive);
+
+		setArchiveCode(deviceArchive);
+	}
+
+	@Override
+	public void addDeviceArchive(DeviceArchive deviceArchive) {
+		addObj(deviceArchive);
+
+		setArchiveCode(deviceArchive);
+	}
+
+	/**
+	 * 设置档案码
+	 * @param deviceArchive
+	 */
+	private void setArchiveCode(DeviceArchive deviceArchive){
+		Long count = deviceArchiveRepository.count((root, criteriaQuery, criteriaBuilder) -> {
+			Join<DeviceArchive, Device> deviceJoin = root.join("device",JoinType.INNER);
+			return criteriaBuilder.and(criteriaBuilder.equal(root.get("deleted"),false),criteriaBuilder.equal(deviceJoin.get("id"),deviceArchive.getDevice().getId()));
+		});
+		if(count == null)count = 0l;
+		Device device = deviceService.queryObjById(deviceArchive.getDevice().getId());
+		device.setArchiveCode(StringUtil.handleDeviceArchiveCode(DeviceArchiveType.ARCHIVE,device.getArchiveCode(),count.intValue()));
+		deviceService.updateObj(device);
 	}
 }
