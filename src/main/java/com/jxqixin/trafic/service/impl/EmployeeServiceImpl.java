@@ -53,11 +53,10 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 					Join<Employee, Org> orgJoin = root.join("org", JoinType.INNER);
 					list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
 				}
-
-				if(!StringUtils.isEmpty(employeeDto.getName())){
-					list.add(criteriaBuilder.like(root.get("name"),"%" + employeeDto.getName() +"%"));
+				if(!StringUtils.isEmpty(employeeDto.getPositionName())){
+					Join<Employee,Position> positionJoin = root.join("position",JoinType.INNER);
+					list.add(criteriaBuilder.like(positionJoin.get("name"),"%" + employeeDto.getPositionName() +"%"));
 				}
-
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
 		}, pageable);

@@ -25,6 +25,16 @@ public class EmployeeDto extends PageDto implements Serializable {
     private String departmentId;
     /**职位ID*/
     private String positionId;
+    /**职务名称*/
+    private String positionName;
+
+    public String getPositionName() {
+        return positionName;
+    }
+
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
+    }
 
     public String getDepartmentId() {
         return departmentId;
