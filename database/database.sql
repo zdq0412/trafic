@@ -1738,3 +1738,22 @@ create table pics(
   type varchar(20) comment '图片所属类别:MEETING,TRAINING,CHECKING...',
   pid varchar(36) comment '所属类别记录ID'
 )comment '图片表：存储会议、培训、日常检查等现场图片';
+
+#-------------------------------------------20201106--------------------------------------------
+#通用职位
+drop table if exists common_position;
+create table common_position(
+  id varchar(36) primary key comment '主键',
+  name varchar(50) comment '职位名称',
+  createDate datetime comment '创建日期'
+)comment '通用职位';
+
+#通用职位与企业类别关联表
+drop table if exists common_position_org_category;
+create table common_position_org_category(
+  id varchar(36) primary key comment '主键',
+  common_position_id varchar(36) comment '通用职位ID',
+  org_category_id varchar(36) comment '企业类别ID',
+  constraint common_position_org_category_id foreign key(org_category_id) references org_category(id),
+  constraint org_category_common_position_id foreign key(common_position_id) references common_position(id)
+)comment '通用职位与企业类别关联表';

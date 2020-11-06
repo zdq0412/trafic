@@ -3,10 +3,7 @@ import com.jxqixin.trafic.constant.Status;
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.OrgCategoryDto;
 import com.jxqixin.trafic.model.OrgCategory;
-import com.jxqixin.trafic.repository.CommonRepository;
-import com.jxqixin.trafic.repository.OrgCategoryFunctionsRepository;
-import com.jxqixin.trafic.repository.OrgCategoryRepository;
-import com.jxqixin.trafic.repository.OrgRepository;
+import com.jxqixin.trafic.repository.*;
 import com.jxqixin.trafic.service.IOrgCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -34,6 +31,8 @@ public class OrgCategoryServiceImpl extends CommonServiceImpl<OrgCategory> imple
 	private OrgRepository orgRepository;
 	@Autowired
 	private OrgCategoryFunctionsRepository orgCategoryFunctionsRepository;
+	@Autowired
+	private CommonPositionOrgCategoryRepository commonPositionOrgCategoryRepository;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return orgCategoryRepository;
@@ -49,6 +48,8 @@ public class OrgCategoryServiceImpl extends CommonServiceImpl<OrgCategory> imple
 		if(count!=null && count>0){
 			throw new RuntimeException("该类别下存在企业，删除失败!");
 		}
+
+		commonPositionOrgCategoryRepository.deleteByOrgCategoryId(id);
 		orgCategoryFunctionsRepository.deleteByOrgCategoryId(id);
 		orgCategoryRepository.deleteById(id);
 	}
