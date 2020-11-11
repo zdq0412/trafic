@@ -280,7 +280,6 @@ create table m002_position(
   constraint fk_m002_department_m002_position_org_id foreign key(org_id) references org(id)
 )comment '职位表';
 
-
 #权限表
 drop table if exists functions;
 create table functions(
@@ -1757,3 +1756,14 @@ create table common_position_org_category(
   constraint common_position_org_category_id foreign key(org_category_id) references org_category(id),
   constraint org_category_common_position_id foreign key(common_position_id) references common_position(id)
 )comment '通用职位与企业类别关联表';
+
+#-------------------------------------------20201111--------------------------------------------
+#职位人员关联表
+drop table if exists employee_position;
+create table employee_position(
+  id varchar(36) primary key comment '主键',
+  employee_id varchar(36) comment '人员ID',
+  position_id varchar(36) comment '职位ID',
+  constraint employee_position_employee_id foreign key(employee_id) references m003_employee(id),
+  constraint employee_position_position_id foreign key(position_id) references m002_position(id)
+)comment '职位人员关联表';
