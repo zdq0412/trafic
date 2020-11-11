@@ -1,21 +1,24 @@
 package com.jxqixin.trafic.controller;
+
 import com.jxqixin.trafic.constant.Result;
-import com.jxqixin.trafic.dto.NameDto;
+import com.jxqixin.trafic.dto.DeptPositionDto;
 import com.jxqixin.trafic.dto.PositionDto;
 import com.jxqixin.trafic.model.Department;
 import com.jxqixin.trafic.model.JsonResult;
 import com.jxqixin.trafic.model.Position;
+import com.jxqixin.trafic.service.IEmployeePositionService;
 import com.jxqixin.trafic.service.IPositionService;
+import com.jxqixin.trafic.util.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
 /**
  * 职位控制器
  */
@@ -23,6 +26,8 @@ import java.util.UUID;
 public class PositionController extends CommonController{
     @Autowired
     private IPositionService positionService;
+    @Autowired
+    private IEmployeePositionService employeePositionService;
     /**
      * 分页查询职位
      * @param positionDto
@@ -97,6 +102,64 @@ public class PositionController extends CommonController{
             result.setMessage(e.getMessage());
             return new JsonResult(result);
         }
+        return new JsonResult(Result.SUCCESS);
+    }
+
+    /**
+     * 根据人员ID查找
+     * @param employeeId
+     * @return
+     */
+    @GetMapping("/positions/employeePositions")
+    public ModelMap findEmployeePositions(String employeeId){
+        List<Position> positions = positionService.findAll();
+        List<DeptPositionDto> deptPositionDtos = new ArrayList<>();
+        Set<Department> departments = new HashSet<>();
+        ModelMap modelMap = new ModelMap();
+        if(!CollectionUtils.isEmpty(positions)){
+            positions.forEach(position ->departments.add(position.getDepartment()));
+
+            if(!CollectionUtils.isEmpty(departments)){
+                departments.forEach(department -> {
+                    DeptPositionDto deptPositionDto = new DeptPositionDto();
+                    deptPositionDto.setId(department.getId());
+                    deptPositionDto.setName(department.getName());
+                    deptPositionDto.setType("dept");
+                    List<DeptPositionDto> children = new ArrayList<>();
+                    positions.forEach(position -> {
+                        Department dept = position.getDepartment();
+                        if(dept!=null && department.getId().equals(dept.getId())){
+                            DeptPositionDto dpdto = new DeptPositionDto();
+                            dpdto.setId(position.getId());
+                            dpdto.setName(position.getName());
+                            dpdto.setType("position");
+                            children.add(dpdto);
+                        }
+                    });
+                    deptPositionDto.setChildren(children);
+                    deptPositionDtos.add(deptPositionDto);
+                });
+            }
+            List<String> positionsIdList = employeePositionService.findIdsByEmployeeId(employeeId);
+            modelMap.addAttribute("positions",deptPositionDtos);
+            modelMap.addAttribute("positionIds",positionsIdList);
+        }else{
+            modelMap.addAttribute("positions",deptPositionDtos);
+            modelMap.addAttribute("positionIds",new ArrayList<>());
+        }
+        return modelMap;
+    }
+
+    /**
+     * 修改人员职位
+     * @param positionsId
+     * @param employeeId
+     * @return
+     */
+    @PutMapping("/position/employeePositions")
+    public JsonResult assignFunctions2OrgCategory(String positionsId,String employeeId){
+        String[] positionIdArray = StringUtil.handleIds(positionsId);
+        positionService.assign2Employee(positionIdArray,employeeId);
         return new JsonResult(Result.SUCCESS);
     }
 }

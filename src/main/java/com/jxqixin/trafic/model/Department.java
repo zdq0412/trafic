@@ -94,4 +94,27 @@ public class Department implements Serializable {
 	public void setOrg(Org org) {
 		this.org = org;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this){
+			return true;
+		}
+
+		if(obj instanceof Department){
+			Department dept = (Department)obj;
+			if(dept.getId().equals(this.getId())){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return this.getId().hashCode();
+	}
 }

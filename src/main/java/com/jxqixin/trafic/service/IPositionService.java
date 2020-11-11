@@ -26,4 +26,10 @@ public interface IPositionService extends ICommonService<Position> {
      * @return
      */
     List<Position> findByDepartmentId(String departmentId);
+    /**
+     * 为人员分配职位
+     * @param positionIdArray
+     * @param employeeId
+     */
+    void assign2Employee(String[] positionIdArray, String employeeId);
 }

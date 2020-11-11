@@ -1,10 +1,12 @@
 package com.jxqixin.trafic.service.impl;
-import com.jxqixin.trafic.common.NameSpecification;
-import com.jxqixin.trafic.dto.NameDto;
+
 import com.jxqixin.trafic.dto.PositionDto;
 import com.jxqixin.trafic.model.Department;
+import com.jxqixin.trafic.model.Employee;
+import com.jxqixin.trafic.model.EmployeePosition;
 import com.jxqixin.trafic.model.Position;
 import com.jxqixin.trafic.repository.CommonRepository;
+import com.jxqixin.trafic.repository.EmployeePositionRepository;
 import com.jxqixin.trafic.repository.EmployeeRepository;
 import com.jxqixin.trafic.repository.PositionRepository;
 import com.jxqixin.trafic.service.IPositionService;
@@ -28,6 +30,8 @@ public class PositionServiceImpl extends CommonServiceImpl<Position> implements 
 	private PositionRepository positionRepository;
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	@Autowired
+	private EmployeePositionRepository employeePositionRepository;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return positionRepository;
@@ -66,5 +70,24 @@ public class PositionServiceImpl extends CommonServiceImpl<Position> implements 
 	@Override
 	public List<Position> findByDepartmentId(String departmentId) {
 		return positionRepository.findByDepartmentId(departmentId);
+	}
+
+	@Override
+	public void assign2Employee(String[] positionIdArray, String employeeId) {
+		if(positionIdArray!=null && positionIdArray.length>0) {
+			employeePositionRepository.deleteByEmployeeId(employeeId);
+			List<EmployeePosition> list = new ArrayList<>();
+			Employee employee = new Employee();
+			employee.setId(employeeId);
+			for (int i = 0; i < positionIdArray.length; i++) {
+				Position position = new Position();
+				position.setId(positionIdArray[i]);
+				EmployeePosition employeePosition = new EmployeePosition();
+				employeePosition.setEmployee(employee);
+				employeePosition.setPosition(position);
+				list.add(employeePosition);
+			}
+			employeePositionRepository.saveAll(list);
+		}
 	}
 }

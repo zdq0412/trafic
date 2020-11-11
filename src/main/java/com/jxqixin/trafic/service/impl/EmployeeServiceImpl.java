@@ -5,6 +5,7 @@ import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.EmployeeRepository;
 import com.jxqixin.trafic.repository.UserRepository;
+import com.jxqixin.trafic.service.IEmployeePositionService;
 import com.jxqixin.trafic.service.IEmployeeService;
 import com.jxqixin.trafic.util.IdCardUtil;
 import org.springframework.beans.BeanUtils;
@@ -34,6 +35,8 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 	private UserRepository userRepository;
 	@Value("${defaultPassword}")
 	private String defaultPassword;
+	@Autowired
+	private IEmployeePositionService employeePositionService;
 	@Override
 	public CommonRepository getCommonRepository() {
 		return employeeRepository;
@@ -116,24 +119,22 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			}
 		}
 
-		if(!StringUtils.isEmpty(employeeDto.getDepartmentId())){
-			Department department = new Department();
-			department.setId(employeeDto.getDepartmentId());
-
-			employee.setDepartment(department);
-		}
-
-		if(!StringUtils.isEmpty(employeeDto.getPositionId())){
-			Position position = new Position();
-			position.setId(employeeDto.getPositionId());
-
-			employee.setPosition(position);
-		}
 		employee.setSex(IdCardUtil.getSex(employeeDto.getIdnum()));
 		employee.setAge(IdCardUtil.getAge(employeeDto.getIdnum()));
 
 		deleteByIdnumAndOrgIdIsNull(employeeDto.getIdnum());
 		employeeRepository.save(employee);
+
+		if(!StringUtils.isEmpty(employeeDto.getPositionId())){
+			Position position = new Position();
+			position.setId(employeeDto.getPositionId());
+
+			EmployeePosition employeePosition = new EmployeePosition();
+			employeePosition.setPosition(position);
+			employeePosition.setEmployee(employee);
+
+			employeePositionService.addObj(employeePosition);
+		}
 	}
 	/**
 	 * 根据身份证号删除不在企业的人员信息
@@ -199,7 +200,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		if(employeeDto.getPhoto()!=null) {
 			employee.setPhoto(employeeDto.getPhoto());
 		}
-		if(!StringUtils.isEmpty(employeeDto.getDepartmentId())){
+		/*if(!StringUtils.isEmpty(employeeDto.getDepartmentId())){
 				Department newDepartment = new Department();
 				newDepartment.setId(employeeDto.getDepartmentId());
 				employee.setDepartment(newDepartment);
@@ -212,7 +213,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			employee.setPosition(position);
 		}else{
 			employee.setPosition(null);
-		}
+		}*/
 		employee.setRealPath(employeeDto.getRealPath());
 		employee.setIdnum(employeeDto.getIdnum());
 		employee.setNote(employeeDto.getNote());
