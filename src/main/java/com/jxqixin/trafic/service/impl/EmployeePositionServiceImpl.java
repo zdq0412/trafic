@@ -24,4 +24,9 @@ public class EmployeePositionServiceImpl extends CommonServiceImpl<EmployeePosit
 	public List<String> findIdsByEmployeeId(String employeeId) {
 		return employeePositionRepository.findIdsByEmployeeId(employeeId);
 	}
+
+	@Override
+	public void deleteByEmployeeId(String id) {
+		employeePositionRepository.deleteByEmployeeId(id);
+	}
 }

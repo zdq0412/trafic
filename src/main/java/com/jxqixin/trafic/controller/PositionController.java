@@ -17,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -111,8 +112,8 @@ public class PositionController extends CommonController{
      * @return
      */
     @GetMapping("/positions/employeePositions")
-    public ModelMap findEmployeePositions(String employeeId){
-        List<Position> positions = positionService.findAll();
+    public ModelMap findEmployeePositions(String employeeId, HttpServletRequest request){
+        List<Position> positions = positionService.findAllByOrg(getOrg(request));
         List<DeptPositionDto> deptPositionDtos = new ArrayList<>();
         Set<Department> departments = new HashSet<>();
         ModelMap modelMap = new ModelMap();

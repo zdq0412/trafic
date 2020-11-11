@@ -17,4 +17,6 @@ public interface PositionRepository<ID extends Serializable> extends CommonRepos
     void deleteByDepartmentId(String departmentId);
     @Query("select p from Position p where p.department.id=?1")
     List<Position> findByDepartmentId(String departmentId);
+    @Query(value = "select p from Position p where p.department.org.id=?1 ")
+    List<Position> findAllByOrgId(String id);
 }

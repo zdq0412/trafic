@@ -1,10 +1,7 @@
 package com.jxqixin.trafic.service.impl;
 
 import com.jxqixin.trafic.dto.PositionDto;
-import com.jxqixin.trafic.model.Department;
-import com.jxqixin.trafic.model.Employee;
-import com.jxqixin.trafic.model.EmployeePosition;
-import com.jxqixin.trafic.model.Position;
+import com.jxqixin.trafic.model.*;
 import com.jxqixin.trafic.repository.CommonRepository;
 import com.jxqixin.trafic.repository.EmployeePositionRepository;
 import com.jxqixin.trafic.repository.EmployeeRepository;
@@ -89,5 +86,13 @@ public class PositionServiceImpl extends CommonServiceImpl<Position> implements 
 			}
 			employeePositionRepository.saveAll(list);
 		}
+	}
+
+	@Override
+	public List<Position> findAllByOrg(Org org) {
+		if(org==null){
+			return positionRepository.findAll();
+		}
+		return positionRepository.findAllByOrgId(org.getId());
 	}
 }

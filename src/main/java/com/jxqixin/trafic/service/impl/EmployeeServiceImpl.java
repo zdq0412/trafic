@@ -87,6 +87,7 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 					}
 				}else{
 					//employee.setId(employee1.getId());
+					employeePositionService.deleteByEmployeeId(employee1.getId());
                     employeeRepository.deleteById(employee1.getId());
 				}
 			}
@@ -235,6 +236,8 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 			employeeRepository.updateUser2NullByUserId(userId);
 			userRepository.deleteById(userId);
 		}
+
+		employeePositionService.deleteByEmployeeId(id);
 	}
 
 	@Override

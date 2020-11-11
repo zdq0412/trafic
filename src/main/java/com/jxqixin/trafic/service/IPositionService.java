@@ -2,6 +2,7 @@ package com.jxqixin.trafic.service;
 
 import com.jxqixin.trafic.dto.NameDto;
 import com.jxqixin.trafic.dto.PositionDto;
+import com.jxqixin.trafic.model.Org;
 import com.jxqixin.trafic.model.Position;
 import org.springframework.data.domain.Page;
 
@@ -32,4 +33,11 @@ public interface IPositionService extends ICommonService<Position> {
      * @param employeeId
      */
     void assign2Employee(String[] positionIdArray, String employeeId);
+
+    /**
+     * 查询本机构下的所有职位
+     * @param org
+     * @return
+     */
+    List<Position> findAllByOrg(Org org);
 }

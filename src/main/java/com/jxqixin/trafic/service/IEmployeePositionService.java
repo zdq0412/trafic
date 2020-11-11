@@ -12,4 +12,10 @@ public interface IEmployeePositionService extends ICommonService<EmployeePositio
      * @return
      */
     List<String> findIdsByEmployeeId(String employeeId);
+
+    /**
+     * 根据人员ID删除记录
+     * @param id
+     */
+    void deleteByEmployeeId(String id);
 }
