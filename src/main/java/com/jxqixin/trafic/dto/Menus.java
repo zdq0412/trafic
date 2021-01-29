@@ -1,8 +1,6 @@
 package com.jxqixin.trafic.dto;
-
 import java.io.Serializable;
 import java.util.List;
-
 /**
  * 页面可 显示的菜单结构
  */
