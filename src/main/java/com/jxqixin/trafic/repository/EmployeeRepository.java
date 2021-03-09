@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface EmployeeRepository<ID extends Serializable> extends CommonRepository<Employee,ID> {
     /***
@@ -53,4 +54,12 @@ public interface EmployeeRepository<ID extends Serializable> extends CommonRepos
     void deleteByIdnumAndOrgIdIsNull(String idnum);
     @Query("select e from Employee e where e.tel=?1")
     Employee findByTel(String tel);
+
+    /**
+     * 根据企业ID查找管理层员工
+     * @param id
+     * @return
+     */
+    @Query(nativeQuery = true,value = "select e.* from m003_employee e inner  join employee_position ep on e.id=ep.employee_id inner join m002_position p on ep.position_id= p.id where e.org_id=?1")
+    List<Employee> findAllByOrgId(String id);
 }

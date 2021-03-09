@@ -267,9 +267,8 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 		if(org==null){
 			return employeeRepository.findAll();
 		}
-		return employeeRepository.findAll(new Specification() {
-			@Override
-			public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+		return employeeRepository.findAllByOrgId(org.getId());
+		/*return employeeRepository.findAll(( root,  criteriaQuery,  criteriaBuilder)-> {
 				List<Predicate> list = new ArrayList<>();
 				Join<Employee,Org> orgJoin = root.join("org");
 				list.add(criteriaBuilder.equal(orgJoin.get("id"),org.getId()));
@@ -279,7 +278,6 @@ public class EmployeeServiceImpl extends CommonServiceImpl<Employee> implements 
 
 				Predicate[] predicates = new Predicate[list.size()];
 				return criteriaBuilder.and(list.toArray(predicates));
-			}
-		});
+		});*/
 	}
 }
