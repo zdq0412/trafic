@@ -30,6 +30,10 @@ public class Employee implements Serializable {
     private String tel;
     /**备注*/
     private String note;
+    /**人员档案路径地址*/
+    private String archives;
+    /**人员档案实际存储路径*/
+    private String archivesRealPath;
     /**所属企业*/
     @ManyToOne
     @JoinColumn(name = "org_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -41,6 +45,22 @@ public class Employee implements Serializable {
     @ManyToOne
     @JoinColumn(name = "department_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Department department;
+
+    public String getArchivesRealPath() {
+        return archivesRealPath == null ? "" : archivesRealPath;
+    }
+
+    public void setArchivesRealPath(String archivesRealPath) {
+        this.archivesRealPath = archivesRealPath;
+    }
+
+    public String getArchives() {
+        return archives == null ? "" : archives;
+    }
+
+    public void setArchives(String archives) {
+        this.archives = archives;
+    }
 
     public Department getDepartment() {
         return department;

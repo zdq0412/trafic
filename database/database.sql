@@ -374,6 +374,8 @@ create table m003_employee(
   user_id varchar(36) comment '人员对应用户ID',
   department_id varchar(36) comment '部门id',
   position_id varchar(36) comment '职位id',
+  archives varchar(200) comment '人员档案路径',
+  archivesRealPath varchar(200) comment '人员档案实际存储路径',
   constraint fk_m003_employee_department_id foreign key(department_id) references m002_department(id),
   constraint fk_m003_employee_position_id foreign key(position_id) references m002_position(id),
   constraint fk_m003_employee_org_id foreign key(org_id) references org(id),

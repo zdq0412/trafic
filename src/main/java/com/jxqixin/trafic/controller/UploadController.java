@@ -23,6 +23,8 @@ public class UploadController extends CommonController {
     @Autowired
     private IUserService userService;
     @Autowired
+    private IEmployeeService employeeService;
+    @Autowired
     private IResumeService resumeService;
     @Autowired
     private IIDCardService idCardService;
@@ -127,6 +129,16 @@ public class UploadController extends CommonController {
      */
     private void updateUrlAndRealPath(String url,String realPath,UploadFileDto uploadFileDto){
         switch (uploadFileDto.getType()){
+            case "archive":{
+                Employee employee = employeeService.queryObjById(uploadFileDto.getId());
+                if(!StringUtils.isEmpty(employee.getArchivesRealPath())){
+                    deleteTemplateFile(employee.getArchivesRealPath());
+                }
+                employee.setArchives(url);
+                employee.setArchivesRealPath(realPath);
+                employeeService.updateObj(employee);
+                break;
+            }
             case "resume":{
                 Resume resume = resumeService.queryObjById(uploadFileDto.getId());
                 if(!StringUtils.isEmpty(resume.getRealPath())){
